@@ -8,39 +8,39 @@ const Gallery = () => {
   const projects = [
     {
       id: 1,
-      title: "Armação de Laje Residencial",
-      category: "Residencial",
-      image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      title: "Armação de Laje com Vergalhões",
+      category: "Armação",
+      image: "https://images.unsplash.com/photo-1597740985671-5f3faeb5c7c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 2,
-      title: "Estrutura de Galpão Industrial",
-      category: "Industrial",
-      image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      id: 3,
-      title: "Cofragem de Pilares",
+      title: "Montagem de Cofragem Estrutural",
       category: "Cofragem",
       image: "https://images.unsplash.com/photo-1590736969955-71cc94901144?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
+      id: 3,
+      title: "Estrutura de Ferro para Lajes",
+      category: "Estrutural",
+      image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    },
+    {
       id: 4,
-      title: "Armação de Fundação",
-      category: "Fundação",
+      title: "Armação de Pilares",
+      category: "Pilares",
       image: "https://images.unsplash.com/photo-1572825719628-4aceb70d8828?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 5,
-      title: "Estrutura Metálica",
-      category: "Metálica",
+      title: "Estrutura Metálica Industrial",
+      category: "Industrial",
       image: "https://images.unsplash.com/photo-1545558014-8692077e9b5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 6,
-      title: "Vergalhões em Obra",
-      category: "Armação",
-      image: "https://images.unsplash.com/photo-1597740985671-5f3faeb5c7c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      title: "Trabalhadores Montando Estrutura",
+      category: "Montagem",
+      image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     }
   ];
 

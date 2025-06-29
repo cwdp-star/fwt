@@ -9,13 +9,11 @@ const Footer = () => {
           {/* Logo e descrição */}
           <div className="md:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="bg-gradient-to-r from-blue-900 to-orange-500 p-2 rounded-lg">
-                <img 
-                  src="/lovable-uploads/dfdb0f79-49d1-438c-b58d-fc91a779077d.png" 
-                  alt="Motivo Visionário Logo" 
-                  className="h-8 w-8"
-                />
-              </div>
+              <img 
+                src="/lovable-uploads/dfdb0f79-49d1-438c-b58d-fc91a779077d.png" 
+                alt="Motivo Visionário Logo" 
+                className="h-12 w-12"
+              />
               <div>
                 <h3 className="text-2xl font-bold">Motivo Visionário</h3>
                 <p className="text-gray-400">Ferro e Cofragem</p>

@@ -16,13 +16,11 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="bg-gradient-to-r from-blue-900 to-orange-500 p-2 rounded-lg">
-              <img 
-                src="/lovable-uploads/dfdb0f79-49d1-438c-b58d-fc91a779077d.png" 
-                alt="Motivo Visionário" 
-                className="h-8 w-8"
-              />
-            </div>
+            <img 
+              src="/lovable-uploads/dfdb0f79-49d1-438c-b58d-fc91a779077d.png" 
+              alt="Motivo Visionário" 
+              className="h-12 w-12"
+            />
             <div>
               <h1 className="text-xl font-bold text-gray-800">Motivo Visionário</h1>
               <p className="text-sm text-gray-600">Ferro e Cofragem</p>

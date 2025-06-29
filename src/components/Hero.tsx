@@ -10,9 +10,9 @@ const Hero = () => {
       {/* Background with gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/90 via-gray-800/90 to-orange-600/90"></div>
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
         style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')`
+          backgroundImage: `url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')`
         }}
       ></div>
 
