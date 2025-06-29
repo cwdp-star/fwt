@@ -1,5 +1,4 @@
-
-import { building } from 'lucide-react';
+import { Building } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -10,7 +9,7 @@ const Footer = () => {
           <div className="md:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
               <div className="bg-gradient-to-r from-blue-600 to-orange-500 p-2 rounded-lg">
-                <building className="h-8 w-8 text-white" />
+                <Building className="h-8 w-8 text-white" />
               </div>
               <div>
                 <h3 className="text-2xl font-bold">Gesso & Aço</h3>

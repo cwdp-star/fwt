@@ -1,6 +1,5 @@
-
 import { useState } from 'react';
-import { images } from 'lucide-react';
+import { Images } from 'lucide-react';
 
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -50,7 +49,7 @@ const Gallery = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <div className="flex items-center justify-center space-x-3 mb-6">
-              <images className="h-8 w-8 text-orange-500" />
+              <Images className="h-8 w-8 text-orange-500" />
               <h2 className="text-4xl md:text-5xl font-bold text-white">
                 Nossos <span className="text-orange-500">Projetos</span>
               </h2>

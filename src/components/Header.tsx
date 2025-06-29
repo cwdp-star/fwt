@@ -1,6 +1,5 @@
-
 import { useState } from 'react';
-import { building, Menu, X } from 'lucide-react';
+import { Building, Menu, X } from 'lucide-react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,7 +16,7 @@ const Header = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="bg-gradient-to-r from-blue-600 to-orange-500 p-2 rounded-lg">
-              <building className="h-8 w-8 text-white" />
+              <Building className="h-8 w-8 text-white" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-800">Gesso & Aço</h1>
