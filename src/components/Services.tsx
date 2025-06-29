@@ -1,28 +1,28 @@
 
-import { building, hammer, square, square-plus } from 'lucide-react';
+import { Building, Hammer, Square, Plus } from 'lucide-react';
 
 const Services = () => {
   const services = [
     {
-      icon: building,
+      icon: Building,
       title: "Construção Civil",
       description: "Projetos residenciais e comerciais completos, desde a fundação até o acabamento final.",
       features: ["Casas", "Edifícios", "Galpões", "Escritórios"]
     },
     {
-      icon: hammer,
+      icon: Hammer,
       title: "Reformas e Ampliações",
       description: "Transformamos e modernizamos seu espaço com qualidade e agilidade.",
       features: ["Reformas Completas", "Ampliações", "Modernização", "Restauração"]
     },
     {
-      icon: square,
+      icon: Square,
       title: "Acabamentos",
       description: "Serviços especializados em gesso, pintura e revestimentos de alta qualidade.",
       features: ["Gesso Liso", "Texturas", "Pintura", "Revestimentos"]
     },
     {
-      icon: square-plus,
+      icon: Plus,
       title: "Projetos Especiais",
       description: "Soluções customizadas para necessidades específicas do seu projeto.",
       features: ["Design Personalizado", "Consultoria", "Orçamento", "Acompanhamento"]

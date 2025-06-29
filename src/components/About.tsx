@@ -1,5 +1,5 @@
 
-import { hammer, square-check, square } from 'lucide-react';
+import { Hammer, CheckSquare, Square } from 'lucide-react';
 
 const About = () => {
   return (
@@ -44,7 +44,7 @@ const About = () => {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center p-8 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow">
               <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <square-check className="h-8 w-8 text-blue-600" />
+                <CheckSquare className="h-8 w-8 text-blue-600" />
               </div>
               <h4 className="text-xl font-bold text-gray-800 mb-4">Qualidade Garantida</h4>
               <p className="text-gray-600">
@@ -55,7 +55,7 @@ const About = () => {
 
             <div className="text-center p-8 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow">
               <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <hammer className="h-8 w-8 text-orange-600" />
+                <Hammer className="h-8 w-8 text-orange-600" />
               </div>
               <h4 className="text-xl font-bold text-gray-800 mb-4">Experiência Sólida</h4>
               <p className="text-gray-600">
@@ -66,7 +66,7 @@ const About = () => {
 
             <div className="text-center p-8 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow">
               <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <square className="h-8 w-8 text-green-600" />
+                <Square className="h-8 w-8 text-green-600" />
               </div>
               <h4 className="text-xl font-bold text-gray-800 mb-4">Prazos Cumpridos</h4>
               <p className="text-gray-600">
