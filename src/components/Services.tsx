@@ -1,31 +1,31 @@
 
-import { Building, Hammer, Square, Plus } from 'lucide-react';
+import { Building, Hammer, Shield, Plus } from 'lucide-react';
 
 const Services = () => {
   const services = [
     {
       icon: Building,
-      title: "Construção Civil",
-      description: "Projetos residenciais e comerciais completos, desde a fundação até o acabamento final.",
-      features: ["Casas", "Edifícios", "Galpões", "Escritórios"]
+      title: "Armação de Ferro",
+      description: "Execução completa de armação de ferro para lajes, vigas, pilares e fundações.",
+      features: ["Lajes Maciças", "Vigas e Pilares", "Fundações", "Escadas"]
     },
     {
       icon: Hammer,
-      title: "Reformas e Ampliações",
-      description: "Transformamos e modernizamos seu espaço com qualidade e agilidade.",
-      features: ["Reformas Completas", "Ampliações", "Modernização", "Restauração"]
+      title: "Cofragem Estrutural",
+      description: "Montagem de cofragem para concreto armado com precisão e segurança.",
+      features: ["Cofragem de Lajes", "Formas para Pilares", "Cofragem de Vigas", "Escoramentos"]
     },
     {
-      icon: Square,
-      title: "Acabamentos",
-      description: "Serviços especializados em gesso, pintura e revestimentos de alta qualidade.",
-      features: ["Gesso Liso", "Texturas", "Pintura", "Revestimentos"]
+      icon: Shield,
+      title: "Estruturas Metálicas",
+      description: "Fabricação e montagem de estruturas metálicas para diversos fins.",
+      features: ["Galpões Industriais", "Mezaninos", "Coberturas", "Estruturas Especiais"]
     },
     {
       icon: Plus,
-      title: "Projetos Especiais",
-      description: "Soluções customizadas para necessidades específicas do seu projeto.",
-      features: ["Design Personalizado", "Consultoria", "Orçamento", "Acompanhamento"]
+      title: "Projetos Especializados",
+      description: "Soluções customizadas para projetos que demandam expertise técnica.",
+      features: ["Consultoria Técnica", "Análise Estrutural", "Orçamento Detalhado", "Acompanhamento"]
     }
   ];
 
@@ -38,8 +38,8 @@ const Services = () => {
               Nossos <span className="text-blue-600">Serviços</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Oferecemos soluções completas em construção civil, 
-              com qualidade profissional e atendimento personalizado.
+              Oferecemos soluções completas em armação de ferro e cofragem, 
+              com qualidade profissional e segurança garantida.
             </p>
           </div>
 

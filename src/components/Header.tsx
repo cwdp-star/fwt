@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Building, Menu, X } from 'lucide-react';
 
@@ -15,12 +16,16 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="bg-gradient-to-r from-blue-600 to-orange-500 p-2 rounded-lg">
-              <Building className="h-8 w-8 text-white" />
+            <div className="bg-gradient-to-r from-blue-900 to-orange-500 p-2 rounded-lg">
+              <img 
+                src="/lovable-uploads/dfdb0f79-49d1-438c-b58d-fc91a779077d.png" 
+                alt="Motivo Visionário" 
+                className="h-8 w-8"
+              />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-800">Gesso & Aço</h1>
-              <p className="text-sm text-gray-600">Construção com Excelência</p>
+              <h1 className="text-xl font-bold text-gray-800">Motivo Visionário</h1>
+              <p className="text-sm text-gray-600">Ferro e Cofragem</p>
             </div>
           </div>
 

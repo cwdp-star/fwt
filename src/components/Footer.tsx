@@ -1,3 +1,4 @@
+
 import { Building } from 'lucide-react';
 
 const Footer = () => {
@@ -8,18 +9,22 @@ const Footer = () => {
           {/* Logo e descrição */}
           <div className="md:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="bg-gradient-to-r from-blue-600 to-orange-500 p-2 rounded-lg">
-                <Building className="h-8 w-8 text-white" />
+              <div className="bg-gradient-to-r from-blue-900 to-orange-500 p-2 rounded-lg">
+                <img 
+                  src="/lovable-uploads/dfdb0f79-49d1-438c-b58d-fc91a779077d.png" 
+                  alt="Motivo Visionário Logo" 
+                  className="h-8 w-8"
+                />
               </div>
               <div>
-                <h3 className="text-2xl font-bold">Gesso & Aço</h3>
-                <p className="text-gray-400">Construção com Excelência</p>
+                <h3 className="text-2xl font-bold">Motivo Visionário</h3>
+                <p className="text-gray-400">Ferro e Cofragem</p>
               </div>
             </div>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              Há mais de 15 anos transformando sonhos em realidade. 
-              Especialistas em construção civil, reformas e acabamentos 
-              de alta qualidade em toda a região.
+              Há mais de 12 anos especializados em armação de ferro e cofragem. 
+              Oferecemos estruturas sólidas e seguras para residências, 
+              empresas e indústrias em toda a região.
             </p>
             <div className="text-sm text-gray-400">
               <p>CNPJ: 12.345.678/0001-90</p>
@@ -31,12 +36,12 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-6 text-orange-400">Serviços</h4>
             <ul className="space-y-3 text-gray-300">
-              <li>Construção Civil</li>
-              <li>Reformas Completas</li>
-              <li>Ampliações</li>
-              <li>Acabamentos</li>
-              <li>Gesso e Pintura</li>
-              <li>Projetos Comerciais</li>
+              <li>Armação de Ferro</li>
+              <li>Cofragem Estrutural</li>
+              <li>Estruturas Metálicas</li>
+              <li>Lajes e Vigas</li>
+              <li>Pilares e Fundações</li>
+              <li>Galpões Industriais</li>
             </ul>
           </div>
 
@@ -54,11 +59,11 @@ const Footer = () => {
               </div>
               <div>
                 <p className="font-medium">E-mail:</p>
-                <p>contato@gessoaco.com.br</p>
+                <p>contato@motivovisionario.com.br</p>
               </div>
               <div>
                 <p className="font-medium">Endereço:</p>
-                <p>Rua das Construções, 123<br />Centro - São Paulo/SP</p>
+                <p>Rua das Estruturas, 456<br />Centro - São Paulo/SP</p>
               </div>
             </div>
           </div>
@@ -67,7 +72,7 @@ const Footer = () => {
         <div className="border-t border-gray-700 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © 2024 Gesso & Aço. Todos os direitos reservados.
+              © 2024 Motivo Visionário. Todos os direitos reservados.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a href="#" className="text-gray-400 hover:text-orange-400 transition-colors text-sm">
@@ -92,11 +97,11 @@ const Footer = () => {
             <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-300">
               <div>
                 <p className="font-medium">Segunda a Sexta:</p>
-                <p>8:00 às 18:00</p>
+                <p>7:00 às 17:00</p>
               </div>
               <div>
                 <p className="font-medium">Sábados:</p>
-                <p>8:00 às 12:00</p>
+                <p>7:00 às 12:00</p>
               </div>
             </div>
             <p className="text-xs text-gray-400 mt-3">

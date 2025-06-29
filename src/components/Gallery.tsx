@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Images } from 'lucide-react';
 
@@ -7,39 +8,39 @@ const Gallery = () => {
   const projects = [
     {
       id: 1,
-      title: "Residência Moderna",
+      title: "Armação de Laje Residencial",
       category: "Residencial",
-      image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 2,
-      title: "Edifício Comercial",
-      category: "Comercial",
-      image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      title: "Estrutura de Galpão Industrial",
+      category: "Industrial",
+      image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 3,
-      title: "Reforma Completa",
-      category: "Reforma",
-      image: "https://images.unsplash.com/photo-1496307653780-42ee777d4833?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      title: "Cofragem de Pilares",
+      category: "Cofragem",
+      image: "https://images.unsplash.com/photo-1590736969955-71cc94901144?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 4,
-      title: "Acabamento Premium",
-      category: "Acabamento",
-      image: "https://images.unsplash.com/photo-1431576901776-e539bd916ba2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      title: "Armação de Fundação",
+      category: "Fundação",
+      image: "https://images.unsplash.com/photo-1572825719628-4aceb70d8828?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 5,
-      title: "Projeto Arquitetônico",
-      category: "Arquitetura",
-      image: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      title: "Estrutura Metálica",
+      category: "Metálica",
+      image: "https://images.unsplash.com/photo-1545558014-8692077e9b5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 6,
-      title: "Construção Industrial",
-      category: "Industrial",
-      image: "https://images.unsplash.com/photo-1459767129954-1b1c1f9b9ace?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      title: "Vergalhões em Obra",
+      category: "Armação",
+      image: "https://images.unsplash.com/photo-1597740985671-5f3faeb5c7c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     }
   ];
 
@@ -55,8 +56,8 @@ const Gallery = () => {
               </h2>
             </div>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Confira alguns dos nossos projetos mais marcantes. 
-              Cada obra representa nosso compromisso com a excelência e inovação.
+              Confira alguns dos nossos trabalhos em armação de ferro e cofragem. 
+              Cada projeto representa nosso compromisso com qualidade e segurança.
             </p>
           </div>
 
@@ -88,13 +89,13 @@ const Gallery = () => {
 
           <div className="text-center mt-12">
             <p className="text-gray-300 mb-6">
-              Quer ver seu projeto aqui? Entre em contato conosco!
+              Precisa de uma estrutura sólida? Entre em contato conosco!
             </p>
             <button 
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
               className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
             >
-              Iniciar Meu Projeto
+              Solicitar Orçamento
             </button>
           </div>
         </div>
