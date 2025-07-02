@@ -6,7 +6,7 @@ const Hero = () => {
   };
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-white">
+    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-white pt-24">
       {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-6xl mx-auto">
         <div className="flex justify-center mb-8">
@@ -20,9 +20,9 @@ const Hero = () => {
         </div>
         
         <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-          Estruturas de
+          Armação de Ferro
           <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent block">
-            Ferro Sólidas
+            para Estruturas
           </span>
         </h1>
         
@@ -51,20 +51,20 @@ const Hero = () => {
         <div className="bg-gray-50 backdrop-blur-sm rounded-2xl p-8 border border-gray-200 shadow-lg">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">50+</div>
+              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">80+</div>
               <div className="text-gray-600 font-medium">Estruturas Executadas</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">5+</div>
+              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">20+</div>
               <div className="text-gray-600 font-medium">Anos de Experiência</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">100%</div>
-              <div className="text-gray-600 font-medium">Segurança Garantida</div>
+              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">20+</div>
+              <div className="text-gray-600 font-medium">Obras em Parceria com Construtoras</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">2</div>
-              <div className="text-gray-600 font-medium">Anos de Garantia</div>
+              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">1.000+</div>
+              <div className="text-gray-600 font-medium">Toneladas de Ferro Armado</div>
             </div>
           </div>
         </div>
