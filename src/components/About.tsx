@@ -7,12 +7,12 @@ const About = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-              Sobre a <span className="text-orange-500">Motivo Visionário</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Sobre a <span className="text-orange-600">Motivo Visionário</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Especialistas em armação de ferro e cofragem, construindo estruturas 
-              sólidas e seguras para todos os tipos de projetos.
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto font-medium">
+              Especialistas em armação de ferro e cofragem estrutural, 
+              construindo estruturas sólidas e seguras para todos os tipos de obras.
             </p>
           </div>
 
@@ -20,20 +20,20 @@ const About = () => {
             <div>
               <img 
                 src="https://images.unsplash.com/photo-1597740985671-5f3faeb5c7c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                alt="Vergalhões de ferro para armação"
-                className="rounded-lg shadow-2xl w-full h-96 object-cover"
+                alt="Armação de ferro para estruturas"
+                className="rounded-xl shadow-2xl w-full h-96 object-cover"
               />
             </div>
             <div>
-              <h3 className="text-3xl font-bold text-gray-800 mb-6">
-                Nossa Especialidade
+              <h3 className="text-3xl font-bold text-gray-900 mb-6">
+                A Nossa Especialidade
               </h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">
+              <p className="text-gray-700 mb-6 leading-relaxed text-lg">
                 A Motivo Visionário nasceu da paixão pelo trabalho com ferro e estruturas. 
-                Nossa equipe especializada domina todas as técnicas de armação e cofragem, 
-                garantindo estruturas resistentes e duradouras.
+                A nossa equipa especializada domina todas as técnicas de armação e cofragem, 
+                garantindo estruturas resistentes e duradoiras.
               </p>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-700 leading-relaxed text-lg">
                 Trabalhamos com vergalhões de alta qualidade e seguimos rigorosamente 
                 todas as normas técnicas de segurança. Cada projeto é executado com 
                 precisão milimétrica e acompanhamento técnico constante.
@@ -42,36 +42,36 @@ const About = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-8 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <CheckSquare className="h-8 w-8 text-blue-600" />
+            <div className="text-center p-8 bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <CheckSquare className="h-12 w-12 text-orange-600" />
               </div>
-              <h4 className="text-xl font-bold text-gray-800 mb-4">Qualidade Superior</h4>
-              <p className="text-gray-600">
+              <h4 className="text-xl font-bold text-gray-900 mb-4">Qualidade Superior</h4>
+              <p className="text-gray-700">
                 Utilizamos apenas vergalhões certificados e seguimos 
-                rigorosamente as normas técnicas da ABNT.
+                rigorosamente as normas técnicas europeias.
               </p>
             </div>
 
-            <div className="text-center p-8 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Hammer className="h-8 w-8 text-orange-600" />
+            <div className="text-center p-8 bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Hammer className="h-12 w-12 text-orange-600" />
               </div>
-              <h4 className="text-xl font-bold text-gray-800 mb-4">Experiência Técnica</h4>
-              <p className="text-gray-600">
-                Mais de 12 anos de experiência em armação de ferro 
-                e cofragem para estruturas de todos os portes.
+              <h4 className="text-xl font-bold text-gray-900 mb-4">Experiência Técnica</h4>
+              <p className="text-gray-700">
+                Mais de 15 anos de experiência em armação de ferro 
+                e cofragem estrutural para obras de todos os portes.
               </p>
             </div>
 
-            <div className="text-center p-8 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Shield className="h-8 w-8 text-green-600" />
+            <div className="text-center p-8 bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Shield className="h-12 w-12 text-orange-600" />
               </div>
-              <h4 className="text-xl font-bold text-gray-800 mb-4">Segurança Total</h4>
-              <p className="text-gray-600">
-                Todos os nossos profissionais são treinados e certificados, 
-                garantindo máxima segurança na execução.
+              <h4 className="text-xl font-bold text-gray-900 mb-4">Segurança Total</h4>
+              <p className="text-gray-700">
+                Todos os nossos profissionais são certificados, 
+                garantindo máxima segurança na execução das obras.
               </p>
             </div>
           </div>

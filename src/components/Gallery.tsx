@@ -32,13 +32,13 @@ const Gallery = () => {
     },
     {
       id: 5,
-      title: "Estrutura Metálica Industrial",
-      category: "Industrial",
+      title: "Cofragem para Fundações",
+      category: "Fundações",
       image: "https://images.unsplash.com/photo-1545558014-8692077e9b5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 6,
-      title: "Trabalhadores Montando Estrutura",
+      title: "Equipa Montando Estrutura",
       category: "Montagem",
       image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     }
@@ -50,14 +50,14 @@ const Gallery = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <div className="flex items-center justify-center space-x-3 mb-6">
-              <Images className="h-8 w-8 text-orange-500" />
+              <Images className="h-10 w-10 text-orange-500" />
               <h2 className="text-4xl md:text-5xl font-bold text-white">
-                Nossos <span className="text-orange-500">Projetos</span>
+                Os Nossos <span className="text-orange-500">Projetos</span>
               </h2>
             </div>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Confira alguns dos nossos trabalhos em armação de ferro e cofragem. 
-              Cada projeto representa nosso compromisso com qualidade e segurança.
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium">
+              Confira alguns dos nossos trabalhos em armação de ferro e cofragem estrutural. 
+              Cada projeto representa o nosso compromisso com qualidade e segurança.
             </p>
           </div>
 
@@ -65,7 +65,7 @@ const Gallery = () => {
             {projects.map((project) => (
               <div 
                 key={project.id}
-                className="group relative overflow-hidden rounded-xl cursor-pointer transform transition-all duration-300 hover:scale-105"
+                className="group relative overflow-hidden rounded-xl cursor-pointer transform transition-all duration-300 hover:scale-105 shadow-xl"
                 onClick={() => setSelectedImage(project.image)}
               >
                 <img 
@@ -73,9 +73,9 @@ const Gallery = () => {
                   alt={project.title}
                   className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="absolute bottom-4 left-4 text-white">
-                    <div className="text-sm text-orange-400 font-semibold mb-1">
+                    <div className="text-sm text-orange-400 font-bold mb-1">
                       {project.category}
                     </div>
                     <h3 className="text-lg font-bold">
@@ -87,13 +87,13 @@ const Gallery = () => {
             ))}
           </div>
 
-          <div className="text-center mt-12">
-            <p className="text-gray-300 mb-6">
-              Precisa de uma estrutura sólida? Entre em contato conosco!
+          <div className="text-center mt-16">
+            <p className="text-gray-300 mb-6 text-lg font-medium">
+              Precisa de uma estrutura sólida? Entre em contacto connosco!
             </p>
             <button 
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+              className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white px-10 py-4 rounded-lg font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl"
             >
               Solicitar Orçamento
             </button>
