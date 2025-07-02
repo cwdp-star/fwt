@@ -11,9 +11,9 @@ interface ProjectImage {
 
 interface ProjectProgress {
   phase: string;
-  status: 'completed' | 'in-progress' | 'pending';
+  status: string; // Changed from union type to string
   description: string;
-  date?: string;
+  date?: string | null; // Added null possibility
 }
 
 interface ProjectDetailsProps {
@@ -24,7 +24,7 @@ interface ProjectDetailsProps {
     city: string;
     duration: string;
     start_date: string;
-    end_date?: string;
+    end_date?: string | null; // Added null possibility
     description: string;
     images: ProjectImage[];
     progress: ProjectProgress[];

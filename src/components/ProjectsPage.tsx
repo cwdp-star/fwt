@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { ArrowLeft, Plus, Edit, Trash2, Calendar, MapPin, Clock } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -13,9 +12,9 @@ interface ProjectImage {
 
 interface ProjectProgress {
   phase: string;
-  status: 'completed' | 'in-progress' | 'pending';
+  status: string; // Changed from union type to string to match Supabase data
   description: string;
-  date?: string;
+  date?: string | null; // Added null possibility to match Supabase schema
 }
 
 interface Project {
@@ -25,7 +24,7 @@ interface Project {
   city: string;
   duration: string;
   start_date: string;
-  end_date?: string;
+  end_date?: string | null; // Added null possibility
   delivery_date: string;
   completion_deadline: string;
   description: string;
@@ -56,8 +55,18 @@ const ProjectsPage = () => {
 
       if (error) throw error;
 
-      const formattedProjects = projectsData?.map(project => ({
-        ...project,
+      const formattedProjects: Project[] = projectsData?.map(project => ({
+        id: project.id,
+        title: project.title,
+        category: project.category,
+        city: project.city,
+        duration: project.duration,
+        start_date: project.start_date,
+        end_date: project.end_date,
+        delivery_date: project.delivery_date,
+        completion_deadline: project.completion_deadline,
+        description: project.description,
+        cover_image: project.cover_image,
         images: project.project_images || [],
         progress: project.project_progress || []
       })) || [];
