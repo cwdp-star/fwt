@@ -16,7 +16,7 @@ const Header = () => {
   <div className="container mx-auto px-4 py-4">
     <div className="flex items-center justify-between">
       <div className="flex items-center space-x-4">
-        <div className="w-25 h-25 flex items-center justify-center">
+        <div className="w-21 h-21 flex items-center justify-center">
           <img 
             src="/lovable-uploads/dfdb0f79-49d1-438c-b58d-fc91a779077d.png" 
             alt="Motivo Visionário" 
