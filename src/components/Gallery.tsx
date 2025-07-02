@@ -1,50 +1,61 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Images, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+
+interface Project {
+  id: string;
+  title: string;
+  category: string;
+  cover_image: string;
+}
 
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const projects = [
-    {
-      id: 1,
-      title: "Edifício Residencial Torres da Rinchoa",
-      category: "Armação Residencial",
-      image: "https://images.unsplash.com/photo-1597740985671-5f3faeb5c7c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      id: 2,
-      title: "Armazém Industrial Cascais", 
-      category: "Cofragem Industrial",
-      image: "https://images.unsplash.com/photo-1590736969955-71cc94901144?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      id: 3,
-      title: "Centro Comercial Sintra",
-      category: "Estrutural Comercial",
-      image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      id: 4,
-      title: "Complexo Habitacional Amadora",
-      category: "Armação Habitacional",
-      image: "https://images.unsplash.com/photo-1572825719628-4aceb70d8828?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      id: 5,
-      title: "Escritórios Corporativos Lisboa",
-      category: "Cofragem Corporativa",
-      image: "https://images.unsplash.com/photo-1545558014-8692077e9b5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      id: 6,
-      title: "Hospital Regional Oeiras",
-      category: "Estrutural Hospitalar",
-      image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const fetchProjects = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('id, title, category, cover_image')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setProjects(data || []);
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  if (loading) {
+    return (
+      <section id="gallery" className="py-20 bg-gray-900">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center">
+              <div className="flex items-center justify-center space-x-3 mb-6">
+                <Images className="h-10 w-10 text-orange-500" />
+                <h2 className="text-4xl md:text-5xl font-bold text-white">
+                  Os Nossos <span className="text-orange-500">Projetos</span>
+                </h2>
+              </div>
+              <p className="text-xl text-gray-300">A carregar projetos...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="gallery" className="py-20 bg-gray-900">
@@ -68,10 +79,10 @@ const Gallery = () => {
               <div 
                 key={project.id}
                 className="group relative overflow-hidden rounded-xl cursor-pointer transform transition-all duration-300 hover:scale-105 shadow-xl"
-                onClick={() => setSelectedImage(project.image)}
+                onClick={() => setSelectedImage(project.cover_image)}
               >
                 <img 
-                  src={project.image}
+                  src={project.cover_image}
                   alt={project.title}
                   className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
                 />

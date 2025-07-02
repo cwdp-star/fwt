@@ -18,13 +18,13 @@ interface ProjectProgress {
 
 interface ProjectDetailsProps {
   project: {
-    id: number;
+    id: string;
     title: string;
     category: string;
     city: string;
     duration: string;
-    startDate: string;
-    endDate?: string;
+    start_date: string;
+    end_date?: string;
     description: string;
     images: ProjectImage[];
     progress: ProjectProgress[];
@@ -88,7 +88,7 @@ const ProjectDetails = ({ project, onBack }: ProjectDetailsProps) => {
               </div>
               <div className="flex items-center space-x-2">
                 <Calendar className="h-5 w-5" />
-                <span>{project.startDate} {project.endDate && `- ${project.endDate}`}</span>
+                <span>{project.start_date} {project.end_date && `- ${project.end_date}`}</span>
               </div>
             </div>
           </div>
@@ -100,60 +100,76 @@ const ProjectDetails = ({ project, onBack }: ProjectDetailsProps) => {
           </div>
 
           {/* Progress */}
-          <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Progresso da Obra</h2>
-            <div className="space-y-4">
-              {project.progress.map((phase, index) => (
-                <div key={index} className="flex items-start space-x-4">
-                  <div className={`w-4 h-4 rounded-full mt-1 ${getStatusColor(phase.status)}`}></div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-1">
-                      <h3 className="font-semibold text-gray-900">{phase.phase}</h3>
-                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        phase.status === 'completed' ? 'bg-green-100 text-green-800' :
-                        phase.status === 'in-progress' ? 'bg-orange-100 text-orange-800' :
-                        'bg-gray-100 text-gray-600'
-                      }`}>
-                        {getStatusText(phase.status)}
-                      </span>
+          {project.progress && project.progress.length > 0 && (
+            <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Progresso da Obra</h2>
+              <div className="space-y-4">
+                {project.progress.map((phase, index) => (
+                  <div key={index} className="flex items-start space-x-4">
+                    <div className={`w-4 h-4 rounded-full mt-1 ${getStatusColor(phase.status)}`}></div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-1">
+                        <h3 className="font-semibold text-gray-900">{phase.phase}</h3>
+                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                          phase.status === 'completed' ? 'bg-green-100 text-green-800' :
+                          phase.status === 'in-progress' ? 'bg-orange-100 text-orange-800' :
+                          'bg-gray-100 text-gray-600'
+                        }`}>
+                          {getStatusText(phase.status)}
+                        </span>
+                      </div>
+                      <p className="text-gray-600">{phase.description}</p>
+                      {phase.date && (
+                        <p className="text-sm text-gray-500 mt-1">{phase.date}</p>
+                      )}
                     </div>
-                    <p className="text-gray-600">{phase.description}</p>
-                    {phase.date && (
-                      <p className="text-sm text-gray-500 mt-1">{phase.date}</p>
-                    )}
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Gallery */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <div className="flex items-center space-x-3 mb-6">
-              <Camera className="h-6 w-6 text-orange-600" />
-              <h2 className="text-2xl font-bold text-gray-900">Galeria de Fotos</h2>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {project.images.map((image) => (
-                <div
-                  key={image.id}
-                  className="group cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow"
-                  onClick={() => setSelectedImage(image.url)}
-                >
-                  <img
-                    src={image.url}
-                    alt={image.caption}
-                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="p-4">
-                    <p className="font-medium text-gray-900 mb-1">{image.caption}</p>
-                    <p className="text-sm text-gray-500">{image.date}</p>
+          {project.images && project.images.length > 0 && (
+            <div className="bg-white rounded-lg shadow-lg p-8">
+              <div className="flex items-center space-x-3 mb-6">
+                <Camera className="h-6 w-6 text-orange-600" />
+                <h2 className="text-2xl font-bold text-gray-900">Galeria de Fotos</h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {project.images.map((image) => (
+                  <div
+                    key={image.id}
+                    className="group cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                    onClick={() => setSelectedImage(image.url)}
+                  >
+                    <img
+                      src={image.url}
+                      alt={image.caption}
+                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="p-4">
+                      <p className="font-medium text-gray-900 mb-1">{image.caption}</p>
+                      <p className="text-sm text-gray-500">{image.date}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* Fallback message when no images or progress */}
+          {(!project.images || project.images.length === 0) && (!project.progress || project.progress.length === 0) && (
+            <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+              <h3 className="text-xl font-semibold text-gray-600 mb-4">
+                Mais detalhes em breve
+              </h3>
+              <p className="text-gray-500">
+                Galeria de fotos e progresso da obra serão adicionados conforme o projeto avança.
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
