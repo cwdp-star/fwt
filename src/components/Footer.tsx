@@ -81,7 +81,7 @@ const Footer = () => {
             <h5 className="text-xl font-bold text-orange-400 mb-4">
               Horário de Atendimento
             </h5>
-            <div className="grid gap-4 text-gray-300">
+            <div className="grid gap-4 text-gray-300 place-items-center text-center">
               <div>
                 <p className="font-semibold text-white">Segunda a Sexta:</p>
                 <p className="text-lg">08:00 às 18:00</p>
