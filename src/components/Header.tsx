@@ -13,10 +13,10 @@ const Header = () => {
 
   return (
 <header className="fixed top-0 w-full bg-white/95 backdrop-blur-md shadow-lg z-50 border-b border-gray-200">
-  <div className="container mx-auto px-4 py-3">
+  <div className="container mx-auto px-4 py-4">
     <div className="flex items-center justify-between">
       <div className="flex items-center space-x-4">
-        <div className="w-20 h-20 flex items-center justify-center">
+        <div className="w-22 h-22 flex items-center justify-center">
           <img 
             src="/lovable-uploads/dfdb0f79-49d1-438c-b58d-fc91a779077d.png" 
             alt="Motivo Visionário" 
@@ -24,8 +24,8 @@ const Header = () => {
           />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Motivo Visionário</h1>
-          <p className="text-sm font-medium text-orange-600">Ferro e Cofragem</p>
+          <h1 className="text-xl font-bold text-gray-900 font-along-serif">Motivo Visionário</h1>
+          <p className="text-sm font-medium text-orange-600 font-along-serif">Ferro e Cofragem</p>
         </div>
       </div>
 
