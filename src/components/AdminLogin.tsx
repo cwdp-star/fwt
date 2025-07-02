@@ -9,11 +9,10 @@ const AdminLogin = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [email, setEmail] = useState('admin@motivovisionario.com');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('Admin123!');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isSignUp, setIsSignUp] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,46 +66,27 @@ const AdminLogin = () => {
     }
   };
 
-  const handleAuth = async (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
     try {
-      if (isSignUp) {
-        // Sign up
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-        });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-        if (error) {
+      if (error) {
+        if (error.message.includes('Invalid login credentials')) {
+          setError('Email ou senha incorretos');
+        } else {
           setError(error.message);
-          return;
         }
-
-        if (data.user && !data.session) {
-          setError('Verifique o seu email para confirmar a conta');
-          return;
-        }
-      } else {
-        // Sign in
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-
-        if (error) {
-          if (error.message.includes('Invalid login credentials')) {
-            setError('Email ou senha incorretos');
-          } else {
-            setError(error.message);
-          }
-          return;
-        }
+        return;
       }
     } catch (error) {
-      console.error('Auth error:', error);
+      console.error('Sign in error:', error);
       setError('Erro na autenticação');
     } finally {
       setLoading(false);
@@ -170,7 +150,7 @@ const AdminLogin = () => {
             </p>
           </div>
 
-          <form onSubmit={handleAuth} className="space-y-6">
+          <form onSubmit={handleSignIn} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 Email
@@ -182,7 +162,6 @@ const AdminLogin = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                placeholder="admin@motivovisionario.com"
               />
             </div>
 
@@ -199,7 +178,6 @@ const AdminLogin = () => {
                   required
                   minLength={6}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent pr-12"
-                  placeholder="••••••••"
                 />
                 <button
                   type="button"
@@ -222,23 +200,13 @@ const AdminLogin = () => {
               disabled={loading}
               className="w-full bg-orange-600 hover:bg-orange-700 disabled:bg-orange-400 text-white py-3 px-4 rounded-lg font-medium transition-colors"
             >
-              {loading ? 'A processar...' : (isSignUp ? 'Criar Conta Admin' : 'Entrar')}
+              {loading ? 'A processar...' : 'Entrar'}
             </button>
-
-            <div className="text-center">
-              <button
-                type="button"
-                onClick={() => setIsSignUp(!isSignUp)}
-                className="text-orange-600 hover:text-orange-700 text-sm font-medium"
-              >
-                {isSignUp ? 'Já tem conta? Entrar' : 'Primeira vez? Criar conta'}
-              </button>
-            </div>
           </form>
 
-          <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <p className="text-yellow-800 text-sm">
-              <strong>Credenciais de Admin:</strong><br />
+          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-blue-800 text-sm">
+              <strong>Credenciais Pré-definidas:</strong><br />
               Email: admin@motivovisionario.com<br />
               Senha: Admin123!
             </p>
