@@ -20,7 +20,7 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-gray-300 mb-6 leading-relaxed text-lg">
-              Há mais de 15 anos especialistas em armação de ferro e cofragem estrutural. 
+              Há mais de 20 anos especialistas em armação de ferro e cofragem estrutural. 
               Oferecemos estruturas sólidas e seguras para habitações, 
               empresas e indústrias em toda a região.
             </p>
@@ -62,7 +62,7 @@ const Footer = () => {
         <div className="border-t border-gray-700 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400">
-              © 2024 Motivo Visionário. Todos os direitos reservados.
+              © 2025 Motivo Visionário. Todos os direitos reservados. Site criado por <a href="https://casacriativami.com/">Casa Criativa MI</a>.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a href="#" className="text-gray-400 hover:text-orange-400 transition-colors">
