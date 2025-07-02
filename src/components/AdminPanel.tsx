@@ -13,8 +13,11 @@ import {
   Image as ImageIcon,
   Calendar,
   MapPin,
-  Clock
+  Clock,
+  TrendingUp
 } from 'lucide-react';
+import ProjectImageManager from './ProjectImageManager';
+import ProjectProgressManager from './ProjectProgressManager';
 
 interface Project {
   id?: string;
@@ -38,6 +41,8 @@ const AdminPanel = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [showImageManager, setShowImageManager] = useState<string | null>(null);
+  const [showProgressManager, setShowProgressManager] = useState<string | null>(null);
   const [formData, setFormData] = useState<Project>({
     title: '',
     category: '',
@@ -134,7 +139,6 @@ const AdminPanel = () => {
     
     try {
       if (editingProject) {
-        // Update existing project
         const { error } = await supabase
           .from('projects')
           .update(formData)
@@ -142,7 +146,6 @@ const AdminPanel = () => {
 
         if (error) throw error;
       } else {
-        // Create new project
         const { error } = await supabase
           .from('projects')
           .insert([formData]);
@@ -288,6 +291,20 @@ const AdminPanel = () => {
                     {project.category}
                   </span>
                   <div className="flex space-x-2">
+                    <button
+                      onClick={() => setShowImageManager(project.id!)}
+                      className="text-purple-600 hover:text-purple-800 transition-colors"
+                      title="Gestão de Imagens"
+                    >
+                      <ImageIcon className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => setShowProgressManager(project.id!)}
+                      className="text-green-600 hover:text-green-800 transition-colors"
+                      title="Gestão de Progresso"
+                    >
+                      <TrendingUp className="h-4 w-4" />
+                    </button>
                     <button
                       onClick={() => handleEdit(project)}
                       className="text-blue-600 hover:text-blue-800 transition-colors"
@@ -506,6 +523,22 @@ const AdminPanel = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Image Manager Modal */}
+      {showImageManager && (
+        <ProjectImageManager
+          projectId={showImageManager}
+          onClose={() => setShowImageManager(null)}
+        />
+      )}
+
+      {/* Progress Manager Modal */}
+      {showProgressManager && (
+        <ProjectProgressManager
+          projectId={showProgressManager}
+          onClose={() => setShowProgressManager(null)}
+        />
       )}
     </div>
   );
