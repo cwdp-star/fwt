@@ -19,8 +19,8 @@ const About = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
             <div>
               <img 
-                src="https://images.unsplash.com/photo-1597740985671-5f3faeb5c7c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                alt="Armação de ferro para estruturas"
+                src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                alt="Trabalhadores executando armação de ferro em grande obra"
                 className="rounded-xl shadow-2xl w-full h-96 object-cover"
               />
             </div>

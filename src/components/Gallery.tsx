@@ -10,38 +10,38 @@ const Gallery = () => {
   const projects = [
     {
       id: 1,
-      title: "Armação de Laje com Vergalhões",
-      category: "Armação",
+      title: "Edifício Residencial Torres da Rinchoa",
+      category: "Armação Residencial",
       image: "https://images.unsplash.com/photo-1597740985671-5f3faeb5c7c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 2,
-      title: "Montagem de Cofragem Estrutural",
-      category: "Cofragem",
+      title: "Armazém Industrial Cascais", 
+      category: "Cofragem Industrial",
       image: "https://images.unsplash.com/photo-1590736969955-71cc94901144?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 3,
-      title: "Estrutura de Ferro para Lajes",
-      category: "Estrutural",
+      title: "Centro Comercial Sintra",
+      category: "Estrutural Comercial",
       image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 4,
-      title: "Armação de Pilares",
-      category: "Pilares",
+      title: "Complexo Habitacional Amadora",
+      category: "Armação Habitacional",
       image: "https://images.unsplash.com/photo-1572825719628-4aceb70d8828?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 5,
-      title: "Cofragem para Fundações",
-      category: "Fundações",
+      title: "Escritórios Corporativos Lisboa",
+      category: "Cofragem Corporativa",
       image: "https://images.unsplash.com/photo-1545558014-8692077e9b5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 6,
-      title: "Equipa Montando Estrutura",
-      category: "Montagem",
+      title: "Hospital Regional Oeiras",
+      category: "Estrutural Hospitalar",
       image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     }
   ];
