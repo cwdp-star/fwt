@@ -86,10 +86,7 @@ const Footer = () => {
                 <p className="font-semibold text-white">Segunda a Sexta:</p>
                 <p className="text-lg">08:00 às 18:00</p>
               </div>
-              <div>
-                <p className="font-semibold text-white">Sábados:</p>
-                <p className="text-lg">08:00 às 13:00</p>
-              </div>
+
             </div>
             <p className="text-sm text-gray-400 mt-4">
               Contacto de emergência: +351 912 363 935
