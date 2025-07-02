@@ -1,9 +1,11 @@
 
 import { useState } from 'react';
-import { Images } from 'lucide-react';
+import { Images, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const projects = [
     {
@@ -87,16 +89,26 @@ const Gallery = () => {
             ))}
           </div>
 
-          <div className="text-center mt-16">
-            <p className="text-gray-300 mb-6 text-lg font-medium">
-              Precisa de uma estrutura sólida? Entre em contacto connosco!
-            </p>
+          <div className="text-center mt-16 space-y-4">
             <button 
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white px-10 py-4 rounded-lg font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl"
+              onClick={() => navigate('/projects')}
+              className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl inline-flex items-center space-x-2 mb-4"
             >
-              Solicitar Orçamento
+              <span>Ver Todos os Projetos</span>
+              <ArrowRight className="h-5 w-5" />
             </button>
+            
+            <div>
+              <p className="text-gray-300 mb-6 text-lg font-medium">
+                Precisa de uma estrutura sólida? Entre em contacto connosco!
+              </p>
+              <button 
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white px-10 py-4 rounded-lg font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl"
+              >
+                Solicitar Orçamento
+              </button>
+            </div>
           </div>
         </div>
       </div>

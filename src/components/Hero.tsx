@@ -19,7 +19,7 @@ const Hero = () => {
       {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-6xl mx-auto">
         <div className="flex justify-center mb-8">
-          <div className="w-32 h-32 bg-white rounded-full shadow-2xl flex items-center justify-center p-4">
+          <div className="w-32 h-32 rounded-full shadow-2xl flex items-center justify-center p-4">
             <img 
               src="/lovable-uploads/dfdb0f79-49d1-438c-b58d-fc91a779077d.png" 
               alt="Motivo Visionário Logo" 
@@ -57,22 +57,24 @@ const Hero = () => {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-16 border-t border-white/30">
-          <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-orange-400 mb-2">500+</div>
-            <div className="text-gray-300 font-medium">Estruturas Executadas</div>
-          </div>
-          <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-orange-400 mb-2">15+</div>
-            <div className="text-gray-300 font-medium">Anos de Experiência</div>
-          </div>
-          <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-orange-400 mb-2">100%</div>
-            <div className="text-gray-300 font-medium">Segurança Garantida</div>
-          </div>
-          <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-orange-400 mb-2">24h</div>
-            <div className="text-gray-300 font-medium">Apoio Técnico</div>
+        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold text-white mb-2">50+</div>
+              <div className="text-gray-300 font-medium">Estruturas Executadas</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold text-white mb-2">5+</div>
+              <div className="text-gray-300 font-medium">Anos de Experiência</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold text-white mb-2">100%</div>
+              <div className="text-gray-300 font-medium">Segurança Garantida</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold text-white mb-2">2</div>
+              <div className="text-gray-300 font-medium">Anos de Garantia</div>
+            </div>
           </div>
         </div>
       </div>
