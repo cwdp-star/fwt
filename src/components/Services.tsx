@@ -1,4 +1,3 @@
-
 import { Hammer, Building } from 'lucide-react';
 
 const Services = () => {
@@ -26,8 +25,7 @@ const Services = () => {
               Os Nossos <span className="text-orange-600">Serviços</span>
             </h2>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto font-medium">
-              Oferecemos soluções completas em armação de ferro e cofragem estrutural, 
-              com qualidade profissional e segurança garantida.
+              Soluções profissionais em armação de ferro e cofragem para obras seguras, bem executadas e dentro dos padrões exigidos.
             </p>
           </div>
 
