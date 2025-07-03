@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
@@ -58,8 +57,10 @@ const AdminPanel = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('AdminPanel mounted');
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log('Auth state changed:', event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
         
@@ -70,6 +71,7 @@ const AdminPanel = () => {
     );
 
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Current session:', session?.user?.email);
       setSession(session);
       setUser(session?.user ?? null);
       
@@ -84,6 +86,7 @@ const AdminPanel = () => {
   }, [navigate]);
 
   const checkAdminStatus = async (userId: string) => {
+    console.log('Checking admin status for user:', userId);
     try {
       const { data, error } = await supabase
         .from('user_roles')
@@ -92,6 +95,8 @@ const AdminPanel = () => {
         .eq('role', 'admin')
         .maybeSingle();
 
+      console.log('Admin check result:', data, error);
+
       if (error) {
         console.error('Error checking admin status:', error);
         navigate('/admin-login');
@@ -99,9 +104,11 @@ const AdminPanel = () => {
       }
 
       if (data?.role === 'admin') {
+        console.log('User is admin, loading projects');
         setIsAdmin(true);
         fetchProjects();
       } else {
+        console.log('User is not admin, redirecting');
         navigate('/admin-login');
       }
     } catch (error) {
@@ -217,7 +224,13 @@ const AdminPanel = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-red-600 mb-4">Acesso Negado</h2>
-          <p className="text-gray-600">Apenas administradores podem aceder a esta página</p>
+          <p className="text-gray-600 mb-4">Apenas administradores podem aceder a esta página</p>
+          <button
+            onClick={() => navigate('/admin-login')}
+            className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg"
+          >
+            Ir para Login
+          </button>
         </div>
       </div>
     );
