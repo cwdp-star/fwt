@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +5,8 @@ import { User, Session } from '@supabase/supabase-js';
 import { Eye, EyeOff, ArrowLeft, Shield } from 'lucide-react';
 
 const AdminLogin = () => {
+  console.log('AdminLogin component rendering');
+  
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [email, setEmail] = useState('admin@motivovisionario.com');
@@ -16,8 +17,10 @@ const AdminLogin = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('AdminLogin useEffect running');
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('Auth state change in AdminLogin:', event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
         
@@ -28,6 +31,7 @@ const AdminLogin = () => {
     );
 
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Current session in AdminLogin:', session?.user?.email);
       setSession(session);
       setUser(session?.user ?? null);
       
@@ -40,6 +44,7 @@ const AdminLogin = () => {
   }, []);
 
   const checkAdminAndRedirect = async (userId: string) => {
+    console.log('Checking admin status in AdminLogin for user:', userId);
     try {
       const { data, error } = await supabase
         .from('user_roles')
@@ -48,6 +53,8 @@ const AdminLogin = () => {
         .eq('role', 'admin')
         .maybeSingle();
 
+      console.log('Admin check result in AdminLogin:', data, error);
+
       if (error) {
         console.error('Error checking admin role:', error);
         setError('Erro ao verificar permissões');
@@ -55,6 +62,7 @@ const AdminLogin = () => {
       }
 
       if (data?.role === 'admin') {
+        console.log('User is admin, navigating to /admin');
         navigate('/admin');
       } else {
         setError('Acesso negado: apenas administradores podem aceder. Entre em contacto para obter acesso de administrador.');
