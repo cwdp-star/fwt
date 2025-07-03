@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import TestRoute from "./pages/TestRoute";
 import ProjectsPage from "./components/ProjectsPage";
 import AdminLogin from "./components/AdminLogin";
 import AdminPanel from "./components/AdminPanel";
@@ -13,7 +14,7 @@ import AdminPanel from "./components/AdminPanel";
 const queryClient = new QueryClient();
 
 const App = () => {
-  console.log('App component rendering');
+  console.log('App rendering - all routes configured');
   
   return (
     <QueryClientProvider client={queryClient}>
@@ -21,13 +22,16 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/admin-login" element={<AdminLogin />} />
-            <Route path="/admin" element={<AdminPanel />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <div className="min-h-screen">
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/projects" element={<ProjectsPage />} />
+              <Route path="/test" element={<TestRoute />} />
+              <Route path="/admin-login" element={<AdminLogin />} />
+              <Route path="/admin" element={<AdminPanel />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </div>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

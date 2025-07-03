@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
@@ -5,7 +6,7 @@ import { User, Session } from '@supabase/supabase-js';
 import { Eye, EyeOff, ArrowLeft, Shield } from 'lucide-react';
 
 const AdminLogin = () => {
-  console.log('AdminLogin component rendering');
+  console.log('AdminLogin component loaded successfully');
   
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
@@ -17,34 +18,41 @@ const AdminLogin = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('AdminLogin useEffect running');
+    console.log('AdminLogin useEffect started');
+    
+    // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log('Auth state change in AdminLogin:', event, session?.user?.email);
+      (event, session) => {
+        console.log('Auth event:', event, 'User:', session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
         
         if (event === 'SIGNED_IN' && session?.user) {
-          await checkAdminAndRedirect(session.user.id);
+          checkAdminStatus(session.user.id);
         }
       }
     );
 
+    // Check current session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('Current session in AdminLogin:', session?.user?.email);
+      console.log('Current session:', session?.user?.email || 'No session');
       setSession(session);
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        checkAdminAndRedirect(session.user.id);
+        checkAdminStatus(session.user.id);
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      console.log('AdminLogin cleanup');
+      subscription.unsubscribe();
+    };
   }, []);
 
-  const checkAdminAndRedirect = async (userId: string) => {
-    console.log('Checking admin status in AdminLogin for user:', userId);
+  const checkAdminStatus = async (userId: string) => {
+    console.log('Checking admin status for:', userId);
+    
     try {
       const { data, error } = await supabase
         .from('user_roles')
@@ -53,7 +61,7 @@ const AdminLogin = () => {
         .eq('role', 'admin')
         .maybeSingle();
 
-      console.log('Admin check result in AdminLogin:', data, error);
+      console.log('Admin check result:', { data, error });
 
       if (error) {
         console.error('Error checking admin role:', error);
@@ -62,20 +70,23 @@ const AdminLogin = () => {
       }
 
       if (data?.role === 'admin') {
-        console.log('User is admin, navigating to /admin');
+        console.log('User is admin - redirecting to /admin');
         navigate('/admin');
       } else {
+        console.log('User is not admin');
         setError('Acesso negado: apenas administradores podem aceder. Entre em contacto para obter acesso de administrador.');
         await supabase.auth.signOut();
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Unexpected error:', error);
       setError('Erro inesperado');
     }
   };
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Sign in attempt for:', email);
+    
     setLoading(true);
     setError(null);
 
@@ -85,7 +96,10 @@ const AdminLogin = () => {
         password,
       });
 
+      console.log('Sign in result:', { user: data.user?.email, error });
+
       if (error) {
+        console.error('Sign in error:', error);
         if (error.message.includes('Invalid login credentials')) {
           setError('Email ou senha incorretos');
         } else {
@@ -93,8 +107,10 @@ const AdminLogin = () => {
         }
         return;
       }
+
+      console.log('Sign in successful');
     } catch (error) {
-      console.error('Sign in error:', error);
+      console.error('Sign in exception:', error);
       setError('Erro na autenticação');
     } finally {
       setLoading(false);
@@ -102,6 +118,7 @@ const AdminLogin = () => {
   };
 
   const handleSignOut = async () => {
+    console.log('Signing out');
     try {
       await supabase.auth.signOut();
       setError(null);
@@ -111,6 +128,7 @@ const AdminLogin = () => {
     }
   };
 
+  // If user is signed in, show loading state
   if (session && user) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -134,6 +152,7 @@ const AdminLogin = () => {
     );
   }
 
+  // Login form
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-gray-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
