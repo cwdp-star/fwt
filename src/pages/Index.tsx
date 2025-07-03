@@ -11,12 +11,15 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <Header />
-      <Hero />
-      <About />
-      <Services />
-      <Gallery />
-      <ContactForm />
-      <Footer />
+      {/* Add top margin to account for fixed header */}
+      <div className="mt-32">
+        <Hero />
+        <About />
+        <Services />
+        <Gallery />
+        <ContactForm />
+        <Footer />
+      </div>
     </div>
   );
 };

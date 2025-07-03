@@ -60,11 +60,16 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-700 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400">
-              © 2025 Motivo Visionário. Todos os direitos reservados. Site criado por <a href="https://casacriativami.com/">Casa Criativa MI</a>.
-            </p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div className="text-center md:text-left">
+              <p className="text-gray-400 mb-2">
+                © 2025 Motivo Visionário. Todos os direitos reservados. Site criado por <a href="https://casacriativami.com/" className="text-orange-400 hover:text-orange-300 transition-colors">Casa Criativa MI</a>.
+              </p>
+              <p className="text-gray-400 text-sm">
+                <span className="font-semibold">Alvará:</span> 144640 - PUB
+              </p>
+            </div>
+            <div className="flex space-x-6">
               <a href="#" className="text-gray-400 hover:text-orange-400 transition-colors">
                 Política de Privacidade
               </a>
@@ -86,7 +91,6 @@ const Footer = () => {
                 <p className="font-semibold text-white">Segunda a Sexta:</p>
                 <p className="text-lg">08:00 às 18:00</p>
               </div>
-
             </div>
             <p className="text-sm text-gray-400 mt-4">
               Contacto de emergência: +351 912 363 935

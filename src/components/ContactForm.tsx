@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from '@/integrations/supabase/client';
 import ContactFormFields from './ContactFormFields';
 import DocumentUpload from './DocumentUpload';
 
@@ -18,47 +19,52 @@ const ContactForm = () => {
   });
 
   const [documents, setDocuments] = useState<File[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     
-    // Create mailto link with form data
-    const subject = encodeURIComponent(`Pedido de Orçamento - ${formData.projectType}`);
-    const body = encodeURIComponent(`
-Nome: ${formData.name}
-Email: ${formData.email}
-Telefone: ${formData.phone}
-Tipo de Projeto: ${formData.projectType}
-Localização: ${formData.location}
-Orçamento Previsto: ${formData.budget}
-Prazo Desejado: ${formData.timeline}
+    try {
+      // Send email via Supabase Edge Function
+      const { error } = await supabase.functions.invoke('send-quote-email', {
+        body: {
+          ...formData,
+          documentsCount: documents.length
+        }
+      });
 
-Descrição do Projeto:
-${formData.description}
+      if (error) {
+        throw error;
+      }
 
-Documentos Anexados: ${documents.length > 0 ? documents.map(doc => doc.name).join(', ') : 'Nenhum'}
-    `);
-    
-    const mailtoLink = `mailto:geral@motivovisionario.pt?subject=${subject}&body=${body}`;
-    window.location.href = mailtoLink;
-    
-    toast({
-      title: "Orçamento Solicitado!",
-      description: "O seu pedido de orçamento foi preparado. Verifique o seu cliente de email.",
-    });
+      toast({
+        title: "Orçamento Enviado com Sucesso!",
+        description: "Recebemos o seu pedido de orçamento. Entraremos em contacto dentro de 24 horas.",
+      });
 
-    // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      projectType: '',
-      location: '',
-      budget: '',
-      timeline: '',
-      description: ''
-    });
-    setDocuments([]);
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        projectType: '',
+        location: '',
+        budget: '',
+        timeline: '',
+        description: ''
+      });
+      setDocuments([]);
+    } catch (error) {
+      console.error('Error sending quote request:', error);
+      toast({
+        title: "Erro ao Enviar",
+        description: "Ocorreu um erro ao enviar o seu pedido. Tente novamente ou contacte-nos diretamente.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -93,9 +99,10 @@ Documentos Anexados: ${documents.length > 0 ? documents.map(doc => doc.name).joi
               <div className="text-center pt-6">
                 <button
                   type="submit"
-                  className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white px-12 py-4 rounded-lg font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
+                  disabled={isSubmitting}
+                  className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 disabled:opacity-50 disabled:cursor-not-allowed text-white px-12 py-4 rounded-lg font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
                 >
-                  Solicitar Orçamento Gratuito
+                  {isSubmitting ? 'A Enviar...' : 'Solicitar Orçamento Gratuito'}
                 </button>
                 <p className="text-sm text-gray-600 mt-4 font-medium">
                   * Campos obrigatórios. Responderemos em 24 horas.
