@@ -14,8 +14,6 @@ import AdminPanel from "./components/AdminPanel";
 const queryClient = new QueryClient();
 
 const App = () => {
-  console.log('App rendering - all routes configured');
-  
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
