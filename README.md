@@ -1,73 +1,65 @@
-# Welcome to your Lovable project
 
-## Project info
+# Motivo Visionário - Ferro e Cofragem
 
-**URL**: https://lovable.dev/projects/59a1f4c8-2856-47da-ac03-f45735ba96f2
+Site oficial da empresa Motivo Visionário, especializada em ferro e cofragem.
 
-## How can I edit this code?
+## 🚀 Deploy no Vercel
 
-There are several ways of editing your application.
+### Configurações Necessárias
 
-**Use Lovable**
+1. **Site URL no Supabase**: Configure no painel do Supabase em Authentication > URL Configuration:
+   - Site URL: `https://seu-dominio.vercel.app`
+   - Redirect URLs: `https://seu-dominio.vercel.app/**`
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/59a1f4c8-2856-47da-ac03-f45735ba96f2) and start prompting.
+2. **Variáveis de Ambiente no Vercel**: Não são necessárias, as URLs do Supabase estão hardcoded no código.
 
-Changes made via Lovable will be committed automatically to this repo.
+### Funcionalidades
 
-**Use your preferred IDE**
+- ✅ Página inicial com informações da empresa
+- ✅ Galeria de projetos
+- ✅ Formulário de contacto
+- ✅ Painel administrativo protegido
+- ✅ Autenticação com Supabase
+- ✅ Gestão de projetos e imagens
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Tecnologias
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- Supabase
+- React Router DOM
 
-Follow these steps:
+### Desenvolvimento Local
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Build para Produção
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+npm run build
+```
 
-**Use GitHub Codespaces**
+### Estrutura do Projeto
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```
+src/
+├── components/        # Componentes React
+├── pages/            # Páginas da aplicação
+├── integrations/     # Configurações do Supabase
+└── lib/              # Utilitários
+```
 
-## What technologies are used for this project?
+### Autenticação
 
-This project is built with:
+O sistema utiliza Row Level Security (RLS) do Supabase com roles de usuário:
+- **admin**: Acesso completo ao painel administrativo
+- **user**: Acesso básico
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Suporte
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/59a1f4c8-2856-47da-ac03-f45735ba96f2) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Para suporte técnico, contacte através do formulário no site.
