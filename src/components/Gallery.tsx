@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Images, ArrowRight } from 'lucide-react';
+import { Images, ArrowRight, MapPin, Calendar } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -9,12 +9,15 @@ interface Project {
   title: string;
   category: string;
   cover_image: string;
+  city: string;
+  start_date: string;
+  description: string;
 }
 
 const Gallery = () => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,8 +28,9 @@ const Gallery = () => {
     try {
       const { data, error } = await supabase
         .from('projects')
-        .select('id, title, category, cover_image')
-        .order('created_at', { ascending: false });
+        .select('id, title, category, cover_image, city, start_date, description')
+        .order('created_at', { ascending: false })
+        .limit(6);
 
       if (error) throw error;
       setProjects(data || []);
@@ -35,6 +39,15 @@ const Gallery = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const categories = ['all', ...Array.from(new Set(projects.map(p => p.category)))];
+  const filteredProjects = selectedCategory === 'all' 
+    ? projects 
+    : projects.filter(p => p.category === selectedCategory);
+
+  const handleProjectClick = (projectId: string) => {
+    navigate(`/projects?project=${projectId}`);
   };
 
   if (loading) {
@@ -49,7 +62,11 @@ const Gallery = () => {
                   Os Nossos <span className="text-orange-500">Projetos</span>
                 </h2>
               </div>
-              <p className="text-xl text-gray-300">A carregar projetos...</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="bg-gray-800 rounded-xl h-80 animate-pulse"></div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -60,7 +77,8 @@ const Gallery = () => {
   return (
     <section id="gallery" className="py-20 bg-gray-900">
       <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
           <div className="text-center mb-16">
             <div className="flex items-center justify-center space-x-3 mb-6">
               <Images className="h-10 w-10 text-orange-500" />
@@ -74,48 +92,98 @@ const Gallery = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project) => (
+          {/* Category Filters */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                  selectedCategory === category
+                    ? 'bg-orange-500 text-white shadow-lg scale-105'
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
+                }`}
+              >
+                {category === 'all' ? 'Todos' : category}
+              </button>
+            ))}
+          </div>
+
+          {/* Projects Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {filteredProjects.map((project) => (
               <div 
                 key={project.id}
-                className="group relative overflow-hidden rounded-xl cursor-pointer transform transition-all duration-300 hover:scale-105 shadow-xl"
-                onClick={() => setSelectedImage(project.cover_image)}
+                className="group relative overflow-hidden rounded-2xl cursor-pointer transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 shadow-2xl"
+                onClick={() => handleProjectClick(project.id)}
               >
-                <img 
-                  src={project.cover_image}
-                  alt={project.title}
-                  className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <div className="text-sm text-orange-400 font-bold mb-1">
+                {/* Image */}
+                <div className="relative h-80 overflow-hidden">
+                  <img 
+                    src={project.cover_image}
+                    alt={project.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
+                  
+                  {/* Category Badge */}
+                  <div className="absolute top-4 left-4">
+                    <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
                       {project.category}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                  <h3 className="text-xl font-bold mb-2 group-hover:text-orange-400 transition-colors">
+                    {project.title}
+                  </h3>
+                  
+                  <p className="text-gray-300 text-sm mb-3 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                    {project.description}
+                  </p>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-1">
+                      <div className="flex items-center text-sm text-gray-300">
+                        <MapPin className="h-4 w-4 mr-1 text-orange-400" />
+                        <span>{project.city}</span>
+                      </div>
+                      <div className="flex items-center text-sm text-gray-300">
+                        <Calendar className="h-4 w-4 mr-1 text-orange-400" />
+                        <span>{project.start_date}</span>
+                      </div>
                     </div>
-                    <h3 className="text-lg font-bold">
-                      {project.title}
-                    </h3>
+                    
+                    <div className="bg-white/20 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200">
+                      <ArrowRight className="h-5 w-5 text-white" />
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="text-center mt-16 space-y-4">
+          {/* Call to Action */}
+          <div className="text-center space-y-6">
             <button 
               onClick={() => navigate('/projects')}
-              className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl inline-flex items-center space-x-2 mb-4"
+              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-10 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl inline-flex items-center space-x-3"
             >
               <span>Ver Todos os Projetos</span>
-              <ArrowRight className="h-5 w-5" />
+              <ArrowRight className="h-6 w-6" />
             </button>
             
-            <div>
+            <div className="mt-8">
               <p className="text-gray-300 mb-6 text-lg font-medium">
                 Precisa de uma estrutura sólida? Entre em contacto connosco!
               </p>
               <button 
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white px-10 py-4 rounded-lg font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl"
+                className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 shadow-xl"
               >
                 Solicitar Orçamento
               </button>
@@ -123,22 +191,6 @@ const Gallery = () => {
           </div>
         </div>
       </div>
-
-      {/* Modal para visualizar imagem */}
-      {selectedImage && (
-        <div 
-          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
-          onClick={() => setSelectedImage(null)}
-        >
-          <div className="max-w-4xl max-h-full">
-            <img 
-              src={selectedImage}
-              alt="Projeto ampliado"
-              className="w-full h-auto rounded-lg"
-            />
-          </div>
-        </div>
-      )}
     </section>
   );
 };
