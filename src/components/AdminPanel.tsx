@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
@@ -5,16 +6,16 @@ import { User, Session } from '@supabase/supabase-js';
 import { 
   LogOut, 
   Plus, 
-  Edit, 
-  Trash2, 
-  Save, 
-  X, 
-  Image as ImageIcon,
-  Calendar,
-  MapPin,
-  Clock,
-  TrendingUp
+  Search,
+  Filter,
+  LayoutDashboard,
+  Settings,
+  Users,
+  FileText
 } from 'lucide-react';
+import AdminDashboard from './admin/AdminDashboard';
+import ProjectFormWizard from './admin/ProjectFormWizard';
+import ProjectCard from './admin/ProjectCard';
 import ProjectImageManager from './ProjectImageManager';
 import ProjectProgressManager from './ProjectProgressManager';
 
@@ -38,22 +39,13 @@ const AdminPanel = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [showForm, setShowForm] = useState(false);
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [showWizard, setShowWizard] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [showImageManager, setShowImageManager] = useState<string | null>(null);
   const [showProgressManager, setShowProgressManager] = useState<string | null>(null);
-  const [formData, setFormData] = useState<Project>({
-    title: '',
-    category: '',
-    city: '',
-    duration: '',
-    start_date: '',
-    end_date: '',
-    delivery_date: '',
-    completion_deadline: '',
-    description: '',
-    cover_image: ''
-  });
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -141,53 +133,9 @@ const AdminPanel = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    try {
-      if (editingProject) {
-        const { error } = await supabase
-          .from('projects')
-          .update(formData)
-          .eq('id', editingProject.id);
-
-        if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .from('projects')
-          .insert([formData]);
-
-        if (error) throw error;
-      }
-
-      // Reset form
-      setFormData({
-        title: '',
-        category: '',
-        city: '',
-        duration: '',
-        start_date: '',
-        end_date: '',
-        delivery_date: '',
-        completion_deadline: '',
-        description: '',
-        cover_image: ''
-      });
-      setEditingProject(null);
-      setShowForm(false);
-      
-      // Refresh projects
-      fetchProjects();
-    } catch (error) {
-      console.error('Error saving project:', error);
-      alert('Erro ao salvar projeto');
-    }
-  };
-
   const handleEdit = (project: Project) => {
-    setFormData(project);
     setEditingProject(project);
-    setShowForm(true);
+    setShowWizard(true);
   };
 
   const handleDelete = async (projectId: string) => {
@@ -208,10 +156,24 @@ const AdminPanel = () => {
     }
   };
 
+  const handleViewProject = (projectId: string) => {
+    navigate(`/projects?project=${projectId}`);
+  };
+
+  const categories = ['all', ...Array.from(new Set(projects.map(p => p.category)))];
+  const filteredProjects = projects.filter(project => {
+    const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         project.city.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || project.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 mx-auto mb-4"></div>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">A carregar...</h2>
           <p className="text-gray-600">A verificar permissões de administrador</p>
         </div>
@@ -222,12 +184,15 @@ const AdminPanel = () => {
   if (!isAdmin) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
+        <div className="text-center max-w-md mx-auto p-8">
+          <div className="bg-red-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <Settings className="h-8 w-8 text-red-600" />
+          </div>
           <h2 className="text-2xl font-bold text-red-600 mb-4">Acesso Negado</h2>
-          <p className="text-gray-600 mb-4">Apenas administradores podem aceder a esta página</p>
+          <p className="text-gray-600 mb-6">Apenas administradores podem aceder a esta página</p>
           <button
             onClick={() => navigate('/admin-login')}
-            className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg"
+            className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium"
           >
             Ir para Login
           </button>
@@ -239,15 +204,44 @@ const AdminPanel = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white shadow-sm border-b sticky top-0 z-40">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Painel Administrativo</h1>
-              <p className="text-gray-600">Gestão de Projetos - Motivo Visionário</p>
+            <div className="flex items-center space-x-6">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Painel Administrativo</h1>
+                <p className="text-gray-600">Gestão de Projetos - Motivo Visionário</p>
+              </div>
+              
+              {/* Tabs */}
+              <nav className="hidden md:flex space-x-1">
+                <button
+                  onClick={() => setActiveTab('dashboard')}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+                    activeTab === 'dashboard' 
+                      ? 'bg-orange-100 text-orange-700' 
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
+                >
+                  <LayoutDashboard className="h-4 w-4" />
+                  <span>Dashboard</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('projects')}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+                    activeTab === 'projects' 
+                      ? 'bg-orange-100 text-orange-700' 
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
+                >
+                  <FileText className="h-4 w-4" />
+                  <span>Projetos</span>
+                </button>
+              </nav>
             </div>
+            
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-600 hidden sm:block">
                 Bem-vindo, {user?.email}
               </span>
               <button
@@ -255,7 +249,7 @@ const AdminPanel = () => {
                 className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
               >
                 <LogOut className="h-4 w-4" />
-                <span>Sair</span>
+                <span className="hidden sm:inline">Sair</span>
               </button>
             </div>
           </div>
@@ -263,282 +257,114 @@ const AdminPanel = () => {
       </header>
 
       <div className="container mx-auto px-4 py-8">
-        {/* Add Project Button */}
-        <div className="mb-8">
-          <button
-            onClick={() => {
-              setFormData({
-                title: '',
-                category: '',
-                city: '',
-                duration: '',
-                start_date: '',
-                end_date: '',
-                delivery_date: '',
-                completion_deadline: '',
-                description: '',
-                cover_image: ''
-              });
-              setEditingProject(null);
-              setShowForm(true);
-            }}
-            className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center space-x-2 transition-colors"
-          >
-            <Plus className="h-5 w-5" />
-            <span>Adicionar Novo Projeto</span>
-          </button>
-        </div>
+        {activeTab === 'dashboard' && <AdminDashboard />}
 
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
-            <div key={project.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <img
-                src={project.cover_image}
-                alt={project.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-orange-600 bg-orange-100 px-2 py-1 rounded">
-                    {project.category}
-                  </span>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => setShowImageManager(project.id!)}
-                      className="text-purple-600 hover:text-purple-800 transition-colors"
-                      title="Gestão de Imagens"
-                    >
-                      <ImageIcon className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => setShowProgressManager(project.id!)}
-                      className="text-green-600 hover:text-green-800 transition-colors"
-                      title="Gestão de Progresso"
-                    >
-                      <TrendingUp className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => handleEdit(project)}
-                      className="text-blue-600 hover:text-blue-800 transition-colors"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(project.id!)}
-                      className="text-red-600 hover:text-red-800 transition-colors"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
+        {activeTab === 'projects' && (
+          <div className="space-y-6">
+            {/* Controls */}
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <button
+                onClick={() => {
+                  setEditingProject(null);
+                  setShowWizard(true);
+                }}
+                className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center space-x-2 transition-colors shadow-lg w-fit"
+              >
+                <Plus className="h-5 w-5" />
+                <span>Novo Projeto</span>
+              </button>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                {/* Search */}
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <input
+                    type="text"
+                    placeholder="Pesquisar projetos..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent w-full sm:w-80"
+                  />
                 </div>
-                
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{project.title}</h3>
-                
-                <div className="space-y-1 text-sm text-gray-600">
-                  <div className="flex items-center">
-                    <MapPin className="h-3 w-3 mr-1" />
-                    <span>{project.city}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Clock className="h-3 w-3 mr-1" />
-                    <span>{project.duration}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Calendar className="h-3 w-3 mr-1" />
-                    <span>{project.delivery_date}</span>
-                  </div>
+
+                {/* Category Filter */}
+                <div className="relative">
+                  <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none bg-white"
+                  >
+                    <option value="all">Todas as Categorias</option>
+                    {categories.slice(1).map(category => (
+                      <option key={category} value={category}>{category}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
 
-        {projects.length === 0 && (
-          <div className="text-center py-16">
-            <h3 className="text-xl font-semibold text-gray-600 mb-4">
-              Nenhum projeto cadastrado
-            </h3>
-            <p className="text-gray-500">
-              Clique em "Adicionar Novo Projeto" para começar.
-            </p>
+            {/* Results Count */}
+            <div className="text-sm text-gray-600">
+              {filteredProjects.length} de {projects.length} projetos
+            </div>
+
+            {/* Projects Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredProjects.map((project) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                  onManageImages={setShowImageManager}
+                  onManageProgress={setShowProgressManager}
+                  onView={handleViewProject}
+                />
+              ))}
+            </div>
+
+            {filteredProjects.length === 0 && (
+              <div className="text-center py-16">
+                <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-gray-600 mb-4">
+                  {projects.length === 0 ? 'Nenhum projeto cadastrado' : 'Nenhum projeto encontrado'}
+                </h3>
+                <p className="text-gray-500 mb-6">
+                  {projects.length === 0 
+                    ? 'Clique em "Novo Projeto" para começar.' 
+                    : 'Tente ajustar os filtros de pesquisa.'
+                  }
+                </p>
+                {projects.length === 0 && (
+                  <button
+                    onClick={() => {
+                      setEditingProject(null);
+                      setShowWizard(true);
+                    }}
+                    className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium"
+                  >
+                    Criar Primeiro Projeto
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
 
-      {/* Form Modal */}
-      {showForm && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-gray-900">
-                  {editingProject ? 'Editar Projeto' : 'Novo Projeto'}
-                </h3>
-                <button
-                  onClick={() => setShowForm(false)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  <X className="h-6 w-6" />
-                </button>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Título
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.title}
-                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Categoria
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.category}
-                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Cidade
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.city}
-                      onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Duração
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.duration}
-                      onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Data de Início
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.start_date}
-                      onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Data de Fim (opcional)
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.end_date || ''}
-                      onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Data de Entrega
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.delivery_date}
-                      onChange={(e) => setFormData({ ...formData, delivery_date: e.target.value })}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Prazo de Conclusão
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.completion_deadline}
-                      onChange={(e) => setFormData({ ...formData, completion_deadline: e.target.value })}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    URL da Imagem de Capa
-                  </label>
-                  <input
-                    type="url"
-                    value={formData.cover_image}
-                    onChange={(e) => setFormData({ ...formData, cover_image: e.target.value })}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    placeholder="https://example.com/image.jpg"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Descrição
-                  </label>
-                  <textarea
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    required
-                    rows={4}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  />
-                </div>
-
-                <div className="flex justify-end space-x-4 pt-4">
-                  <button
-                    type="button"
-                    onClick={() => setShowForm(false)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
-                  >
-                    <Save className="h-4 w-4" />
-                    <span>{editingProject ? 'Atualizar' : 'Criar'} Projeto</span>
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
+      {/* Modals */}
+      {showWizard && (
+        <ProjectFormWizard
+          project={editingProject}
+          onClose={() => {
+            setShowWizard(false);
+            setEditingProject(null);
+          }}
+          onSuccess={fetchProjects}
+        />
       )}
 
-      {/* Image Manager Modal */}
       {showImageManager && (
         <ProjectImageManager
           projectId={showImageManager}
@@ -546,7 +372,6 @@ const AdminPanel = () => {
         />
       )}
 
-      {/* Progress Manager Modal */}
       {showProgressManager && (
         <ProjectProgressManager
           projectId={showProgressManager}
