@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +9,6 @@ import {
   Filter,
   LayoutDashboard,
   Settings,
-  Users,
   FileText
 } from 'lucide-react';
 import AdminDashboard from './admin/AdminDashboard';
@@ -18,20 +16,7 @@ import ProjectFormWizard from './admin/ProjectFormWizard';
 import ProjectCard from './admin/ProjectCard';
 import ProjectImageManager from './ProjectImageManager';
 import ProjectProgressManager from './ProjectProgressManager';
-
-interface Project {
-  id?: string;
-  title: string;
-  category: string;
-  city: string;
-  duration: string;
-  start_date: string;
-  end_date?: string;
-  delivery_date: string;
-  completion_deadline: string;
-  description: string;
-  cover_image: string;
-}
+import { Project } from '@/types/project';
 
 const AdminPanel = () => {
   const [session, setSession] = useState<Session | null>(null);

@@ -9,18 +9,7 @@ import {
   Clock,
   Eye
 } from 'lucide-react';
-
-interface Project {
-  id: string;
-  title: string;
-  category: string;
-  city: string;
-  duration: string;
-  start_date: string;
-  delivery_date: string;
-  description: string;
-  cover_image: string;
-}
+import { Project } from '@/types/project';
 
 interface ProjectCardProps {
   project: Project;
@@ -60,21 +49,21 @@ const ProjectCard = ({
         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
           <div className="flex space-x-3">
             <button
-              onClick={() => onView(project.id)}
+              onClick={() => onView(project.id!)}
               className="bg-white/20 backdrop-blur-sm text-white p-2 rounded-lg hover:bg-white/30 transition-colors"
               title="Ver Projeto"
             >
               <Eye className="h-5 w-5" />
             </button>
             <button
-              onClick={() => onManageImages(project.id)}
+              onClick={() => onManageImages(project.id!)}
               className="bg-white/20 backdrop-blur-sm text-white p-2 rounded-lg hover:bg-white/30 transition-colors"
               title="Gestão de Imagens"
             >
               <ImageIcon className="h-5 w-5" />
             </button>
             <button
-              onClick={() => onManageProgress(project.id)}
+              onClick={() => onManageProgress(project.id!)}
               className="bg-white/20 backdrop-blur-sm text-white p-2 rounded-lg hover:bg-white/30 transition-colors"
               title="Gestão de Progresso"
             >
@@ -123,7 +112,7 @@ const ProjectCard = ({
               <span>Editar</span>
             </button>
             <button
-              onClick={() => onDelete(project.id)}
+              onClick={() => onDelete(project.id!)}
               className="flex items-center space-x-1 text-red-600 hover:text-red-800 text-sm font-medium"
             >
               <Trash2 className="h-4 w-4" />

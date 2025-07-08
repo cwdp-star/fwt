@@ -9,24 +9,10 @@ import {
   MapPin, 
   Building,
   FileText,
-  Image as ImageIcon,
   Eye
 } from 'lucide-react';
 import ImageUpload from '../ImageUpload';
-
-interface Project {
-  id?: string;
-  title: string;
-  category: string;
-  city: string;
-  duration: string;
-  start_date: string;
-  end_date?: string;
-  delivery_date: string;
-  completion_deadline: string;
-  description: string;
-  cover_image: string;
-}
+import { Project } from '@/types/project';
 
 interface ProjectFormWizardProps {
   project?: Project;
