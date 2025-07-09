@@ -52,19 +52,19 @@ const Gallery = () => {
 
   if (loading) {
     return (
-      <section id="gallery" className="py-20 bg-gray-900">
+      <section id="gallery" className="py-20 bg-secondary">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center">
               <div className="flex items-center justify-center space-x-3 mb-6">
-                <Images className="h-10 w-10 text-orange-500" />
+                <Images className="h-10 w-10 text-primary" />
                 <h2 className="text-4xl md:text-5xl font-bold text-white">
-                  Os Nossos <span className="text-orange-500">Projetos</span>
+                  Os Nossos <span className="text-primary">Projetos</span>
                 </h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[...Array(6)].map((_, i) => (
-                  <div key={i} className="bg-gray-800 rounded-xl h-80 animate-pulse"></div>
+                  <div key={i} className="bg-secondary/80 rounded-xl h-80 animate-pulse"></div>
                 ))}
               </div>
             </div>
@@ -75,20 +75,20 @@ const Gallery = () => {
   }
 
   return (
-    <section id="gallery" className="py-20 bg-gray-900">
+    <section id="gallery" className="py-20 bg-secondary">
       <div className="container mx-auto px-4">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-16">
             <div className="flex items-center justify-center space-x-3 mb-6">
-              <Images className="h-10 w-10 text-orange-500" />
+              <Images className="h-10 w-10 text-primary" />
               <h2 className="text-4xl md:text-5xl font-bold text-white">
-                Os Nossos <span className="text-orange-500">Projetos</span>
+                Os Nossos <span className="text-primary">Projetos</span>
               </h2>
             </div>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium">
-              Confira alguns dos nossos trabalhos em armação de ferro e cofragem estrutural. 
-              Cada projeto representa o nosso compromisso com qualidade e segurança.
+              Confira alguns dos nossos trabalhos em construção civil e remodelações. 
+              Cada projeto representa o nosso compromisso com qualidade estrutural e excelência.
             </p>
           </div>
 
@@ -100,8 +100,8 @@ const Gallery = () => {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
                   selectedCategory === category
-                    ? 'bg-orange-500 text-white shadow-lg scale-105'
-                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
+                    ? 'bg-primary text-white shadow-lg scale-105'
+                    : 'bg-secondary/50 text-gray-300 hover:bg-primary/20 hover:text-white border border-primary/30'
                 }`}
               >
                 {category === 'all' ? 'Todos' : category}
@@ -130,7 +130,7 @@ const Gallery = () => {
                   
                   {/* Category Badge */}
                   <div className="absolute top-4 left-4">
-                    <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                    <span className="bg-primary text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
                       {project.category}
                     </span>
                   </div>
@@ -138,7 +138,7 @@ const Gallery = () => {
 
                 {/* Content */}
                 <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="text-xl font-bold mb-2 group-hover:text-orange-400 transition-colors">
+                  <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
                     {project.title}
                   </h3>
                   
@@ -149,11 +149,11 @@ const Gallery = () => {
                   <div className="flex items-center justify-between">
                     <div className="space-y-1">
                       <div className="flex items-center text-sm text-gray-300">
-                        <MapPin className="h-4 w-4 mr-1 text-orange-400" />
+                        <MapPin className="h-4 w-4 mr-1 text-primary" />
                         <span>{project.city}</span>
                       </div>
                       <div className="flex items-center text-sm text-gray-300">
-                        <Calendar className="h-4 w-4 mr-1 text-orange-400" />
+                        <Calendar className="h-4 w-4 mr-1 text-primary" />
                         <span>{project.start_date}</span>
                       </div>
                     </div>
@@ -171,7 +171,7 @@ const Gallery = () => {
           <div className="text-center space-y-6">
             <button 
               onClick={() => navigate('/projects')}
-              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-10 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl inline-flex items-center space-x-3"
+              className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white px-10 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl inline-flex items-center space-x-3"
             >
               <span>Ver Todos os Projetos</span>
               <ArrowRight className="h-6 w-6" />
@@ -179,11 +179,11 @@ const Gallery = () => {
             
             <div className="mt-8">
               <p className="text-gray-300 mb-6 text-lg font-medium">
-                Precisa de uma estrutura sólida? Entre em contacto connosco!
+                Precisa de construção civil ou remodelação? Entre em contacto connosco!
               </p>
               <button 
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 shadow-xl"
+                className="bg-white text-secondary hover:bg-gray-100 px-8 py-3 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 shadow-xl"
               >
                 Solicitar Orçamento
               </button>

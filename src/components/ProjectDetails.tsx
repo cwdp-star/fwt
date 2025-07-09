@@ -40,7 +40,7 @@ const ProjectDetails = ({ project, onBack }: ProjectDetailsProps) => {
       case 'completed':
         return <CheckCircle className="h-5 w-5 text-green-500" />;
       case 'in-progress':
-        return <AlertCircle className="h-5 w-5 text-orange-500" />;
+        return <AlertCircle className="h-5 w-5 text-primary" />;
       case 'pending':
         return <Circle className="h-5 w-5 text-gray-400" />;
       default:
@@ -53,7 +53,7 @@ const ProjectDetails = ({ project, onBack }: ProjectDetailsProps) => {
       case 'completed':
         return 'bg-green-500';
       case 'in-progress':
-        return 'bg-orange-500';
+        return 'bg-primary';
       case 'pending':
         return 'bg-gray-400';
       default:
@@ -81,7 +81,7 @@ const ProjectDetails = ({ project, onBack }: ProjectDetailsProps) => {
           {/* Navigation */}
           <button
             onClick={onBack}
-            className="flex items-center space-x-2 text-orange-600 hover:text-orange-700 font-medium mb-8 transition-colors group"
+            className="flex items-center space-x-2 text-primary hover:text-accent font-medium mb-8 transition-colors group"
           >
             <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
             <span>Voltar aos Projetos</span>
@@ -101,8 +101,8 @@ const ProjectDetails = ({ project, onBack }: ProjectDetailsProps) => {
               <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
                 <div className="max-w-4xl">
                   <div className="flex items-center space-x-3 mb-4">
-                    <Building2 className="h-8 w-8 text-orange-400" />
-                    <span className="bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-bold">
+                    <Building2 className="h-8 w-8 text-primary" />
+                    <span className="bg-primary text-white px-4 py-2 rounded-full text-sm font-bold">
                       {project.category}
                     </span>
                   </div>
@@ -111,15 +111,15 @@ const ProjectDetails = ({ project, onBack }: ProjectDetailsProps) => {
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-lg">
                     <div className="flex items-center space-x-3">
-                      <MapPin className="h-6 w-6 text-orange-400" />
+                      <MapPin className="h-6 w-6 text-primary" />
                       <span><strong>Localização:</strong> {project.city}</span>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <Clock className="h-6 w-6 text-orange-400" />
+                      <Clock className="h-6 w-6 text-primary" />
                       <span><strong>Duração:</strong> {project.duration}</span>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <Calendar className="h-6 w-6 text-orange-400" />
+                      <Calendar className="h-6 w-6 text-primary" />
                       <span><strong>Início:</strong> {project.start_date}</span>
                     </div>
                   </div>
@@ -134,7 +134,7 @@ const ProjectDetails = ({ project, onBack }: ProjectDetailsProps) => {
               {/* Description */}
               <div className="bg-white rounded-2xl shadow-lg p-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center">
-                  <Building2 className="h-8 w-8 text-orange-500 mr-3" />
+                  <Building2 className="h-8 w-8 text-primary mr-3" />
                   Descrição do Projeto
                 </h2>
                 <p className="text-gray-700 leading-relaxed text-lg">{project.description}</p>
@@ -144,9 +144,9 @@ const ProjectDetails = ({ project, onBack }: ProjectDetailsProps) => {
               {project.images && project.images.length > 0 && (
                 <div className="bg-white rounded-2xl shadow-lg p-8">
                   <div className="flex items-center space-x-3 mb-8">
-                    <Camera className="h-8 w-8 text-orange-500" />
+                    <Camera className="h-8 w-8 text-primary" />
                     <h2 className="text-3xl font-bold text-gray-900">Galeria de Fotos</h2>
-                    <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-semibold">
+                    <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-semibold">
                       {project.images.length} foto{project.images.length !== 1 ? 's' : ''}
                     </span>
                   </div>
@@ -185,7 +185,7 @@ const ProjectDetails = ({ project, onBack }: ProjectDetailsProps) => {
               {project.progress && project.progress.length > 0 && (
                 <div className="bg-white rounded-2xl shadow-lg p-8">
                   <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                    <CheckCircle className="h-6 w-6 text-orange-500 mr-2" />
+                    <CheckCircle className="h-6 w-6 text-primary mr-2" />
                     Progresso da Obra
                   </h2>
                   <div className="space-y-6">
@@ -208,7 +208,7 @@ const ProjectDetails = ({ project, onBack }: ProjectDetailsProps) => {
                               <h3 className="font-semibold text-gray-900 text-lg">{phase.phase}</h3>
                               <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
                                 phase.status === 'completed' ? 'bg-green-100 text-green-800' :
-                                phase.status === 'in-progress' ? 'bg-orange-100 text-orange-800' :
+                                phase.status === 'in-progress' ? 'bg-primary/10 text-primary' :
                                 'bg-gray-100 text-gray-600'
                               }`}>
                                 {getStatusText(phase.status)}
@@ -230,22 +230,22 @@ const ProjectDetails = ({ project, onBack }: ProjectDetailsProps) => {
               )}
 
               {/* Project Stats */}
-              <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl shadow-lg p-8 border border-orange-200">
-                <h3 className="text-xl font-bold text-orange-800 mb-6">Estatísticas do Projeto</h3>
+              <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl shadow-lg p-8 border border-primary/20">
+                <h3 className="text-xl font-bold text-secondary mb-6">Estatísticas do Projeto</h3>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-orange-700">Total de Fotos:</span>
-                    <span className="font-bold text-orange-800">{project.images.length}</span>
+                    <span className="text-secondary">Total de Fotos:</span>
+                    <span className="font-bold text-secondary">{project.images.length}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-orange-700">Fases de Progresso:</span>
-                    <span className="font-bold text-orange-800">{project.progress.length}</span>
+                    <span className="text-secondary">Fases de Progresso:</span>
+                    <span className="font-bold text-secondary">{project.progress.length}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-orange-700">Status Atual:</span>
+                    <span className="text-secondary">Status Atual:</span>
                     <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                       project.end_date ? 'bg-green-100 text-green-800' :
-                      project.progress.some(p => p.status === 'in-progress') ? 'bg-orange-100 text-orange-800' :
+                      project.progress.some(p => p.status === 'in-progress') ? 'bg-primary/10 text-primary' :
                       'bg-gray-100 text-gray-600'
                     }`}>
                       {project.end_date ? 'Concluído' : 

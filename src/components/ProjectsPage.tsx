@@ -138,9 +138,9 @@ const ProjectsPage = () => {
     const hasInProgress = project.progress.some(p => p.status === 'in-progress');
     
     if (project.end_date) return { status: 'Concluído', color: 'bg-green-500' };
-    if (hasInProgress) return { status: 'Em Andamento', color: 'bg-orange-500' };
-    if (hasCompleted) return { status: 'Parcialmente Concluído', color: 'bg-blue-500' };
-    return { status: 'Planejamento', color: 'bg-yellow-500' };
+    if (hasInProgress) return { status: 'Em Andamento', color: 'bg-primary' };
+    if (hasCompleted) return { status: 'Parcialmente Concluído', color: 'bg-accent' };
+    return { status: 'Planejamento', color: 'bg-gray-500' };
   };
 
   if (loading) {
@@ -184,7 +184,7 @@ const ProjectsPage = () => {
           <div className="mb-12">
             <button
               onClick={() => window.history.back()}
-              className="flex items-center space-x-2 text-orange-600 hover:text-orange-700 font-medium mb-6 transition-colors"
+              className="flex items-center space-x-2 text-primary hover:text-accent font-medium mb-6 transition-colors"
             >
               <ArrowLeft className="h-5 w-5" />
               <span>Voltar ao Site</span>
@@ -192,14 +192,14 @@ const ProjectsPage = () => {
             
             <div className="text-center bg-white rounded-2xl shadow-xl p-8 mb-8">
               <div className="flex items-center justify-center space-x-3 mb-4">
-                <Building className="h-10 w-10 text-orange-500" />
+                <Building className="h-10 w-10 text-primary" />
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
-                  Os Nossos <span className="text-orange-600">Projetos</span>
+                  Os Nossos <span className="text-primary">Projetos</span>
                 </h1>
               </div>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Explore nossa galeria completa de projetos em armação de ferro e cofragem estrutural. 
-                Cada obra reflete nossa dedicação à excelência e inovação.
+                Explore nossa galeria completa de projetos em construção civil e remodelações. 
+                Cada obra reflete nossa dedicação à qualidade estrutural e excelência.
               </p>
             </div>
 
@@ -214,7 +214,7 @@ const ProjectsPage = () => {
                     placeholder="Pesquisar projetos..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                   />
                 </div>
 
@@ -224,7 +224,7 @@ const ProjectsPage = () => {
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all appearance-none bg-white"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all appearance-none bg-white"
                   >
                     <option value="all">Todas as Categorias</option>
                     {categories.slice(1).map(category => (
@@ -239,7 +239,7 @@ const ProjectsPage = () => {
                   <select
                     value={selectedCity}
                     onChange={(e) => setSelectedCity(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all appearance-none bg-white"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all appearance-none bg-white"
                   >
                     <option value="all">Todas as Cidades</option>
                     {cities.slice(1).map(city => (
@@ -286,7 +286,7 @@ const ProjectsPage = () => {
                       
                       {/* Category Badge */}
                       <div className="absolute top-4 left-4">
-                        <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                        <span className="bg-primary text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
                           {project.category}
                         </span>
                       </div>
@@ -301,7 +301,7 @@ const ProjectsPage = () => {
 
                     {/* Content */}
                     <div className="p-6">
-                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-orange-600 transition-colors">
+                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
                         {project.title}
                       </h3>
                       
@@ -311,20 +311,20 @@ const ProjectsPage = () => {
                       
                       <div className="space-y-3 mb-6">
                         <div className="flex items-center text-sm text-gray-500">
-                          <MapPin className="h-4 w-4 mr-2 text-orange-500" />
+                          <MapPin className="h-4 w-4 mr-2 text-primary" />
                           <span><strong>Cidade:</strong> {project.city}</span>
                         </div>
                         <div className="flex items-center text-sm text-gray-500">
-                          <Clock className="h-4 w-4 mr-2 text-orange-500" />
+                          <Clock className="h-4 w-4 mr-2 text-primary" />
                           <span><strong>Duração:</strong> {project.duration}</span>
                         </div>
                         <div className="flex items-center text-sm text-gray-500">
-                          <Calendar className="h-4 w-4 mr-2 text-orange-500" />
+                          <Calendar className="h-4 w-4 mr-2 text-primary" />
                           <span><strong>Entrega:</strong> {project.delivery_date}</span>
                         </div>
                       </div>
                       
-                      <button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3 px-4 rounded-xl font-semibold transition-all duration-300 transform group-hover:scale-105 shadow-lg">
+                      <button className="w-full bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white py-3 px-4 rounded-xl font-semibold transition-all duration-300 transform group-hover:scale-105 shadow-lg">
                         Ver Detalhes Completos
                       </button>
                     </div>
@@ -348,7 +348,7 @@ const ProjectsPage = () => {
                     setSelectedCategory('all');
                     setSelectedCity('all');
                   }}
-                  className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-semibold transition-colors"
+                  className="bg-primary hover:bg-accent text-white px-6 py-2 rounded-lg font-semibold transition-colors"
                 >
                   Limpar Filtros
                 </button>
@@ -357,15 +357,15 @@ const ProjectsPage = () => {
           )}
 
           {/* Info Card */}
-          <div className="mt-16 bg-gradient-to-r from-orange-50 to-orange-100 border border-orange-200 rounded-2xl p-8 shadow-lg">
+          <div className="mt-16 bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 rounded-2xl p-8 shadow-lg">
             <div className="text-center">
-              <h3 className="text-2xl font-bold text-orange-800 mb-4">
+              <h3 className="text-2xl font-bold text-secondary mb-4">
                 Sobre os Nossos Projetos
               </h3>
-              <p className="text-orange-700 text-lg leading-relaxed max-w-4xl mx-auto">
-                Cada projeto da Motivo Visionário é desenvolvido com rigor técnico e atenção aos detalhes. 
-                Nossa experiência em armação de ferro e cofragem estrutural garante que cada obra seja 
-                executada com a máxima qualidade e dentro dos prazos estabelecidos. Explore nossa galeria 
+              <p className="text-secondary text-lg leading-relaxed max-w-4xl mx-auto">
+                Cada projeto da RC Construções é desenvolvido com rigor técnico e atenção aos detalhes. 
+                Nossa experiência em construção civil e remodelações garante que cada obra seja 
+                executada com a máxima qualidade estrutural e dentro dos prazos estabelecidos. Explore nossa galeria 
                 e conheça os detalhes de cada projeto, incluindo progresso da obra e documentação fotográfica.
               </p>
             </div>
