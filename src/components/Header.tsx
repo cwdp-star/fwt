@@ -15,18 +15,12 @@ const Header = () => {
     <header className="fixed top-0 w-full bg-white/95 backdrop-blur-md shadow-lg z-50 border-b border-gray-200">
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="w-20 h-16 flex items-center justify-center">
-              <img 
-                src="/lovable-uploads/2637c813-1f59-4fc8-82f5-a5c27d976878.png" 
-                alt="RC Construções" 
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <div className="flex flex-col">
-              <h1 className="text-2xl font-bold text-secondary font-along-serif">RC Construções</h1>
-              <p className="text-lg font-medium text-primary font-along-serif">Construção & Remodelação</p>
-            </div>
+          <div className="flex items-center">
+            <img 
+              src="/lovable-uploads/2637c813-1f59-4fc8-82f5-a5c27d976878.png" 
+              alt="RC Construções" 
+              className="h-20 w-auto"
+            />
           </div>
 
           {/* Desktop Menu */}

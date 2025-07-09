@@ -20,9 +20,9 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-gray-300 mb-6 leading-relaxed text-lg">
-              Há mais de 15 anos especializados em construção civil e remodelações completas. 
-              Oferecemos soluções inovadoras da planta à chave na mão para 
-              habitações, comércios e indústrias em toda a região.
+              Especializados em construção civil e remodelações completas. 
+              Oferecemos soluções da planta à chave na mão para 
+              habitações, comércios e indústrias em Portugal Continental e Ilhas.
             </p>
           </div>
 
@@ -53,7 +53,7 @@ const Footer = () => {
               </div>
               <div>
                 <p className="font-semibold text-white">Morada:</p>
-                <p>Rua da Construção 123<br />4000-000 Porto</p>
+                <p>Rua Senhor Dos Aflitos 809<br />4415-887 Sandim<br />Vila Nova de Gaia</p>
               </div>
             </div>
           </div>
@@ -66,7 +66,7 @@ const Footer = () => {
                 © 2025 RC Construções. Todos os direitos reservados.
               </p>
               <p className="text-gray-400 text-sm">
-                <span className="font-semibold">Alvará de Construção:</span> 987654 - Empresa Licenciada
+                Atuamos em Portugal Continental e Ilhas - Empresa Licenciada
               </p>
             </div>
             <div className="flex space-x-6">

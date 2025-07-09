@@ -4,27 +4,27 @@ const Services = () => {
   const services = [
     {
       icon: Building,
-      title: "Construção Nova",
-      description: "Construção completa desde as fundações até aos acabamentos finais, com projeto personalizado.",
-      features: ["Construção de Raiz", "Moradias e Vivendas", "Edifícios Comerciais", "Projeto e Licenciamento"]
+      title: "Construção Civil",
+      description: "Construção de habitações e estruturas comerciais com foco na qualidade estrutural e durabilidade excecional.",
+      features: ["Estruturas Robustas", "Materiais Certificados", "Técnicas Avançadas", "Controlo de Qualidade"]
     },
     {
       icon: Home,
       title: "Remodelações Completas",
-      description: "Transformação total de espaços existentes com design moderno e funcionalidade otimizada.",
-      features: ["Remodelação de Interiores", "Ampliações", "Mudança de Layout", "Modernização de Instalações"]
+      description: "Renovação total de espaços existentes com qualidade construtiva superior e atenção aos detalhes.",
+      features: ["Qualidade Estrutural", "Acabamentos Premium", "Segurança Garantida", "Durabilidade"]
     },
     {
       icon: Wrench,
-      title: "Obras de Renovação",
-      description: "Renovação e manutenção de estruturas existentes com foco na durabilidade e estética.",
-      features: ["Renovação de Fachadas", "Reparação Estrutural", "Impermeabilizações", "Isolamentos Térmicos"]
+      title: "Projetos Chave na Mão",
+      description: "Da planta ao acabamento final, garantimos qualidade em cada etapa do processo construtivo.",
+      features: ["Gestão Completa", "Controlo de Qualidade", "Entrega no Prazo", "Estruturas Sólidas"]
     },
     {
       icon: PaintBucket,
-      title: "Acabamentos Premium",
-      description: "Acabamentos de alta qualidade que conferem elegância e valor ao seu imóvel.",
-      features: ["Pinturas Especializadas", "Revestimentos", "Pavimentos", "Decoração de Interiores"]
+      title: "Acabamentos de Qualidade",
+      description: "Acabamentos superiores que garantem a longevidade e beleza das estruturas construídas.",
+      features: ["Materiais Premium", "Técnicas Especializadas", "Durabilidade Comprovada", "Acabamentos Perfeitos"]
     }
   ];
 
@@ -37,7 +37,7 @@ const Services = () => {
               Os Nossos <span className="text-primary">Serviços</span>
             </h2>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto font-medium">
-              Soluções completas em construção civil e remodelação, da conceção à execução, com qualidade e profissionalismo garantidos.
+              Construção de qualidade superior com estruturas sólidas e duradouras, garantindo segurança e excelência em cada projeto.
             </p>
           </div>
 

@@ -10,13 +10,11 @@ const Hero = () => {
       {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-6xl mx-auto">
         <div className="flex justify-center mb-8">
-          <div className="w-40 h-32 rounded-2xl shadow-2xl flex items-center justify-center p-6 bg-white border-2 border-primary/20">
-            <img 
-              src="/lovable-uploads/2637c813-1f59-4fc8-82f5-a5c27d976878.png" 
-              alt="RC Construções Logo" 
-              className="w-full h-full object-contain"
-            />
-          </div>
+          <img 
+            src="/lovable-uploads/2637c813-1f59-4fc8-82f5-a5c27d976878.png" 
+            alt="RC Construções Logo" 
+            className="h-40 w-auto"
+          />
         </div>
         
         <h1 className="text-5xl md:text-7xl font-bold text-secondary mb-6 leading-tight">
@@ -47,27 +45,6 @@ const Hero = () => {
           </button>
         </div>
 
-        {/* Stats */}
-        <div className="bg-gradient-to-br from-white/90 to-gray-50/90 backdrop-blur-sm rounded-3xl p-8 border border-primary/20 shadow-xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-secondary mb-2">150+</div>
-              <div className="text-gray-600 font-medium">Projetos Realizados</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-secondary mb-2">15+</div>
-              <div className="text-gray-600 font-medium">Anos de Experiência</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-secondary mb-2">100%</div>
-              <div className="text-gray-600 font-medium">Satisfação dos Clientes</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-secondary mb-2">24/7</div>
-              <div className="text-gray-600 font-medium">Suporte Dedicado</div>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );

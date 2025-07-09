@@ -14,7 +14,7 @@ const About = () => {
               Excelência em Construção Civil e Remodelação
             </p>
             <p className="text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed">
-              A RC Construções é uma empresa especializada em construção civil e remodelações completas. Oferecemos serviços desde a conceção do projeto até à entrega da chave, garantindo qualidade, inovação e total satisfação dos nossos clientes.
+              A RC Construções é sinónimo de qualidade estrutural e excelência construtiva. Especializamo-nos em projetos de construção civil, remodelações completas e projetos chave na mão, sempre com foco na durabilidade e segurança das estruturas que construímos.
             </p>
           </div>
 
@@ -31,10 +31,10 @@ const About = () => {
                 A Nossa Missão
               </h3>
               <p className="text-gray-700 mb-6 leading-relaxed text-lg">
-                A RC Construções dedica-se a transformar sonhos em realidade através da construção civil de qualidade. Especializamo-nos em construção nova, remodelações completas, ampliações e renovações, sempre com foco na excelência e inovação.
+                A RC Construções dedica-se à construção de estruturas sólidas e duradouras. Especializamo-nos em construção nova, remodelações completas e projetos chave na mão, sempre com foco na qualidade estrutural e segurança.
               </p>
               <p className="text-gray-700 leading-relaxed text-lg">
-                Trabalhamos com uma equipa altamente qualificada e utilizamos os melhores materiais do mercado. Cada projeto é único e recebe atenção personalizada desde o planeamento até à conclusão, garantindo resultados que superam as expectativas.
+                Trabalhamos com materiais certificados e técnicas avançadas de construção. Cada projeto recebe controlo rigoroso de qualidade desde as fundações até aos acabamentos, garantindo estruturas robustas e duradouras.
               </p>
             </div>
           </div>
