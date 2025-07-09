@@ -79,11 +79,11 @@ const ContactForm = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Solicite o seu <span className="text-orange-600">Orçamento</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
+              Solicite o seu <span className="text-primary">Orçamento</span>
             </h2>
             <p className="text-xl text-gray-700 font-medium">
-              Preencha o formulário abaixo e receba um orçamento personalizado para a sua obra.
+              Preencha o formulário abaixo e receba um orçamento personalizado para o seu projeto de construção ou remodelação.
             </p>
           </div>
 
@@ -100,7 +100,7 @@ const ContactForm = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 disabled:opacity-50 disabled:cursor-not-allowed text-white px-12 py-4 rounded-lg font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
+                  className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary disabled:opacity-50 disabled:cursor-not-allowed text-white px-12 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
                 >
                   {isSubmitting ? 'A Enviar...' : 'Solicitar Orçamento Gratuito'}
                 </button>

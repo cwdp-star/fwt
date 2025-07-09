@@ -10,61 +10,61 @@ const Hero = () => {
       {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-6xl mx-auto">
         <div className="flex justify-center mb-8">
-          <div className="w-32 h-32 rounded-full shadow-2xl flex items-center justify-center p-4 bg-white border-2 border-gray-200">
+          <div className="w-40 h-32 rounded-2xl shadow-2xl flex items-center justify-center p-6 bg-white border-2 border-primary/20">
             <img 
-              src="/lovable-uploads/dfdb0f79-49d1-438c-b58d-fc91a779077d.png" 
-              alt="Motivo Visionário Logo" 
+              src="/lovable-uploads/2637c813-1f59-4fc8-82f5-a5c27d976878.png" 
+              alt="RC Construções Logo" 
               className="w-full h-full object-contain"
             />
           </div>
         </div>
         
-        <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-          Armação de Ferro
-          <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent block">
-            para Estruturas
+        <h1 className="text-5xl md:text-7xl font-bold text-secondary mb-6 leading-tight">
+          Construção Civil
+          <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent block">
+            & Remodelação
           </span>
         </h1>
         
         <p className="text-xl md:text-2xl text-gray-700 mb-8 max-w-4xl mx-auto leading-relaxed">
-          Especialistas em armação de ferro e cofragem estrutural para obras. 
-          A Motivo Visionário oferece soluções completas com qualidade, 
-          rigor técnico e segurança incomparáveis.
+          Da planta à chave na mão. RC Construções oferece soluções completas 
+          em construção civil e remodelações com qualidade, 
+          profissionalismo e cumprimento de prazos garantidos.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
           <button 
             onClick={scrollToContact}
-            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-10 py-4 rounded-lg font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl"
+            className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white px-10 py-4 rounded-lg font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl"
           >
             Solicitar Orçamento
           </button>
           <button 
             onClick={() => document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' })}
-            className="border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white px-10 py-4 rounded-lg font-bold text-lg transition-all duration-300"
+            className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-white px-10 py-4 rounded-lg font-bold text-lg transition-all duration-300"
           >
-            Ver Projetos
+            Ver Galeria
           </button>
         </div>
 
         {/* Stats */}
-        <div className="bg-gray-50 backdrop-blur-sm rounded-2xl p-8 border border-gray-200 shadow-lg">
+        <div className="bg-gradient-to-br from-white/90 to-gray-50/90 backdrop-blur-sm rounded-3xl p-8 border border-primary/20 shadow-xl">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">80+</div>
-              <div className="text-gray-600 font-medium">Estruturas Executadas</div>
+              <div className="text-4xl md:text-5xl font-bold text-secondary mb-2">150+</div>
+              <div className="text-gray-600 font-medium">Projetos Realizados</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">20+</div>
+              <div className="text-4xl md:text-5xl font-bold text-secondary mb-2">15+</div>
               <div className="text-gray-600 font-medium">Anos de Experiência</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">20+</div>
-              <div className="text-gray-600 font-medium">Obras em Parceria com Construtoras</div>
+              <div className="text-4xl md:text-5xl font-bold text-secondary mb-2">100%</div>
+              <div className="text-gray-600 font-medium">Satisfação dos Clientes</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">1.000+</div>
-              <div className="text-gray-600 font-medium">Toneladas de Ferro Armado</div>
+              <div className="text-4xl md:text-5xl font-bold text-secondary mb-2">24/7</div>
+              <div className="text-gray-600 font-medium">Suporte Dedicado</div>
             </div>
           </div>
         </div>

@@ -16,34 +16,34 @@ const Header = () => {
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className="w-24 h-24 flex items-center justify-center">
+            <div className="w-20 h-16 flex items-center justify-center">
               <img 
-                src="/lovable-uploads/dfdb0f79-49d1-438c-b58d-fc91a779077d.png" 
-                alt="Motivo Visionário" 
+                src="/lovable-uploads/2637c813-1f59-4fc8-82f5-a5c27d976878.png" 
+                alt="RC Construções" 
                 className="w-full h-full object-contain"
               />
             </div>
             <div className="flex flex-col">
-              <h1 className="text-2xl font-bold text-gray-900 font-along-serif">Motivo Visionário</h1>
-              <p className="text-lg font-medium text-orange-600 font-along-serif">Ferro e Cofragem</p>
+              <h1 className="text-2xl font-bold text-secondary font-along-serif">RC Construções</h1>
+              <p className="text-lg font-medium text-primary font-along-serif">Construção & Remodelação</p>
             </div>
           </div>
 
           {/* Desktop Menu */}
           <nav className="hidden md:flex space-x-8">
-            <button onClick={() => scrollToSection('home')} className="text-gray-900 hover:text-orange-600 font-semibold transition-colors">
+            <button onClick={() => scrollToSection('home')} className="text-secondary hover:text-primary font-semibold transition-colors">
               Início
             </button>
-            <button onClick={() => scrollToSection('about')} className="text-gray-900 hover:text-orange-600 font-semibold transition-colors">
+            <button onClick={() => scrollToSection('about')} className="text-secondary hover:text-primary font-semibold transition-colors">
               Sobre Nós
             </button>
-            <button onClick={() => scrollToSection('services')} className="text-gray-900 hover:text-orange-600 font-semibold transition-colors">
+            <button onClick={() => scrollToSection('services')} className="text-secondary hover:text-primary font-semibold transition-colors">
               Serviços
             </button>
-            <button onClick={() => scrollToSection('gallery')} className="text-gray-900 hover:text-orange-600 font-semibold transition-colors">
-              Projetos
+            <button onClick={() => scrollToSection('gallery')} className="text-secondary hover:text-primary font-semibold transition-colors">
+              Galeria
             </button>
-            <button onClick={() => scrollToSection('contact')} className="text-gray-900 hover:text-orange-600 font-semibold transition-colors">
+            <button onClick={() => scrollToSection('contact')} className="text-secondary hover:text-primary font-semibold transition-colors">
               Contacto
             </button>
           </nav>
@@ -61,19 +61,19 @@ const Header = () => {
         {isMenuOpen && (
           <nav className="md:hidden mt-4 py-4 border-t border-gray-200">
             <div className="flex flex-col space-y-3">
-              <button onClick={() => scrollToSection('home')} className="text-left text-gray-900 hover:text-orange-600 font-semibold py-2">
+              <button onClick={() => scrollToSection('home')} className="text-left text-secondary hover:text-primary font-semibold py-2">
                 Início
               </button>
-              <button onClick={() => scrollToSection('about')} className="text-left text-gray-900 hover:text-orange-600 font-semibold py-2">
+              <button onClick={() => scrollToSection('about')} className="text-left text-secondary hover:text-primary font-semibold py-2">
                 Sobre Nós
               </button>
-              <button onClick={() => scrollToSection('services')} className="text-left text-gray-900 hover:text-orange-600 font-semibold py-2">
+              <button onClick={() => scrollToSection('services')} className="text-left text-secondary hover:text-primary font-semibold py-2">
                 Serviços
               </button>
-              <button onClick={() => scrollToSection('gallery')} className="text-left text-gray-900 hover:text-orange-600 font-semibold py-2">
-                Projetos
+              <button onClick={() => scrollToSection('gallery')} className="text-left text-secondary hover:text-primary font-semibold py-2">
+                Galeria
               </button>
-              <button onClick={() => scrollToSection('contact')} className="text-left text-gray-900 hover:text-orange-600 font-semibold py-2">
+              <button onClick={() => scrollToSection('contact')} className="text-left text-secondary hover:text-primary font-semibold py-2">
                 Contacto
               </button>
             </div>
