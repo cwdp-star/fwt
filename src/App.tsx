@@ -12,6 +12,7 @@ import ProjectsPage from "./components/ProjectsPage";
 import ProjectImageManagerPage from "./pages/ProjectImageManagerPage";
 import AdminLogin from "./components/AdminLogin";
 import AdminPanel from "./components/AdminPanel";
+import CookieConsent from "./components/CookieConsent";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ const App = () => {
                 <Route path="/admin" element={<AdminPanel />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              <CookieConsent />
             </div>
           </BrowserRouter>
         </TooltipProvider>

@@ -25,9 +25,9 @@ const Hero = () => {
         </h1>
         
         <p className="text-xl md:text-2xl text-gray-700 mb-8 max-w-4xl mx-auto leading-relaxed">
-          Da planta à chave na mão. RC Construções oferece soluções completas 
-          em construção civil e remodelações com qualidade, 
-          profissionalismo e cumprimento de prazos garantidos.
+          Da conceção à entrega das chaves. A RC Construções oferece soluções completas 
+          em construção civil e remodelações com qualidade superior, 
+          profissionalismo comprovado e cumprimento rigoroso de prazos.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">

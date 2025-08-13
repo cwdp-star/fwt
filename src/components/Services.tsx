@@ -37,7 +37,7 @@ const Services = () => {
               Os Nossos <span className="text-primary">Serviços</span>
             </h2>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto font-medium">
-              Construção de qualidade superior com estruturas sólidas e duradouras, garantindo segurança e excelência em cada projeto.
+              Especialistas em construção civil com estruturas robustas e duradouras, garantindo segurança, qualidade e excelência técnica em cada projeto realizado.
             </p>
           </div>
 
