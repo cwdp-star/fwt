@@ -5,8 +5,9 @@ import { ArrowLeft, Calendar, MapPin, Clock, Camera, CheckCircle, Circle, AlertC
 interface ProjectImage {
   id: string;
   url: string;
-  caption: string;
-  date: string;
+  caption?: string;
+  date?: string;
+  project_id: string;
 }
 
 interface ProjectProgress {
@@ -30,9 +31,10 @@ interface ProjectDetailsProps {
     progress: ProjectProgress[];
   };
   onBack: () => void;
+  onImageClick?: (images: ProjectImage[], index: number) => void;
 }
 
-const ProjectDetails = ({ project, onBack }: ProjectDetailsProps) => {
+const ProjectDetails = ({ project, onBack, onImageClick }: ProjectDetailsProps) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const getStatusIcon = (status: string) => {
