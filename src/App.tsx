@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import TestRoute from "./pages/TestRoute";
 import ProjectsPage from "./components/ProjectsPage";
+import ProjectImageManagerPage from "./pages/ProjectImageManagerPage";
 import AdminLogin from "./components/AdminLogin";
 import AdminPanel from "./components/AdminPanel";
 
@@ -28,6 +29,7 @@ const App = () => {
                 <Route path="/projetos" element={<ProjectsPage />} />
                 <Route path="/projetos/:id" element={<ProjectsPage />} />
                 <Route path="/projects" element={<ProjectsPage />} />
+                <Route path="/admin/projetos/:id/imagens" element={<ProjectImageManagerPage />} />
                 <Route path="/test" element={<TestRoute />} />
                 <Route path="/admin-login" element={<AdminLogin />} />
                 <Route path="/admin" element={<AdminPanel />} />
