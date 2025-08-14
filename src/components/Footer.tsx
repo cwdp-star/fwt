@@ -79,24 +79,6 @@ const Footer = () => {
             </div>
           </div>
         </div>
-
-        {/* Horário de atendimento */}
-        <div className="mt-8 p-6 bg-gray-800 rounded-xl">
-          <div className="text-center">
-            <h5 className="text-xl font-bold text-primary mb-4">
-              Horário de Atendimento
-            </h5>
-            <div className="grid gap-4 text-gray-300 place-items-center text-center">
-              <div>
-                <p className="font-semibold text-white">Segunda a Sexta:</p>
-                <p className="text-lg">08:00 às 18:00</p>
-              </div>
-            </div>
-            <p className="text-sm text-gray-400 mt-4">
-              Contacto de emergência: +351 965 123 456
-            </p>
-          </div>
-        </div>
       </div>
     </footer>
   );

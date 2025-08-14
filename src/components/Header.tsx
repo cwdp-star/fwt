@@ -1,9 +1,19 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -12,14 +22,18 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 w-full bg-white/95 backdrop-blur-md shadow-lg z-50 border-b border-gray-200">
-      <div className="container mx-auto px-4 py-6">
+    <header className="fixed top-0 w-full bg-white/95 backdrop-blur-md shadow-lg z-50 border-b border-gray-200 transition-all duration-300">
+      <div className={`container mx-auto px-4 transition-all duration-300 ${
+        isScrolled ? 'py-3' : 'py-6'
+      }`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <img 
               src="/lovable-uploads/2637c813-1f59-4fc8-82f5-a5c27d976878.png" 
               alt="RC Construções" 
-              className="h-20 w-auto"
+              className={`w-auto transition-all duration-300 ${
+                isScrolled ? 'h-12' : 'h-20'
+              }`}
             />
           </div>
 
