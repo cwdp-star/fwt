@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { uploadImageToSupabase, deleteImageFromSupabase } from '@/utils/imageHelpers';
 
 interface ProjectImage {
   id: string;
@@ -34,25 +35,7 @@ export const ImageUploadManager: React.FC<ImageUploadManagerProps> = ({
   const { toast } = useToast();
 
   const uploadImage = useCallback(async (file: File): Promise<string | null> => {
-    try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${projectId}/${Date.now()}.${fileExt}`;
-      
-      const { data, error } = await supabase.storage
-        .from('project-images')
-        .upload(fileName, file);
-
-      if (error) throw error;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('project-images')
-        .getPublicUrl(fileName);
-
-      return publicUrl;
-    } catch (error) {
-      console.error('Erro no upload:', error);
-      return null;
-    }
+    return await uploadImageToSupabase(file, projectId);
   }, [projectId]);
 
   const handleFileUpload = useCallback(async (files: FileList) => {
@@ -140,17 +123,38 @@ export const ImageUploadManager: React.FC<ImageUploadManagerProps> = ({
   }, [images, onImagesUpdate]);
 
   const deleteImage = useCallback(async (imageId: string) => {
-    const { error } = await supabase
-      .from('project_images')
-      .delete()
-      .eq('id', imageId);
+    const imageToDelete = images.find(img => img.id === imageId);
+    if (!imageToDelete) return;
 
-    if (!error) {
-      const updatedImages = images.filter(img => img.id !== imageId);
-      onImagesUpdate(updatedImages);
+    // Delete from storage first
+    const storageDeleted = await deleteImageFromSupabase(imageToDelete.url);
+    
+    if (storageDeleted) {
+      // Then delete from database
+      const { error } = await supabase
+        .from('project_images')
+        .delete()
+        .eq('id', imageId);
+
+      if (!error) {
+        const updatedImages = images.filter(img => img.id !== imageId);
+        onImagesUpdate(updatedImages);
+        toast({
+          title: "Sucesso",
+          description: "Imagem removida",
+        });
+      } else {
+        toast({
+          title: "Erro",
+          description: "Erro ao remover imagem da base de dados",
+          variant: "destructive",
+        });
+      }
+    } else {
       toast({
-        title: "Sucesso",
-        description: "Imagem removida",
+        title: "Erro",
+        description: "Erro ao remover imagem do armazenamento",
+        variant: "destructive",
       });
     }
   }, [images, onImagesUpdate, toast]);

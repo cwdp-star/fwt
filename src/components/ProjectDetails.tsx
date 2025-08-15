@@ -35,7 +35,6 @@ interface ProjectDetailsProps {
 }
 
 const ProjectDetails = ({ project, onBack, onImageClick }: ProjectDetailsProps) => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -154,11 +153,11 @@ const ProjectDetails = ({ project, onBack, onImageClick }: ProjectDetailsProps) 
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {project.images.map((image) => (
+                    {project.images.map((image, index) => (
                       <div
                         key={image.id}
                         className="group cursor-pointer overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
-                        onClick={() => setSelectedImage(image.url)}
+                        onClick={() => onImageClick?.(project.images, index)}
                       >
                         <div className="relative h-64 overflow-hidden">
                           <img
@@ -274,27 +273,6 @@ const ProjectDetails = ({ project, onBack, onImageClick }: ProjectDetailsProps) 
         </div>
       </div>
 
-      {/* Image Modal */}
-      {selectedImage && (
-        <div
-          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
-          onClick={() => setSelectedImage(null)}
-        >
-          <div className="max-w-5xl max-h-full relative">
-            <img
-              src={selectedImage}
-              alt="Imagem ampliada"
-              className="w-full h-auto rounded-lg shadow-2xl"
-            />
-            <button
-              onClick={() => setSelectedImage(null)}
-              className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white p-2 rounded-full hover:bg-white/30 transition-colors"
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
