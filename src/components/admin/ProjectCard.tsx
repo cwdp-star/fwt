@@ -58,16 +58,16 @@ const ProjectCard = ({
             <button
               onClick={() => onManageImages(project.id!)}
               className="bg-white/20 backdrop-blur-sm text-white p-2 rounded-lg hover:bg-white/30 transition-colors"
-              title="Gestão de Imagens"
+              title="Gestão Completa"
             >
               <ImageIcon className="h-5 w-5" />
             </button>
             <button
-              onClick={() => onManageProgress(project.id!)}
+              onClick={() => onEdit(project)}
               className="bg-white/20 backdrop-blur-sm text-white p-2 rounded-lg hover:bg-white/30 transition-colors"
-              title="Gestão de Progresso"
+              title="Editar Dados"
             >
-              <TrendingUp className="h-5 w-5" />
+              <Edit className="h-5 w-5" />
             </button>
           </div>
         </div>
@@ -105,11 +105,11 @@ const ProjectCard = ({
         <div className="flex items-center justify-between pt-4 border-t border-gray-100">
           <div className="flex space-x-2">
             <button
-              onClick={() => onEdit(project)}
+              onClick={() => onManageImages(project.id!)}
               className="flex items-center space-x-1 text-blue-600 hover:text-blue-800 text-sm font-medium"
             >
               <Edit className="h-4 w-4" />
-              <span>Editar</span>
+              <span>Gerir</span>
             </button>
             <button
               onClick={() => onDelete(project.id!)}

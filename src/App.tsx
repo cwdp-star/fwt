@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import TestRoute from "./pages/TestRoute";
 import ProjectsPage from "./components/ProjectsPage";
 import ProjectImageManagerPage from "./pages/ProjectImageManagerPage";
+import ProjectManagementPage from "./pages/ProjectManagementPage";
 import AdminLogin from "./components/AdminLogin";
 import AdminPanel from "./components/AdminPanel";
 import CookieConsent from "./components/CookieConsent";
@@ -31,6 +32,7 @@ const App = () => {
                 <Route path="/projetos/:id" element={<ProjectsPage />} />
                 <Route path="/projects" element={<ProjectsPage />} />
                 <Route path="/admin/projetos/:id/imagens" element={<ProjectImageManagerPage />} />
+                <Route path="/admin/projetos/:id/gestao" element={<ProjectManagementPage />} />
                 <Route path="/test" element={<TestRoute />} />
                 <Route path="/admin-login" element={<AdminLogin />} />
                 <Route path="/admin" element={<AdminPanel />} />

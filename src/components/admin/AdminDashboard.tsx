@@ -89,8 +89,11 @@ const AdminDashboard = () => {
   };
 
   const handleEditProject = (projectId: string) => {
-    // For now, just navigate to project images management
-    navigate(`/admin/projetos/${projectId}/imagens`);
+    navigate(`/admin/projetos/${projectId}/gestao`);
+  };
+
+  const handleViewProject = (projectId: string) => {
+    navigate(`/projetos/${projectId}`);
   };
 
   if (loading) {
@@ -125,20 +128,20 @@ const AdminDashboard = () => {
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid grid-cols-3 w-full max-w-2xl mb-8">
-            <TabsTrigger value="projects">Projetos</TabsTrigger>
+            <TabsTrigger value="projects">Gestão de Projetos</TabsTrigger>
             <TabsTrigger value="quotes">Orçamentos</TabsTrigger>
-            <TabsTrigger value="add-project">Adicionar Projeto</TabsTrigger>
+            <TabsTrigger value="add-project">Novo Projeto</TabsTrigger>
           </TabsList>
 
           <TabsContent value="projects" className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Lista de Projetos</h2>
+              <h2 className="text-2xl font-bold">Gestão de Projetos</h2>
               <Button 
                 onClick={() => setActiveTab('add-project')}
                 className="flex items-center gap-2"
               >
                 <Plus className="h-4 w-4" />
-                Adicionar Projeto
+                Novo Projeto
               </Button>
             </div>
 
@@ -151,7 +154,7 @@ const AdminDashboard = () => {
                 </p>
                 <Button onClick={() => setActiveTab('add-project')}>
                   <Plus className="h-4 w-4 mr-2" />
-                  Adicionar Primeiro Projeto
+                  Criar Primeiro Projeto
                 </Button>
               </div>
             ) : (
@@ -162,9 +165,9 @@ const AdminDashboard = () => {
                       project={project}
                       onEdit={() => handleEditProject(project.id)}
                       onDelete={() => handleDeleteProject(project.id)}
-                      onManageImages={() => navigate(`/admin/projetos/${project.id}/imagens`)}
-                      onManageProgress={() => {}}
-                      onView={() => {}}
+                      onManageImages={() => navigate(`/admin/projetos/${project.id}/gestao`)}
+                      onManageProgress={() => navigate(`/admin/projetos/${project.id}/gestao`)}
+                      onView={() => handleViewProject(project.id)}
                     />
                   </div>
                 ))}
