@@ -8,7 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import ProjectDetails from './ProjectDetails';
 import { MasonryGrid } from './gallery/MasonryGrid';
 import { ImageLightbox } from './lightbox/ImageLightbox';
-import { MetaTags, getConstructionProjectStructuredData } from './seo/MetaTags';
+import { MetaTags, getConstructionProjectStructuredData } from '@/components/seo/MetaTags';
 
 interface ProjectImage {
   id: string;

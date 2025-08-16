@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import ProjectCard from './ProjectCard';
 import ProjectFormWizard from './ProjectFormWizard';
-import QuoteRequestsList from './QuoteRequestsList';
+import QuoteRequestsManager from './QuoteRequestsManager';
 
 interface Project {
   id: string;
@@ -176,7 +176,7 @@ const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="quotes">
-            <QuoteRequestsList />
+            <QuoteRequestsManager />
           </TabsContent>
 
           <TabsContent value="add-project">

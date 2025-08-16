@@ -38,8 +38,7 @@ const ContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      // For now, we'll just use localStorage to simulate storing requests
-      // This will be replaced with proper database integration later
+      // For now, save to localStorage (will be updated once quote_requests table is available)
       const quoteRequest = {
         id: Date.now().toString(),
         name: formData.name,
