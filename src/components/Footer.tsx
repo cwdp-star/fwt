@@ -65,8 +65,19 @@ const Footer = () => {
               <p className="text-gray-400 mb-2">
                 © 2025 RC Construções. Todos os direitos reservados.
               </p>
-              <p className="text-gray-400 text-sm">
+              <p className="text-gray-400 text-sm mb-2">
                 Atuamos em Portugal Continental e Ilhas - Empresa Licenciada
+              </p>
+              <p className="text-gray-400 text-xs">
+                Este site foi criado por{" "}
+                <a 
+                  href="https://casacriativami.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-primary/80 transition-colors underline"
+                >
+                  Casa Criativa Mi
+                </a>
               </p>
             </div>
             <div className="flex space-x-6">
