@@ -12,7 +12,7 @@ import ProjectsPage from "./components/ProjectsPage";
 import ProjectImageManagerPage from "./pages/ProjectImageManagerPage";
 import ProjectManagementPage from "./pages/ProjectManagementPage";
 import AdminLogin from "./components/AdminLogin";
-import AdminPanel from "./components/AdminPanel";
+import AdminDashboard from "./components/admin/AdminDashboard";
 import CookieConsent from "./components/CookieConsent";
 
 const queryClient = new QueryClient();
@@ -35,7 +35,7 @@ const App = () => {
                 <Route path="/admin/projetos/:id/gestao" element={<ProjectManagementPage />} />
                 <Route path="/test" element={<TestRoute />} />
                 <Route path="/admin-login" element={<AdminLogin />} />
-                <Route path="/admin" element={<AdminPanel />} />
+                <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <CookieConsent />
