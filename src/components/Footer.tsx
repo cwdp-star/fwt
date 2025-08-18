@@ -1,22 +1,16 @@
-
 const Footer = () => {
-  return (
-    <footer className="bg-gray-900 text-white">
+  return <footer className="bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-4 gap-8">
           {/* Logo e descrição */}
           <div className="md:col-span-2">
             <div className="flex items-center space-x-4 mb-6">
               <div className="w-20 h-16 bg-white rounded-xl shadow-md flex items-center justify-center p-3">
-                <img 
-                  src="/lovable-uploads/2637c813-1f59-4fc8-82f5-a5c27d976878.png" 
-                  alt="RC Construções Logo" 
-                  className="w-full h-full object-contain"
-                />
+                <img src="/lovable-uploads/2637c813-1f59-4fc8-82f5-a5c27d976878.png" alt="RC Construções Logo" className="w-full h-full object-contain" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold">RC Construções</h3>
-                <p className="text-primary font-semibold">Construção & Remodelação</p>
+                
+                
               </div>
             </div>
             <p className="text-gray-300 mb-6 leading-relaxed text-lg">
@@ -65,17 +59,10 @@ const Footer = () => {
               <p className="text-gray-400 mb-2">
                 © 2025 RC Construções. Todos os direitos reservados.
               </p>
-              <p className="text-gray-400 text-sm mb-2">
-                Atuamos em Portugal Continental e Ilhas - Empresa Licenciada
-              </p>
+              
               <p className="text-gray-400 text-xs">
                 Este site foi criado por{" "}
-                <a 
-                  href="https://casacriativami.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-primary hover:text-primary/80 transition-colors underline"
-                >
+                <a href="https://casacriativami.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 transition-colors underline">
                   Casa Criativa Mi
                 </a>
               </p>
@@ -91,8 +78,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
