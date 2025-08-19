@@ -166,13 +166,13 @@ const AdminDashboard = () => {
           </Button>
           
           <Button 
-            onClick={() => navigate('/admin-login')}
+            onClick={() => navigate('/admin/security')}
             variant="outline"
             className="h-24 flex-col gap-2 border-2 hover:bg-accent"
             size="lg"
           >
             <Settings className="h-6 w-6" />
-            <span className="font-semibold">Configurações</span>
+            <span className="font-semibold">Auditoria de Segurança</span>
           </Button>
         </motion.div>
 

@@ -4,6 +4,10 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/integrations/supabase/client';
 import ContactFormFields from './ContactFormFields';
 import PrivacyPolicy from './PrivacyPolicy';
+import { sanitizeFormData, isValidEmail, isValidPhone, createRateLimiter } from '@/utils/sanitizer';
+
+// Rate limiter: max 3 submissions per 10 minutes
+const rateLimiter = createRateLimiter(3, 10 * 60 * 1000);
 
 const ContactForm = () => {
   const { toast } = useToast();
@@ -26,6 +30,18 @@ const ContactForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Rate limiting check
+    const clientId = formData.email || 'anonymous';
+    if (!rateLimiter(clientId)) {
+      toast({
+        title: "Muitas Tentativas",
+        description: "Aguarde alguns minutos antes de enviar outro pedido.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // GDPR consent check
     if (!formData.gdprConsent) {
       toast({
         title: "Consentimento Obrigatório",
@@ -35,21 +51,42 @@ const ContactForm = () => {
       return;
     }
 
+    // Enhanced validation
+    if (!isValidEmail(formData.email)) {
+      toast({
+        title: "Email Inválido",
+        description: "Por favor, insira um endereço de email válido.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (formData.phone && !isValidPhone(formData.phone)) {
+      toast({
+        title: "Telefone Inválido",
+        description: "Por favor, insira um número de telefone português válido.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
-      // For now, save to localStorage (will be updated once quote_requests table is available)
+      // Sanitize form data before processing
+      const sanitizedData = sanitizeFormData(formData);
+      
       const quoteRequest = {
         id: Date.now().toString(),
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        project_type: formData.projectType,
-        location: formData.location,
-        budget: formData.budget,
-        timeline: formData.timeline,
-        description: formData.description,
-        documents_link: formData.documentsLink,
+        name: sanitizedData.name,
+        email: sanitizedData.email,
+        phone: sanitizedData.phone,
+        project_type: sanitizedData.projectType,
+        location: sanitizedData.location,
+        budget: sanitizedData.budget,
+        timeline: sanitizedData.timeline,
+        description: sanitizedData.description,
+        documents_link: sanitizedData.documentsLink,
         gdpr_consent: formData.gdprConsent,
         created_at: new Date().toISOString()
       };

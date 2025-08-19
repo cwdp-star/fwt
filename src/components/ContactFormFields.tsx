@@ -34,32 +34,35 @@ const ContactFormFields = ({ formData, onChange, onConsentChange, onPrivacyClick
           <label htmlFor="name" className="block text-sm font-bold text-gray-800 mb-2">
             Nome Completo *
           </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            value={formData.name}
-            onChange={onChange}
-            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all font-medium"
-            placeholder="O seu nome completo"
-          />
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              value={formData.name}
+              onChange={onChange}
+              maxLength={100}
+              pattern="[A-Za-zÀ-ÿ\s]+"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all font-medium"
+              placeholder="O seu nome completo"
+            />
         </div>
 
         <div>
           <label htmlFor="email" className="block text-sm font-bold text-gray-800 mb-2">
             Email *
           </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            value={formData.email}
-            onChange={onChange}
-            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all font-medium"
-            placeholder="seuemail@exemplo.com"
-          />
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              value={formData.email}
+              onChange={onChange}
+              maxLength={254}
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all font-medium"
+              placeholder="seuemail@exemplo.com"
+            />
         </div>
       </div>
 
@@ -166,16 +169,17 @@ const ContactFormFields = ({ formData, onChange, onConsentChange, onPrivacyClick
         <label htmlFor="description" className="block text-sm font-bold text-gray-800 mb-2">
           Descrição da Obra *
         </label>
-        <textarea
-          id="description"
-          name="description"
-          required
-          rows={5}
-          value={formData.description}
-          onChange={onChange}
-          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all resize-none font-medium"
-          placeholder="Descreva detalhes da sua obra, área, especificações, objetivos..."
-        ></textarea>
+            <textarea
+              id="description"
+              name="description"
+              required
+              rows={5}
+              value={formData.description}
+              onChange={onChange}
+              maxLength={2000}
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all resize-none font-medium"
+              placeholder="Descreva detalhes da sua obra, área, especificações, objetivos..."
+            ></textarea>
       </div>
 
       {/* Documents Link Field */}

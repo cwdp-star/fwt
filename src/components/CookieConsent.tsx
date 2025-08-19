@@ -36,9 +36,10 @@ const CookieConsent = () => {
             <div className="flex-1">
               <h3 className="font-semibold text-lg mb-2">Utilização de Cookies</h3>
               <p className="text-gray-700 mb-4">
-                Este website utiliza apenas cookies técnicos essenciais para o funcionamento adequado do site. 
-                Não utilizamos cookies de marketing ou rastreamento. Ao continuar a navegar, aceita a utilização 
-                destes cookies essenciais.
+                Este website utiliza apenas cookies técnicos essenciais para o funcionamento adequado do site, 
+                incluindo preferências de cookies, sessão de utilizador e dados de formulário. Não utilizamos 
+                cookies de marketing, rastreamento ou análise sem o seu consentimento explícito. Pode consultar 
+                a nossa Política de Privacidade para mais informações sobre o tratamento de dados.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button 
