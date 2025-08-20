@@ -5,12 +5,16 @@ import { supabase } from '@/integrations/supabase/client';
 import ContactFormFields from './ContactFormFields';
 import PrivacyPolicy from './PrivacyPolicy';
 import { sanitizeFormData, isValidEmail, isValidPhone, createRateLimiter } from '@/utils/sanitizer';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 // Rate limiter: max 3 submissions per 10 minutes
 const rateLimiter = createRateLimiter(3, 10 * 60 * 1000);
 
 const ContactForm = () => {
   const { toast } = useToast();
+  const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
+  const { elementRef: formRef, isVisible: formVisible } = useScrollAnimation({ threshold: 0.2 });
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -162,16 +166,22 @@ const ContactForm = () => {
     <section id="contact" className="py-20 bg-gradient-to-br from-gray-100 to-white">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
+          <div ref={headerRef} className="text-center mb-12">
+            <h2 className={`text-4xl md:text-5xl font-bold text-secondary mb-6 transition-all duration-700 ${
+              headerVisible ? 'animate-fade-in-down' : 'opacity-0'
+            }`}>
               Solicite o seu <span className="text-primary">Orçamento</span>
             </h2>
-            <p className="text-xl text-gray-700 font-medium">
+            <p className={`text-xl text-gray-700 font-medium transition-all duration-700 ${
+              headerVisible ? 'animate-fade-in-up-delay-200' : 'opacity-0'
+            }`}>
               Preencha o formulário abaixo e receba um orçamento personalizado para o seu projeto de construção ou remodelação.
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 border border-gray-200">
+          <div ref={formRef} className={`bg-white rounded-2xl shadow-2xl p-8 md:p-12 border border-gray-200 transition-all duration-700 ${
+            formVisible ? 'animate-scale-in' : 'opacity-0 scale-95'
+          }`}>
             <form onSubmit={handleSubmit} className="space-y-6">
               <ContactFormFields 
                 formData={formData} 

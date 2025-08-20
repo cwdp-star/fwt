@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Images, ArrowRight, MapPin, Calendar } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { useScrollAnimation, useStaggeredAnimation } from '@/hooks/useScrollAnimation';
 
 interface Project {
   id: string;
@@ -19,6 +20,8 @@ const Gallery = () => {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const navigate = useNavigate();
+  const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
+  const { containerRef: gridRef, visibleItems } = useStaggeredAnimation(6, 150);
 
   useEffect(() => {
     fetchProjects();
@@ -79,14 +82,18 @@ const Gallery = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-16">
-            <div className="flex items-center justify-center space-x-3 mb-6">
-              <Images className="h-10 w-10 text-primary" />
+          <div ref={headerRef} className="text-center mb-16">
+            <div className={`flex items-center justify-center space-x-3 mb-6 transition-all duration-700 ${
+              headerVisible ? 'animate-fade-in-down' : 'opacity-0'
+            }`}>
+              <Images className="h-10 w-10 text-primary animate-float" />
               <h2 className="text-4xl md:text-5xl font-bold text-white">
                 Os Nossos <span className="text-primary">Projetos</span>
               </h2>
             </div>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium">
+            <p className={`text-xl text-gray-300 max-w-3xl mx-auto font-medium transition-all duration-700 ${
+              headerVisible ? 'animate-fade-in-up-delay-200' : 'opacity-0'
+            }`}>
               Confira alguns dos nossos trabalhos em construção civil e remodelações. 
               Cada projeto representa o nosso compromisso com qualidade estrutural e excelência.
             </p>
@@ -110,11 +117,14 @@ const Gallery = () => {
           </div>
 
           {/* Projects Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            {filteredProjects.map((project) => (
+          <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {filteredProjects.map((project, index) => (
               <div 
                 key={project.id}
-                className="group relative overflow-hidden rounded-2xl cursor-pointer transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 shadow-2xl"
+                className={`group relative overflow-hidden rounded-2xl cursor-pointer transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 shadow-2xl ${
+                  visibleItems.has(index) ? 'animate-scale-in' : 'opacity-0 scale-75'
+                }`}
+                style={{ animationDelay: `${index * 0.15}s` }}
                 onClick={() => handleProjectClick(project.id)}
               >
                 {/* Image */}

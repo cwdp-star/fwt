@@ -4,11 +4,15 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
-    {
-      "source": "/projetos/:id",
-      "destination": "/index.html"
-    },
-    {
+  {
+    "source": "/projetos",
+    "destination": "/index.html"
+  },
+  {
+    "source": "/projetos/:id",
+    "destination": "/index.html"
+  },
+  {
       "source": "/admin/projetos/:id/imagens",
       "destination": "/index.html"
     },

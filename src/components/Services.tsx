@@ -1,6 +1,10 @@
 import { Building, Home, Wrench, PaintBucket } from 'lucide-react';
+import { useScrollAnimation, useStaggeredAnimation } from '@/hooks/useScrollAnimation';
 
 const Services = () => {
+  const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
+  const { containerRef: servicesRef, visibleItems } = useStaggeredAnimation(4, 200);
+  
   const services = [
     {
       icon: Building,
@@ -32,22 +36,28 @@ const Services = () => {
     <section id="services" className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
+          <div ref={headerRef} className="text-center mb-16">
+            <h2 className={`text-4xl md:text-5xl font-bold text-secondary mb-6 transition-all duration-700 ${
+              headerVisible ? 'animate-fade-in-down' : 'opacity-0'
+            }`}>
               Os Nossos <span className="text-primary">Serviços</span>
             </h2>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto font-medium">
+            <p className={`text-xl text-gray-700 max-w-3xl mx-auto font-medium transition-all duration-700 ${
+              headerVisible ? 'animate-fade-in-up-delay-200' : 'opacity-0'
+            }`}>
               Especialistas em construção civil com estruturas robustas e duradouras, garantindo segurança, qualidade e excelência técnica em cada projeto realizado.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto mb-12">
+          <div ref={servicesRef} className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto mb-12">
             {services.slice(0, 2).map((service, index) => (
-              <div key={index} className="bg-gradient-to-br from-white to-gray-50/50 p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-primary/10">
+              <div key={index} className={`bg-gradient-to-br from-white to-gray-50/50 p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-primary/10 ${
+                visibleItems.has(index) ? 'animate-scale-in' : 'opacity-0 scale-75'
+              }`} style={{ animationDelay: `${index * 0.2}s` }}>
                 <div className="text-center mb-6">
                   <div className="flex justify-center mb-6">
                     <div className="w-20 h-20 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl flex items-center justify-center">
-                      <service.icon className="h-12 w-12 text-primary" />
+                      <service.icon className="h-12 w-12 text-primary animate-float" />
                     </div>
                   </div>
                   <h3 className="text-2xl font-bold text-secondary mb-4">
@@ -71,11 +81,13 @@ const Services = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {services.slice(2, 4).map((service, index) => (
-              <div key={index + 2} className="bg-gradient-to-br from-white to-gray-50/50 p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-primary/10">
+              <div key={index + 2} className={`bg-gradient-to-br from-white to-gray-50/50 p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-primary/10 ${
+                visibleItems.has(index + 2) ? 'animate-scale-in' : 'opacity-0 scale-75'
+              }`} style={{ animationDelay: `${(index + 2) * 0.2}s` }}>
                 <div className="text-center mb-6">
                   <div className="flex justify-center mb-6">
                     <div className="w-20 h-20 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl flex items-center justify-center">
-                      <service.icon className="h-12 w-12 text-primary" />
+                      <service.icon className="h-12 w-12 text-primary animate-float" />
                     </div>
                   </div>
                   <h3 className="text-2xl font-bold text-secondary mb-4">
@@ -100,7 +112,7 @@ const Services = () => {
           <div className="text-center mt-16">
             <button 
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white px-12 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
+              className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white px-12 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl animate-fade-in-up"
             >
               Solicitar Orçamento Gratuito
             </button>
