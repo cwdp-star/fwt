@@ -141,7 +141,7 @@ const AdminDashboard = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
         >
           <Button 
             onClick={() => {
@@ -173,6 +173,16 @@ const AdminDashboard = () => {
           >
             <Settings className="h-6 w-6" />
             <span className="font-semibold">Auditoria de Segurança</span>
+          </Button>
+
+          <Button 
+            onClick={() => navigate('/admin/database-health')}
+            variant="outline"
+            className="h-24 flex-col gap-2 border-2 hover:bg-accent text-blue-600 border-blue-200"
+            size="lg"
+          >
+            <Users className="h-6 w-6" />
+            <span className="font-semibold">Verificar Base de Dados</span>
           </Button>
         </motion.div>
 

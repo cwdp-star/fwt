@@ -43,36 +43,42 @@ export const useScrollAnimation = <T extends HTMLElement = HTMLDivElement>(optio
   return { elementRef, isVisible };
 };
 
-export const useStaggeredAnimation = <T extends HTMLElement = HTMLDivElement>(itemCount: number, delay = 100) => {
+export const useStaggeredAnimation = (itemCount: number, delay: number = 100) => {
   const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set());
-  const containerRef = useRef<T>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
+    // Always show first 3 items immediately for better UX
+    setVisibleItems(new Set([0, 1, 2]));
+    
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          // Animate items with staggered delay
-          for (let i = 0; i < itemCount; i++) {
-            setTimeout(() => {
-              setVisibleItems(prev => new Set([...prev, i]));
-            }, i * delay);
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const children = Array.from(entry.target.children);
+            children.forEach((child, index) => {
+              setTimeout(() => {
+                setVisibleItems(prev => new Set([...prev, index]));
+              }, index * delay);
+            });
           }
-          observer.unobserve(container);
-        }
+        });
       },
-      {
+      { 
         threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px',
+        rootMargin: '100px'
       }
     );
 
-    observer.observe(container);
+    const container = containerRef.current;
+    if (container) {
+      observer.observe(container);
+    }
 
     return () => {
-      observer.unobserve(container);
+      if (container) {
+        observer.unobserve(container);
+      }
     };
   }, [itemCount, delay]);
 
