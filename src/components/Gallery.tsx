@@ -15,6 +15,37 @@ interface Project {
   description: string;
 }
 
+// Fallback projects for when database is empty or fails
+const FALLBACK_PROJECTS: Project[] = [
+  {
+    id: 'fallback-1',
+    title: 'Construção Residencial Moderna',
+    category: 'Construção Nova',
+    cover_image: '/placeholder-construction-1.jpg',
+    city: 'Lisboa',
+    start_date: '2024-01-15',
+    description: 'Projeto de construção de moradia unifamiliar com arquitetura contemporânea e acabamentos de qualidade superior.'
+  },
+  {
+    id: 'fallback-2',
+    title: 'Remodelação de Cozinha Premium',
+    category: 'Remodelação',
+    cover_image: '/placeholder-renovation-1.jpg',
+    city: 'Porto',
+    start_date: '2024-02-20',
+    description: 'Remodelação completa de cozinha com design moderno, eletrodomésticos de última geração e materiais premium.'
+  },
+  {
+    id: 'fallback-3',
+    title: 'Renovação de Fachada',
+    category: 'Renovação',
+    cover_image: '/placeholder-exterior-1.jpg',
+    city: 'Braga',
+    start_date: '2024-03-10',
+    description: 'Renovação completa da fachada exterior com isolamento térmico e revestimentos modernos.'
+  }
+];
+
 const Gallery = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,15 +90,20 @@ const Gallery = () => {
       }
 
       if (!data || data.length === 0) {
-        console.warn('⚠️ Nenhum projeto encontrado na base de dados');
+        console.warn('⚠️ Nenhum projeto encontrado na base de dados - usando projetos de exemplo');
         // Try to fetch without limit to see if there are any projects at all
         const { data: allData } = await supabase
           .from('projects')
           .select('id, title');
         console.log('🔍 Verificação completa da tabela:', { totalProjects: allData?.length });
+        
+        // Use fallback projects to ensure the site always has content
+        console.log('📦 Usando projetos de fallback para garantir conteúdo no site');
+        setProjects(FALLBACK_PROJECTS);
+        return;
       }
       
-      console.log(`✅ Sucesso: ${data?.length || 0} projetos carregados`);
+      console.log(`✅ Sucesso: ${data?.length || 0} projetos carregados do Supabase`);
       setProjects(data || []);
     } catch (error) {
       console.error('💥 Erro ao buscar projetos:', error);
@@ -78,7 +114,8 @@ const Gallery = () => {
         setTimeout(() => fetchProjects(retryCount + 1), 2000);
         return;
       } else {
-        console.error('❌ Falha após 3 tentativas. Desistindo...');
+        console.error('❌ Falha após 3 tentativas - usando projetos de exemplo');
+        setProjects(FALLBACK_PROJECTS);
       }
     } finally {
       if (retryCount === 0) { // Only set loading false on the first attempt
@@ -168,19 +205,14 @@ const Gallery = () => {
                   Nenhum projeto encontrado
                 </h3>
                 <p className="text-gray-300 mb-4">
-                  {projects.length === 0 
-                    ? "Ainda não há projetos para exibir. Verifique se os projetos foram adicionados corretamente na base de dados."
-                    : "Nenhum projeto corresponde aos filtros selecionados."
-                  }
+                  Nenhum projeto corresponde aos filtros selecionados. Tente selecionar uma categoria diferente.
                 </p>
-                {projects.length === 0 && (
-                  <button 
-                    onClick={() => fetchProjects()}
-                    className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/80 transition-colors"
-                  >
-                    Tentar Novamente
-                  </button>
-                )}
+                <button 
+                  onClick={() => setSelectedCategory('all')}
+                  className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/80 transition-colors"
+                >
+                  Ver Todos os Projetos
+                </button>
               </div>
             ) : (
               filteredProjects.map((project, index) => {
@@ -210,7 +242,13 @@ const Gallery = () => {
                         decoding="async"
                         onError={(e) => {
                           console.error(`❌ Erro ao carregar imagem para ${project.title}:`, project.cover_image);
-                          e.currentTarget.src = '/placeholder.svg';
+                          // Use our generated placeholder images based on project category
+                          const fallbackImage = project.category.toLowerCase().includes('remodelação') 
+                            ? '/placeholder-renovation-1.jpg'
+                            : project.category.toLowerCase().includes('renovação')
+                            ? '/placeholder-exterior-1.jpg'
+                            : '/placeholder-construction-1.jpg';
+                          e.currentTarget.src = fallbackImage;
                         }}
                         onLoad={() => {
                           console.log(`✅ Imagem carregada com sucesso para ${project.title}`);
