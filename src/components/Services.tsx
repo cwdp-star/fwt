@@ -1,9 +1,9 @@
-import { Building, Home, Wrench, PaintBucket } from 'lucide-react';
+import { Building, Home, Wrench } from 'lucide-react';
 import { useScrollAnimation, useStaggeredAnimation } from '@/hooks/useScrollAnimation';
 
 const Services = () => {
   const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
-  const { containerRef: servicesRef, visibleItems } = useStaggeredAnimation(4, 200);
+  const { containerRef: servicesRef, visibleItems } = useStaggeredAnimation(3, 200);
   
   const services = [
     {
@@ -23,12 +23,6 @@ const Services = () => {
       title: "Projetos Chave na Mão",
       description: "Da planta ao acabamento final, garantimos qualidade em cada etapa do processo construtivo.",
       features: ["Gestão Completa", "Controlo de Qualidade", "Entrega no Prazo", "Estruturas Sólidas"]
-    },
-    {
-      icon: PaintBucket,
-      title: "Acabamentos de Qualidade",
-      description: "Acabamentos superiores que garantem a longevidade e beleza das estruturas construídas.",
-      features: ["Materiais Premium", "Técnicas Especializadas", "Durabilidade Comprovada", "Acabamentos Perfeitos"]
     }
   ];
 
@@ -49,41 +43,11 @@ const Services = () => {
             </p>
           </div>
 
-          <div ref={servicesRef} className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto mb-12">
-            {services.slice(0, 2).map((service, index) => (
+          <div ref={servicesRef} className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {services.map((service, index) => (
               <div key={index} className={`bg-gradient-to-br from-white to-gray-50/50 p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-primary/10 ${
                 visibleItems.has(index) ? 'animate-scale-in' : 'opacity-0 scale-75'
               }`} style={{ animationDelay: `${index * 0.2}s` }}>
-                <div className="text-center mb-6">
-                  <div className="flex justify-center mb-6">
-                    <div className="w-20 h-20 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl flex items-center justify-center">
-                      <service.icon className="h-12 w-12 text-primary animate-float" />
-                    </div>
-                  </div>
-                  <h3 className="text-2xl font-bold text-secondary mb-4">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-700 text-base leading-relaxed">
-                    {service.description}
-                  </p>
-                </div>
-                <ul className="space-y-3">
-                  {service.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></div>
-                      <span className="text-gray-700 font-medium text-sm">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            {services.slice(2, 4).map((service, index) => (
-              <div key={index + 2} className={`bg-gradient-to-br from-white to-gray-50/50 p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-primary/10 ${
-                visibleItems.has(index + 2) ? 'animate-scale-in' : 'opacity-0 scale-75'
-              }`} style={{ animationDelay: `${(index + 2) * 0.2}s` }}>
                 <div className="text-center mb-6">
                   <div className="flex justify-center mb-6">
                     <div className="w-20 h-20 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl flex items-center justify-center">

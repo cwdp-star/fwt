@@ -118,9 +118,7 @@ const Gallery = () => {
         setProjects(FALLBACK_PROJECTS);
       }
     } finally {
-      if (retryCount === 0) { // Only set loading false on the first attempt
-        setLoading(false);
-      }
+      setLoading(false);
     }
   };
 
