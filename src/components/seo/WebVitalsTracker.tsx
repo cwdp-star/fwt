@@ -1,12 +1,5 @@
 import { useEffect } from 'react';
 
-// Declare gtag type for Google Analytics
-declare global {
-  interface Window {
-    gtag: (command: string, targetId: string, config?: any) => void;
-  }
-}
-
 interface WebVitalsData {
   name: string;
   value: number;
@@ -26,8 +19,8 @@ export const WebVitalsTracker = () => {
           console.log(`${metric.name}: ${metric.value}`);
           
           // Send to Google Analytics 4 if available
-          if (typeof window !== 'undefined' && window.gtag) {
-            window.gtag('event', metric.name, {
+          if (typeof window !== 'undefined' && (window as any).gtag) {
+            (window as any).gtag('event', metric.name, {
               value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
               event_category: 'Web Vitals',
               event_label: metric.id,
@@ -55,8 +48,8 @@ export const WebVitalsTracker = () => {
               console.log('DOM Content Loaded:', domContentLoaded);
               
               // Track as custom events
-              if (window.gtag) {
-                window.gtag('event', 'page_load_timing', {
+              if ((window as any).gtag) {
+                (window as any).gtag('event', 'page_load_timing', {
                   event_category: 'Performance',
                   value: Math.round(pageLoadTime),
                   custom_parameter_1: Math.round(domContentLoaded)
