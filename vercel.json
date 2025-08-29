@@ -4,15 +4,23 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
-  {
-    "source": "/projetos",
-    "destination": "/index.html"
-  },
-  {
-    "source": "/projetos/:id",
-    "destination": "/index.html"
-  },
-  {
+    {
+      "source": "/sitemap.xml",
+      "destination": "/sitemap.xml"
+    },
+    {
+      "source": "/robots.txt", 
+      "destination": "/robots.txt"
+    },
+    {
+      "source": "/projetos",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/projetos/:id",
+      "destination": "/index.html"
+    },
+    {
       "source": "/admin/projetos/:id/imagens",
       "destination": "/index.html"
     },
@@ -27,6 +35,45 @@
       "headers": [
         {
           "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options", 
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "geolocation=(), microphone=(), camera=()"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.(jpg|jpeg|png|gif|webp|svg|ico))",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000, s-maxage=31536000"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.(js|css))",
+      "headers": [
+        {
+          "key": "Cache-Control", 
           "value": "public, max-age=31536000, immutable"
         }
       ]

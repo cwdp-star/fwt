@@ -1,8 +1,14 @@
-User-agent: Googlebot
+User-agent: *
 Allow: /
 
-User-agent: Bingbot
+# Enhanced crawling directives
+User-agent: Googlebot
 Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot  
+Allow: /
+Crawl-delay: 1
 
 User-agent: Twitterbot
 Allow: /
@@ -10,5 +16,28 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
-Allow: /
+# Block admin areas and sensitive paths
+Disallow: /admin/
+Disallow: /admin-login
+Disallow: /*?*
+Disallow: /api/
+Disallow: /_next/
+Disallow: /tmp/
+
+# Allow important assets
+Allow: /assets/
+Allow: /images/
+Allow: /*.css
+Allow: /*.js
+Allow: /*.jpg
+Allow: /*.jpeg  
+Allow: /*.png
+Allow: /*.webp
+Allow: /*.svg
+Allow: /*.gif
+
+# Sitemap locations
+Sitemap: https://rcconstrucoes.pt/sitemap.xml
+
+# Host directive (helps with crawl budget)
+Host: https://rcconstrucoes.pt
