@@ -78,7 +78,7 @@ const ProjectsPage = () => {
 
   const fetchProjects = async () => {
     try {
-      const { data: projectsData, error } = await supabase
+      const { data: projectsData, error } = await (supabase as any)
         .from('projects')
         .select(`
           *,
@@ -89,7 +89,7 @@ const ProjectsPage = () => {
 
       if (error) throw error;
 
-      const formattedProjects: Project[] = projectsData?.map(project => ({
+      const formattedProjects: Project[] = projectsData?.map((project: any) => ({
         id: project.id,
         title: project.title,
         category: project.category,

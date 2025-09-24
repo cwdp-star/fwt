@@ -35,7 +35,7 @@ const ProjectProgressManager = ({ projectId, onClose }: ProjectProgressManagerPr
 
   const fetchProgress = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('project_progress')
         .select('*')
         .eq('project_id', projectId)
@@ -55,7 +55,7 @@ const ProjectProgressManager = ({ projectId, onClose }: ProjectProgressManagerPr
     
     try {
       if (editingProgress) {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('project_progress')
           .update({
             phase: formData.phase,
@@ -67,7 +67,7 @@ const ProjectProgressManager = ({ projectId, onClose }: ProjectProgressManagerPr
 
         if (error) throw error;
       } else {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('project_progress')
           .insert([{
             project_id: projectId,
@@ -105,7 +105,7 @@ const ProjectProgressManager = ({ projectId, onClose }: ProjectProgressManagerPr
     if (!confirm('Tem certeza que deseja excluir este progresso?')) return;
 
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('project_progress')
         .delete()
         .eq('id', progressId);
