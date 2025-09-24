@@ -7,185 +7,23 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
+    PostgrestVersion: "13.0.5"
   }
   public: {
     Tables: {
-      profiles: {
-        Row: {
-          created_at: string
-          email: string
-          id: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          id: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          id?: string
-        }
-        Relationships: []
-      }
-      project_images: {
-        Row: {
-          caption: string
-          created_at: string
-          date: string
-          id: string
-          project_id: string
-          url: string
-        }
-        Insert: {
-          caption: string
-          created_at?: string
-          date: string
-          id?: string
-          project_id: string
-          url: string
-        }
-        Update: {
-          caption?: string
-          created_at?: string
-          date?: string
-          id?: string
-          project_id?: string
-          url?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "project_images_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      project_progress: {
-        Row: {
-          created_at: string
-          date: string | null
-          description: string
-          id: string
-          phase: string
-          project_id: string
-          status: string
-        }
-        Insert: {
-          created_at?: string
-          date?: string | null
-          description: string
-          id?: string
-          phase: string
-          project_id: string
-          status: string
-        }
-        Update: {
-          created_at?: string
-          date?: string | null
-          description?: string
-          id?: string
-          phase?: string
-          project_id?: string
-          status?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "project_progress_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      projects: {
-        Row: {
-          category: string
-          city: string
-          completion_deadline: string
-          cover_image: string
-          created_at: string
-          delivery_date: string
-          description: string
-          duration: string
-          end_date: string | null
-          id: string
-          start_date: string
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          category: string
-          city: string
-          completion_deadline: string
-          cover_image: string
-          created_at?: string
-          delivery_date: string
-          description: string
-          duration: string
-          end_date?: string | null
-          id?: string
-          start_date: string
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          category?: string
-          city?: string
-          completion_deadline?: string
-          cover_image?: string
-          created_at?: string
-          delivery_date?: string
-          description?: string
-          duration?: string
-          end_date?: string | null
-          id?: string
-          start_date?: string
-          title?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      user_roles: {
-        Row: {
-          created_at: string
-          id: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          role?: Database["public"]["Enums"]["app_role"]
-          user_id?: string
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      is_admin: {
-        Args: { user_id: string }
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
-      app_role: "admin" | "user"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -312,8 +150,6 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {
-      app_role: ["admin", "user"],
-    },
+    Enums: {},
   },
 } as const
