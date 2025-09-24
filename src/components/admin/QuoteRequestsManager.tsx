@@ -39,17 +39,37 @@ const QuoteRequestsManager = () => {
 
   const fetchQuoteRequests = async () => {
     try {
-      // Try to fetch from localStorage (fallback until Supabase table is ready)
-      const storedRequests = JSON.parse(localStorage.getItem('quote_requests') || '[]');
-      
-      // Add status and notes if not present
-      const requestsWithStatus = storedRequests.map((req: any) => ({
-        ...req,
-        status: req.status || 'pending',
-        notes: req.notes || ''
+      // Fetch from Supabase database
+      const { data, error } = await supabase
+        .from('quote_requests')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+
+      // Transform data to match expected format
+      const transformedRequests = (data || []).map((req: any) => ({
+        id: req.id,
+        name: req.name,
+        email: req.email,
+        phone: req.phone || '',
+        project_type: req.project_type || req.service || '',
+        location: req.city || '',
+        budget: req.budget || '',
+        timeline: req.timeline || '',
+        description: req.description || '',
+        documents_link: req.documents_link || '',
+        gdpr_consent: true, // Assume consent given if in database
+        status: req.status || 'new',
+        notes: req.notes || '',
+        created_at: req.created_at,
+        updated_at: req.updated_at
       }));
       
-      setRequests(requestsWithStatus);
+      setRequests(transformedRequests);
     } catch (error) {
       console.error('Error fetching quote requests:', error);
       toast({
@@ -64,16 +84,27 @@ const QuoteRequestsManager = () => {
 
   const updateRequestStatus = async (id: string, status: string, notes: string) => {
     try {
-      // Update in localStorage for now
-      const storedRequests = JSON.parse(localStorage.getItem('quote_requests') || '[]');
-      const updatedRequests = storedRequests.map((req: QuoteRequest) =>
+      // Update in Supabase database
+      const { error } = await supabase
+        .from('quote_requests')
+        .update({ 
+          status, 
+          notes,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id);
+
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+
+      // Update local state
+      setRequests(prev => prev.map(req =>
         req.id === id 
           ? { ...req, status, notes, updated_at: new Date().toISOString() }
           : req
-      );
-      
-      localStorage.setItem('quote_requests', JSON.stringify(updatedRequests));
-      setRequests(updatedRequests);
+      ));
       
       setEditingId(null);
       toast({

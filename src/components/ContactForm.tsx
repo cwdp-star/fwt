@@ -80,34 +80,36 @@ const ContactForm = () => {
       // Sanitize form data before processing
       const sanitizedData = sanitizeFormData(formData);
       
-      const quoteRequest = {
-        id: Date.now().toString(),
-        name: sanitizedData.name,
-        email: sanitizedData.email,
-        phone: sanitizedData.phone,
-        project_type: sanitizedData.projectType,
-        location: sanitizedData.location,
-        budget: sanitizedData.budget,
-        timeline: sanitizedData.timeline,
-        description: sanitizedData.description,
-        documents_link: sanitizedData.documentsLink,
-        gdpr_consent: formData.gdprConsent,
-        created_at: new Date().toISOString()
-      };
-      
-      const existingRequests = JSON.parse(localStorage.getItem('quote_requests') || '[]');
-      existingRequests.unshift(quoteRequest);
-      localStorage.setItem('quote_requests', JSON.stringify(existingRequests));
+      // Save to Supabase database
+      const { error: dbError } = await supabase
+        .from('quote_requests')
+        .insert({
+          name: sanitizedData.name,
+          email: sanitizedData.email,
+          phone: sanitizedData.phone,
+          service: sanitizedData.projectType,
+          project_type: sanitizedData.projectType,
+          budget: sanitizedData.budget,
+          timeline: sanitizedData.timeline,
+          city: sanitizedData.location,
+          description: sanitizedData.description,
+          status: 'new'
+        });
+
+      if (dbError) {
+        console.error('Database error:', dbError);
+        throw dbError;
+      }
 
       // Send email via Supabase Edge Function
-      const { error } = await supabase.functions.invoke('send-quote-email', {
+      const { error: emailError } = await supabase.functions.invoke('send-quote-email', {
         body: {
           ...formData
         }
       });
 
-      if (error) {
-        console.warn('Email sending failed:', error);
+      if (emailError) {
+        console.warn('Email sending failed:', emailError);
       }
 
       toast({

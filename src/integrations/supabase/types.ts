@@ -56,9 +56,12 @@ export type Database = {
         Row: {
           category: string | null
           city: string | null
+          completion_deadline: string | null
           cover_image: string | null
           created_at: string
+          delivery_date: string | null
           description: string | null
+          duration: string | null
           end_date: string | null
           id: string
           start_date: string | null
@@ -69,9 +72,12 @@ export type Database = {
         Insert: {
           category?: string | null
           city?: string | null
+          completion_deadline?: string | null
           cover_image?: string | null
           created_at?: string
+          delivery_date?: string | null
           description?: string | null
+          duration?: string | null
           end_date?: string | null
           id?: string
           start_date?: string | null
@@ -82,14 +88,65 @@ export type Database = {
         Update: {
           category?: string | null
           city?: string | null
+          completion_deadline?: string | null
           cover_image?: string | null
           created_at?: string
+          delivery_date?: string | null
           description?: string | null
+          duration?: string | null
           end_date?: string | null
           id?: string
           start_date?: string | null
           status?: string | null
           title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      quote_requests: {
+        Row: {
+          budget: string | null
+          city: string | null
+          created_at: string
+          description: string | null
+          email: string
+          id: string
+          name: string
+          phone: string | null
+          project_type: string | null
+          service: string
+          status: string | null
+          timeline: string | null
+          updated_at: string
+        }
+        Insert: {
+          budget?: string | null
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          email: string
+          id?: string
+          name: string
+          phone?: string | null
+          project_type?: string | null
+          service: string
+          status?: string | null
+          timeline?: string | null
+          updated_at?: string
+        }
+        Update: {
+          budget?: string | null
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string
+          id?: string
+          name?: string
+          phone?: string | null
+          project_type?: string | null
+          service?: string
+          status?: string | null
+          timeline?: string | null
           updated_at?: string
         }
         Relationships: []
