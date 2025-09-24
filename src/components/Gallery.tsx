@@ -247,6 +247,7 @@ const Gallery = () => {
                             ? '/placeholder-exterior-1.jpg'
                             : '/placeholder-construction-1.jpg';
                           e.currentTarget.src = fallbackImage;
+                          e.currentTarget.onerror = null; // Prevent infinite loop
                         }}
                         onLoad={() => {
                           console.log(`✅ Imagem carregada com sucesso para ${project.title}`);

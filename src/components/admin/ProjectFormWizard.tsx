@@ -136,11 +136,43 @@ const ProjectFormWizard = ({ project, onClose, onSuccess }: ProjectFormWizardPro
     }
   };
 
-  const handleImageUpload = (file: File) => {
-    // For now, we'll use a placeholder URL
-    // In a real implementation, you'd upload to Supabase Storage
-    const imageUrl = URL.createObjectURL(file);
-    setFormData({ ...formData, cover_image: imageUrl });
+  const handleImageUpload = async (file: File) => {
+    try {
+      setLoading(true);
+      
+      // Generate a unique filename for the cover image
+      const fileExt = file.name.split('.').pop();
+      const fileName = `covers/${Date.now()}.${fileExt}`;
+      
+      const { data, error } = await supabase.storage
+        .from('project-images')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (error) throw error;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('project-images')
+        .getPublicUrl(fileName);
+
+      setFormData({ ...formData, cover_image: publicUrl });
+      
+      toast({
+        title: "Sucesso",
+        description: "Imagem de capa carregada com sucesso",
+      });
+    } catch (error) {
+      console.error('Erro ao fazer upload da imagem:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao fazer upload da imagem de capa",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const isStepValid = (step: number) => {
