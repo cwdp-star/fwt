@@ -60,7 +60,7 @@ export const useImageUpload = (projectId: string, maxImages: number = 20) => {
       }
 
       try {
-        const url = await uploadImageToSupabase(file, projectId);
+        const url = await uploadImageToSupabase(file, 'gallery');
         
         if (url) {
           // Update progress

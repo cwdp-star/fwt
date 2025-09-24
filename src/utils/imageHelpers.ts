@@ -1,6 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 
-export const uploadImageToSupabase = async (file: File, projectId: string): Promise<string | null> => {
+export const uploadImageToSupabase = async (file: File, folder: string = 'gallery'): Promise<string | null> => {
   try {
     // Validate file type
     if (!file.type.startsWith('image/')) {
@@ -13,7 +13,7 @@ export const uploadImageToSupabase = async (file: File, projectId: string): Prom
     }
 
     const fileExt = file.name.split('.').pop();
-    const fileName = `${projectId}/${Date.now()}.${fileExt}`;
+    const fileName = `${folder}/${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
     
     const { data, error } = await supabase.storage
       .from('project-images')
@@ -35,12 +35,36 @@ export const uploadImageToSupabase = async (file: File, projectId: string): Prom
   }
 };
 
+export const listAllImages = async (): Promise<string[]> => {
+  try {
+    const { data, error } = await supabase.storage
+      .from('project-images')
+      .list('gallery', {
+        limit: 100,
+        sortBy: { column: 'created_at', order: 'desc' }
+      });
+
+    if (error) throw error;
+
+    return data?.map(file => {
+      const { data: { publicUrl } } = supabase.storage
+        .from('project-images')
+        .getPublicUrl(`gallery/${file.name}`);
+      return publicUrl;
+    }) || [];
+  } catch (error) {
+    console.error('Erro ao listar imagens:', error);
+    return [];
+  }
+};
+
 export const deleteImageFromSupabase = async (imageUrl: string): Promise<boolean> => {
   try {
     // Extract the file path from the URL
     const url = new URL(imageUrl);
     const pathParts = url.pathname.split('/');
-    const filePath = pathParts.slice(-2).join('/'); // Get projectId/filename.ext
+    const fileName = pathParts[pathParts.length - 1]; // Get filename only
+    const filePath = `gallery/${fileName}`; // All images are in gallery folder now
 
     const { error } = await supabase.storage
       .from('project-images')

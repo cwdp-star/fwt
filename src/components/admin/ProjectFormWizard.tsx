@@ -13,9 +13,11 @@ import {
   X
 } from 'lucide-react';
 import ImageUpload from '../ImageUpload';
+import ImageSelector from './ImageSelector';
 import { Project } from '@/types/project';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
+import { uploadImageToSupabase } from '@/utils/imageHelpers';
 
 interface ProjectFormWizardProps {
   project?: Project;
@@ -26,6 +28,7 @@ interface ProjectFormWizardProps {
 const ProjectFormWizard = ({ project, onClose, onSuccess }: ProjectFormWizardProps) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [showImageSelector, setShowImageSelector] = useState(false);
   const { toast } = useToast();
   const [formData, setFormData] = useState<Project>({
     title: '',
@@ -140,29 +143,16 @@ const ProjectFormWizard = ({ project, onClose, onSuccess }: ProjectFormWizardPro
     try {
       setLoading(true);
       
-      // Generate a unique filename for the cover image
-      const fileExt = file.name.split('.').pop();
-      const fileName = `covers/${Date.now()}.${fileExt}`;
-      
-      const { data, error } = await supabase.storage
-        .from('project-images')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: false
+      const url = await uploadImageToSupabase(file, 'gallery');
+      if (url) {
+        setFormData({ ...formData, cover_image: url });
+        toast({
+          title: "Sucesso",
+          description: "Imagem de capa carregada com sucesso",
         });
-
-      if (error) throw error;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('project-images')
-        .getPublicUrl(fileName);
-
-      setFormData({ ...formData, cover_image: publicUrl });
-      
-      toast({
-        title: "Sucesso",
-        description: "Imagem de capa carregada com sucesso",
-      });
+      } else {
+        throw new Error('Falha no upload');
+      }
     } catch (error) {
       console.error('Erro ao fazer upload da imagem:', error);
       toast({
@@ -173,6 +163,10 @@ const ProjectFormWizard = ({ project, onClose, onSuccess }: ProjectFormWizardPro
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleImageSelect = (imageUrl: string) => {
+    setFormData({ ...formData, cover_image: imageUrl });
   };
 
   const isStepValid = (step: number) => {
@@ -328,11 +322,26 @@ const ProjectFormWizard = ({ project, onClose, onSuccess }: ProjectFormWizardPro
               />
             </div>
 
-            <ImageUpload
-              onImageUpload={handleImageUpload}
-              currentImage={formData.cover_image}
-              onImageRemove={() => setFormData({ ...formData, cover_image: '' })}
-            />
+            <div className="space-y-4">
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <ImageUpload
+                    onImageUpload={handleImageUpload}
+                    currentImage={formData.cover_image}
+                    onImageRemove={() => setFormData({ ...formData, cover_image: '' })}
+                  />
+                </div>
+                <div className="flex flex-col justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setShowImageSelector(true)}
+                    className="px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-colors text-sm"
+                  >
+                    Escolher da Galeria
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         );
 
@@ -560,6 +569,15 @@ const ProjectFormWizard = ({ project, onClose, onSuccess }: ProjectFormWizardPro
           </motion.div>
         </motion.div>
       </motion.div>
+
+      {/* Image Selector Modal */}
+      {showImageSelector && (
+        <ImageSelector
+          selectedImage={formData.cover_image}
+          onImageSelect={handleImageSelect}
+          onClose={() => setShowImageSelector(false)}
+        />
+      )}
     </AnimatePresence>
   );
 };
