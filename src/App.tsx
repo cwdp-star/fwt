@@ -15,6 +15,7 @@ import AdminLogin from "./components/AdminLogin";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import SecurityAuditPage from "./pages/SecurityAuditPage";
 import DatabaseHealthPage from "./pages/DatabaseHealthPage";
+import ImageGalleryPage from "./pages/ImageGalleryPage";
 import { SecurityProvider } from "./components/SecurityProvider";
 import CookieConsent from "./components/CookieConsent";
 
@@ -39,6 +40,7 @@ const App = () => {
                   <Route path="/admin/projetos/:id/gestao" element={<ProjectManagementPage />} />
                   <Route path="/admin/security" element={<SecurityAuditPage />} />
                   <Route path="/admin/database-health" element={<DatabaseHealthPage />} />
+                  <Route path="/image-gallery" element={<ImageGalleryPage />} />
                   <Route path="/test" element={<TestRoute />} />
                   <Route path="/admin-login" element={<AdminLogin />} />
                   <Route path="/admin" element={<AdminDashboard />} />

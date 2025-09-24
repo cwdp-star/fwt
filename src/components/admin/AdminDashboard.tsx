@@ -17,7 +17,7 @@ import {
 import ProjectCard from './ProjectCard';
 import ProjectFormWizard from './ProjectFormWizard';
 import QuoteRequestsManager from './QuoteRequestsManager';
-import ImageGallery from './ImageGallery';
+import DashboardStats from './DashboardStats';
 import { motion } from 'framer-motion';
 
 interface Project {
@@ -42,7 +42,6 @@ const AdminDashboard = () => {
   const [showWizard, setShowWizard] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [showQuotes, setShowQuotes] = useState(false);
-  const [showGallery, setShowGallery] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -139,6 +138,15 @@ const AdminDashboard = () => {
           </p>
         </motion.div>
 
+        {/* Dashboard Statistics */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.05 }}
+        >
+          <DashboardStats />
+        </motion.div>
+
         {/* Action Cards */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -169,7 +177,7 @@ const AdminDashboard = () => {
           </Button>
           
           <Button 
-            onClick={() => setShowGallery(true)}
+            onClick={() => navigate('/image-gallery')}
             variant="outline"
             className="h-24 flex-col gap-2 border-2 hover:bg-accent"
             size="lg"
@@ -280,22 +288,6 @@ const AdminDashboard = () => {
               setEditingProject(null);
             }}
           />
-        )}
-
-        {showGallery && (
-          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-            <div className="bg-background rounded-lg max-w-7xl w-full max-h-[90vh] overflow-hidden">
-              <div className="p-6 border-b flex items-center justify-between">
-                <h2 className="text-2xl font-bold">Galeria de Imagens</h2>
-                <Button onClick={() => setShowGallery(false)} variant="ghost" size="sm">
-                  ✕
-                </Button>
-              </div>
-              <div className="overflow-y-auto max-h-[calc(90vh-80px)]">
-                <ImageGallery />
-              </div>
-            </div>
-          </div>
         )}
 
         {showQuotes && (
