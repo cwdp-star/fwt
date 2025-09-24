@@ -16,9 +16,20 @@ const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRouteProps)
 
   useEffect(() => {
     if (!loading && !user) {
+      console.log('🚫 Utilizador não autenticado, redirecionando para login');
       navigate('/admin-login');
     }
   }, [user, loading, navigate]);
+
+  // Add debug logging for auth state
+  useEffect(() => {
+    console.log('🔍 ProtectedRoute - Estado:', { 
+      loading, 
+      user: !!user, 
+      isAdmin, 
+      requireAdmin 
+    });
+  }, [loading, user, isAdmin, requireAdmin]);
 
   if (loading) {
     return (

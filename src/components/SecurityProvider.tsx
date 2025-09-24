@@ -30,26 +30,44 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
+  // Add timeout to prevent infinite loading
   useEffect(() => {
+    const timeout = setTimeout(() => {
+      console.log('⏰ Timeout de autenticação atingido, forçando loading = false');
+      setLoading(false);
+    }, 10000); // 10 second timeout
+
+    return () => clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    console.log('🔄 Iniciando verificação de autenticação...');
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('📋 Sessão inicial:', session ? 'Encontrada' : 'Não encontrada');
       setUser(session?.user ?? null);
       if (session?.user) {
         checkAdminStatus(session.user.id);
       } else {
+        console.log('✅ Nenhum utilizador encontrado, definindo loading como false');
         setLoading(false);
       }
+    }).catch((error) => {
+      console.error('❌ Erro ao obter sessão inicial:', error);
+      setLoading(false);
     });
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('🔄 Mudança de estado de auth:', event);
         setUser(session?.user ?? null);
         
         if (session?.user) {
           await checkAdminStatus(session.user.id);
         } else {
           setIsAdmin(false);
+          console.log('✅ Utilizador desligado, definindo loading como false');
           setLoading(false);
         }
       }
@@ -59,6 +77,7 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
   }, []);
 
   const checkAdminStatus = async (userId: string) => {
+    console.log('🔍 Verificando status de admin para:', userId);
     try {
       const { data, error } = await supabase
         .from('user_roles')
@@ -68,15 +87,18 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
         .maybeSingle();
 
       if (error) {
-        console.error('Error checking admin status:', error);
+        console.error('❌ Erro ao verificar status de admin:', error);
         setIsAdmin(false);
       } else {
-        setIsAdmin(data?.role === 'admin');
+        const isAdminUser = data?.role === 'admin';
+        console.log('✅ Status de admin:', isAdminUser);
+        setIsAdmin(isAdminUser);
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('❌ Erro geral:', error);
       setIsAdmin(false);
     } finally {
+      console.log('✅ Verificação de admin concluída, definindo loading como false');
       setLoading(false);
     }
   };
