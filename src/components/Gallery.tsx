@@ -117,35 +117,35 @@ const Gallery = () => {
 
   if (loading) {
     return (
-      <section id="gallery" className="py-20 bg-secondary">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center">
-              <div className="flex items-center justify-center space-x-3 mb-6">
-                <Images className="h-10 w-10 text-primary" />
-                <h2 className="text-4xl md:text-5xl font-bold text-white">
-                  Os Nossos <span className="text-primary">Projetos</span>
-                </h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="bg-secondary/80 rounded-xl h-80 animate-pulse"></div>
-                ))}
-              </div>
+    <section id="gallery" className="py-12 bg-secondary">
+      <div className="container mx-auto px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-3 mb-6">
+              <Images className="h-10 w-10 text-primary" />
+              <h2 className="text-4xl md:text-5xl font-bold text-white">
+                Os Nossos <span className="text-primary">Projetos</span>
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="bg-secondary/80 rounded-xl h-80 animate-pulse"></div>
+              ))}
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
     );
   }
 
   return (
-    <section id="gallery" className="py-20 bg-secondary">
+    <section id="gallery" className="py-12 bg-secondary">
       <div className="container mx-auto px-4">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div ref={headerRef} className="text-center mb-16">
-            <div className={`flex items-center justify-center space-x-3 mb-6 transition-all duration-700 ${
+          <div ref={headerRef} className="text-center mb-12">
+            <div className={`flex items-center justify-center space-x-3 mb-4 transition-all duration-700 ${
               headerVisible ? 'animate-fade-in-down' : 'opacity-0'
             }`}>
               <Images className="h-10 w-10 text-primary animate-float" />
@@ -153,7 +153,7 @@ const Gallery = () => {
                 Os Nossos <span className="text-primary">Projetos</span>
               </h2>
             </div>
-            <p className={`text-xl text-gray-300 max-w-3xl mx-auto font-medium transition-all duration-700 ${
+            <p className={`text-lg text-gray-300 max-w-3xl mx-auto transition-all duration-700 ${
               headerVisible ? 'animate-fade-in-up-delay-200' : 'opacity-0'
             }`}>
               Confira alguns dos nossos trabalhos em construção civil e remodelações. 
@@ -162,7 +162,7 @@ const Gallery = () => {
           </div>
 
           {/* Category Filters */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
             {categories.map((category) => (
               <button
                 key={category}
@@ -179,7 +179,7 @@ const Gallery = () => {
           </div>
 
           {/* Projects Grid */}
-          <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
             {filteredProjects.length === 0 ? (
               <div className="col-span-full text-center py-16">
                 <Images className="h-16 w-16 text-gray-400 mx-auto mb-4" />
@@ -283,17 +283,17 @@ const Gallery = () => {
           </div>
 
           {/* Call to Action */}
-          <div className="text-center space-y-6">
+          <div className="text-center space-y-4">
             <button 
-              onClick={() => navigate('/projects')}
+              onClick={() => navigate('/projetos')}
               className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white px-10 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl inline-flex items-center space-x-3"
             >
               <span>Ver Todos os Projetos</span>
               <ArrowRight className="h-6 w-6" />
             </button>
             
-            <div className="mt-8">
-              <p className="text-gray-300 mb-6 text-lg font-medium">
+            <div className="mt-6">
+              <p className="text-gray-300 mb-4 text-lg font-medium">
                 Precisa de construção civil ou remodelação? Entre em contacto connosco!
               </p>
               <button 
