@@ -3,7 +3,7 @@ import { useScrollAnimation, useStaggeredAnimation } from '@/hooks/useScrollAnim
 
 const Services = () => {
   const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
-  const { containerRef: servicesRef, visibleItems } = useStaggeredAnimation(3, 200);
+  const { containerRef: servicesRef, visibleItems } = useStaggeredAnimation(4, 200);
   
   const services = [
     {
@@ -23,6 +23,12 @@ const Services = () => {
       title: "Projetos Chave na Mão",
       description: "Da planta ao acabamento final, garantimos qualidade em cada etapa do processo construtivo.",
       features: ["Gestão Completa", "Controlo de Qualidade", "Entrega no Prazo", "Estruturas Sólidas"]
+    },
+    {
+      icon: Building,
+      title: "Betão Armado",
+      description: "Especialistas em estruturas de betão armado, ferro e cofragem com técnicas de construção avançadas.",
+      features: ["Ferro e Cofragem", "Estruturas Especiais", "Betão de Qualidade", "Resistência Superior"]
     }
   ];
 
@@ -31,7 +37,7 @@ const Services = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div ref={headerRef} className="text-center mb-16">
-            <h2 className={`text-4xl md:text-5xl font-bold text-secondary mb-6 transition-all duration-700 ${
+            <h2 className={`text-4xl md:text-5xl font-bold text-foreground mb-6 transition-all duration-700 ${
               headerVisible ? 'animate-fade-in-down' : 'opacity-0'
             }`}>
               Os Nossos <span className="text-primary">Serviços</span>
@@ -43,7 +49,7 @@ const Services = () => {
             </p>
           </div>
 
-          <div ref={servicesRef} className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div ref={servicesRef} className="grid lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
             {services.map((service, index) => (
               <div key={index} className={`bg-gradient-to-br from-white to-gray-50/50 p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-primary/10 ${
                 visibleItems.has(index) ? 'animate-scale-in' : 'opacity-0 scale-75'
@@ -54,7 +60,7 @@ const Services = () => {
                       <service.icon className="h-12 w-12 text-primary animate-float" />
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-secondary mb-4">
+                  <h3 className="text-xl font-bold text-foreground mb-4">
                     {service.title}
                   </h3>
                   <p className="text-gray-700 text-base leading-relaxed">
