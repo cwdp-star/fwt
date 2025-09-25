@@ -52,7 +52,7 @@ const Gallery = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const navigate = useNavigate();
   const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
-  const { containerRef: gridRef, visibleItems } = useStaggeredAnimation(6, 150);
+  const { containerRef: gridRef, visibleItems } = useStaggeredAnimation(8, 150);
 
   useEffect(() => {
     fetchProjects();
@@ -123,12 +123,12 @@ const Gallery = () => {
           <div className="text-center">
             <div className="flex items-center justify-center space-x-3 mb-6">
               <Images className="h-10 w-10 text-primary" />
-              <h2 className="text-4xl md:text-5xl font-bold text-white">
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground">
                 Os Nossos <span className="text-primary">Projetos</span>
               </h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(6)].map((_, i) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+              {[...Array(8)].map((_, i) => (
                 <div key={i} className="bg-secondary/80 rounded-xl h-80 animate-pulse"></div>
               ))}
             </div>
@@ -149,11 +149,11 @@ const Gallery = () => {
               headerVisible ? 'animate-fade-in-down' : 'opacity-0'
             }`}>
               <Images className="h-10 w-10 text-primary animate-float" />
-              <h2 className="text-4xl md:text-5xl font-bold text-white">
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground">
                 Os Nossos <span className="text-primary">Projetos</span>
               </h2>
             </div>
-            <p className={`text-lg text-gray-300 max-w-3xl mx-auto transition-all duration-700 ${
+            <p className={`text-lg text-muted-foreground max-w-3xl mx-auto transition-all duration-700 ${
               headerVisible ? 'animate-fade-in-up-delay-200' : 'opacity-0'
             }`}>
               Confira alguns dos nossos trabalhos em construção civil e remodelações. 
@@ -169,8 +169,8 @@ const Gallery = () => {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
                   selectedCategory === category
-                    ? 'bg-primary text-white shadow-lg scale-105'
-                    : 'bg-secondary/50 text-gray-300 hover:bg-primary/20 hover:text-white border border-primary/30'
+                    ? 'bg-primary text-primary-foreground shadow-lg scale-105'
+                    : 'bg-muted/50 text-muted-foreground hover:bg-primary/20 hover:text-primary-foreground border border-primary/30'
                 }`}
               >
                 {category === 'all' ? 'Todos' : category}
@@ -179,19 +179,19 @@ const Gallery = () => {
           </div>
 
           {/* Projects Grid */}
-          <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+          <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 max-w-7xl mx-auto">
             {filteredProjects.length === 0 ? (
               <div className="col-span-full text-center py-16">
                 <Images className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <h3 className="text-xl font-semibold text-foreground mb-2">
                   Nenhum projeto encontrado
                 </h3>
-                <p className="text-gray-300 mb-4">
+                <p className="text-muted-foreground mb-4">
                   Nenhum projeto corresponde aos filtros selecionados. Tente selecionar uma categoria diferente.
                 </p>
                 <button 
                   onClick={() => setSelectedCategory('all')}
-                  className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/80 transition-colors"
+                  className="bg-primary text-primary-foreground px-6 py-2 rounded-lg hover:bg-primary/80 transition-colors"
                 >
                   Ver Todos os Projetos
                 </button>
@@ -250,29 +250,29 @@ const Gallery = () => {
                     </div>
 
                   {/* Content */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-foreground transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                     <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
                       {project.title}
                     </h3>
                     
-                    <p className="text-gray-300 text-sm mb-3 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                    <p className="text-muted-foreground text-sm mb-3 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
                       {project.description}
                     </p>
                     
                     <div className="flex items-center justify-between">
                       <div className="space-y-1">
-                        <div className="flex items-center text-sm text-gray-300">
+                        <div className="flex items-center text-sm text-muted-foreground">
                           <MapPin className="h-4 w-4 mr-1 text-primary" />
                           <span>{project.city}</span>
                         </div>
-                        <div className="flex items-center text-sm text-gray-300">
+                        <div className="flex items-center text-sm text-muted-foreground">
                           <Calendar className="h-4 w-4 mr-1 text-primary" />
                           <span>{project.start_date}</span>
                         </div>
                       </div>
                       
                       <div className="bg-white/20 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200">
-                        <ArrowRight className="h-5 w-5 text-white" />
+                        <ArrowRight className="h-5 w-5 text-foreground" />
                       </div>
                      </div>
                    </div>
@@ -286,19 +286,19 @@ const Gallery = () => {
           <div className="text-center space-y-4">
             <button 
               onClick={() => navigate('/projetos')}
-              className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white px-10 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl inline-flex items-center space-x-3"
+              className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-primary-foreground px-10 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl inline-flex items-center space-x-3"
             >
               <span>Ver Todos os Projetos</span>
               <ArrowRight className="h-6 w-6" />
             </button>
             
             <div className="mt-6">
-              <p className="text-gray-300 mb-4 text-lg font-medium">
+              <p className="text-muted-foreground mb-4 text-lg font-medium">
                 Precisa de construção civil ou remodelação? Entre em contacto connosco!
               </p>
               <button 
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="bg-white text-secondary hover:bg-gray-100 px-8 py-3 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 shadow-xl"
+                className="bg-background text-foreground hover:bg-muted px-8 py-3 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 shadow-xl"
               >
                 Solicitar Orçamento
               </button>
