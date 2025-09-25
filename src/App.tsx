@@ -3,6 +3,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { HelmetProvider } from 'react-helmet-async';
 
 // Pages
 import Index from '@/pages/Index';
@@ -61,69 +62,71 @@ function App() {
   }
 
   return (
-    <SecurityProvider>
-      <Router>
-        <div className="min-h-screen flex flex-col">
-          <Header user={user} />
-          <main className="flex-1">
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<AuthPage />} />
-              <Route path="/projetos" element={<ProjectsPage />} />
-              <Route path="/projetos/:id" element={<ProjectsPage />} />
-              <Route path="/projects" element={<ProjectsPage />} />
-              <Route path="/gallery" element={<ImageGalleryPage />} />
-              <Route path="/admin" element={
-                <ProtectedRoute>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/projetos/:id/imagens" element={
-                <ProtectedRoute>
-                  <ProjectImageManagerPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/projetos/:id/gestao" element={
-                <ProtectedRoute>
-                  <ProjectManagementPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/images/:projectId" element={
-                <ProtectedRoute>
-                  <ProjectImageManagerPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/security" element={
-                <ProtectedRoute>
-                  <SecurityAuditPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/database-health" element={
-                <ProtectedRoute>
-                  <DatabaseHealthPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/image-gallery" element={<ImageGalleryPage />} />
-              <Route path="/health" element={
-                <ProtectedRoute>
-                  <DatabaseHealthPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/security" element={
-                <ProtectedRoute>
-                  <SecurityAuditPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/test" element={<TestRoute />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </main>
-          <Footer />
-          <CookieConsent />
-          <Toaster />
-        </div>
-      </Router>
-    </SecurityProvider>
+    <HelmetProvider>
+      <SecurityProvider>
+        <Router>
+          <div className="min-h-screen flex flex-col">
+            <Header user={user} />
+            <main className="flex-1">
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/auth" element={<AuthPage />} />
+                <Route path="/projetos" element={<ProjectsPage />} />
+                <Route path="/projetos/:id" element={<ProjectsPage />} />
+                <Route path="/projects" element={<ProjectsPage />} />
+                <Route path="/gallery" element={<ImageGalleryPage />} />
+                <Route path="/admin" element={
+                  <ProtectedRoute>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/projetos/:id/imagens" element={
+                  <ProtectedRoute>
+                    <ProjectImageManagerPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/projetos/:id/gestao" element={
+                  <ProtectedRoute>
+                    <ProjectManagementPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/images/:projectId" element={
+                  <ProtectedRoute>
+                    <ProjectImageManagerPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/security" element={
+                  <ProtectedRoute>
+                    <SecurityAuditPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/database-health" element={
+                  <ProtectedRoute>
+                    <DatabaseHealthPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/image-gallery" element={<ImageGalleryPage />} />
+                <Route path="/health" element={
+                  <ProtectedRoute>
+                    <DatabaseHealthPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/security" element={
+                  <ProtectedRoute>
+                    <SecurityAuditPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/test" element={<TestRoute />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+            <Footer />
+            <CookieConsent />
+            <Toaster />
+          </div>
+        </Router>
+      </SecurityProvider>
+    </HelmetProvider>
   );
 }
 
