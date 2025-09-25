@@ -82,8 +82,7 @@ const ProjectsPage = () => {
         .from('projects')
         .select(`
           *,
-          project_images (*),
-          project_progress (*)
+          project_images (*)
         `)
         .order('created_at', { ascending: false });
 
@@ -102,7 +101,7 @@ const ProjectsPage = () => {
         description: project.description,
         cover_image: project.cover_image,
         images: project.project_images || [],
-        progress: project.project_progress || []
+        progress: []
       })) || [];
 
       setProjects(formattedProjects);

@@ -1,11 +1,9 @@
 
-import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Services from "@/components/Services";
 import Gallery from "@/components/Gallery";
 import ContactForm from "@/components/ContactForm";
-import Footer from "@/components/Footer";
 import { MetaTags, getOrganizationStructuredData } from "@/components/seo/MetaTags";
 
 const Index = () => {
@@ -30,7 +28,6 @@ const Index = () => {
         canonical="https://rcconstrucoes.pt"
         structuredData={getOrganizationStructuredData()}
       />
-      <Header />
       {/* Add top margin to account for fixed header */}
       <div className="mt-32">
         <Hero />
@@ -38,7 +35,6 @@ const Index = () => {
         <Services />
         <Gallery />
         <ContactForm />
-        <Footer />
       </div>
     </div>
   );

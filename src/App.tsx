@@ -71,6 +71,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<AuthPage />} />
+                <Route path="/admin-login" element={<AuthPage />} />
                 <Route path="/projetos" element={<ProjectsPage />} />
                 <Route path="/projetos/:id" element={<ProjectsPage />} />
                 <Route path="/projects" element={<ProjectsPage />} />
