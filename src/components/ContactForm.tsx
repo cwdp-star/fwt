@@ -101,16 +101,6 @@ const ContactForm = () => {
         throw dbError;
       }
 
-      // Send email via Supabase Edge Function
-      const { error: emailError } = await supabase.functions.invoke('send-quote-email', {
-        body: {
-          ...formData
-        }
-      });
-
-      if (emailError) {
-        console.warn('Email sending failed:', emailError);
-      }
 
       toast({
         title: "Orçamento Enviado com Sucesso!",
