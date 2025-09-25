@@ -140,7 +140,7 @@ const Gallery = () => {
   }
 
   return (
-    <section id="gallery" className="py-12 bg-secondary">
+    <section id="gallery" className="py-16 bg-gradient-to-br from-background via-muted/20 to-background">
       <div className="container mx-auto px-4">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
@@ -149,11 +149,11 @@ const Gallery = () => {
               headerVisible ? 'animate-fade-in-down' : 'opacity-0'
             }`}>
               <Images className="h-10 w-10 text-primary animate-float" />
-              <h2 className="text-4xl md:text-5xl font-bold text-secondary-foreground">
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground">
                 Os Nossos <span className="text-primary">Projetos</span>
               </h2>
             </div>
-            <p className={`text-lg text-muted-foreground max-w-3xl mx-auto transition-all duration-700 ${
+            <p className={`text-lg text-foreground/80 max-w-3xl mx-auto transition-all duration-700 ${
               headerVisible ? 'animate-fade-in-up-delay-200' : 'opacity-0'
             }`}>
               Confira alguns dos nossos trabalhos em construção civil e remodelações. 
@@ -179,7 +179,7 @@ const Gallery = () => {
           </div>
 
           {/* Projects Grid */}
-          <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 max-w-7xl mx-auto">
+          <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 max-w-7xl mx-auto">
             {filteredProjects.length === 0 ? (
               <div className="col-span-full text-center py-16">
                 <Images className="h-16 w-16 text-gray-400 mx-auto mb-4" />

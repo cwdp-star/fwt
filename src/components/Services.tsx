@@ -3,7 +3,7 @@ import { useScrollAnimation, useStaggeredAnimation } from '@/hooks/useScrollAnim
 
 const Services = () => {
   const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
-  const { containerRef: servicesRef, visibleItems } = useStaggeredAnimation(4, 200);
+  const { containerRef: servicesRef, visibleItems } = useStaggeredAnimation(4, 150);
   
   const services = [
     {
@@ -53,7 +53,7 @@ const Services = () => {
             {services.map((service, index) => (
               <div key={index} className={`bg-gradient-to-br from-white to-gray-50/50 p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-primary/10 ${
                 visibleItems.has(index) ? 'animate-scale-in' : 'opacity-0 scale-75'
-              }`} style={{ animationDelay: `${index * 0.2}s` }}>
+              }`} style={{ animationDelay: `${index * 0.15}s` }}>
                 <div className="text-center mb-6">
                   <div className="flex justify-center mb-6">
                     <div className="w-20 h-20 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl flex items-center justify-center">
