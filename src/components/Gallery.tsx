@@ -149,7 +149,7 @@ const Gallery = () => {
               headerVisible ? 'animate-fade-in-down' : 'opacity-0'
             }`}>
               <Images className="h-10 w-10 text-primary animate-float" />
-              <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+              <h2 className="text-4xl md:text-5xl font-bold text-secondary-foreground">
                 Os Nossos <span className="text-primary">Projetos</span>
               </h2>
             </div>
