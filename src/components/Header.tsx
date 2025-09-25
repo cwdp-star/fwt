@@ -1,11 +1,20 @@
-
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Phone, Mail, MapPin, LogIn, LogOut, User as UserIcon } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { User } from '@supabase/supabase-js';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 
-const Header = () => {
+interface HeaderProps {
+  user?: User | null;
+}
+
+const Header = ({ user }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,7 +25,30 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      toast({
+        title: "Logout realizado",
+        description: "Você foi desconectado com sucesso.",
+      });
+      navigate('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+      toast({
+        title: "Erro no logout",
+        description: "Ocorreu um erro ao desconectar. Tente novamente.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const scrollToSection = (sectionId: string) => {
+    if (location.pathname !== '/') {
+      navigate('/', { state: { scrollTo: sectionId } });
+      return;
+    }
     const element = document.getElementById(sectionId);
     element?.scrollIntoView({ behavior: 'smooth' });
     setIsMenuOpen(false);
@@ -38,19 +70,21 @@ const Header = () => {
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           >
-            <img 
-              src="/lovable-uploads/2637c813-1f59-4fc8-82f5-a5c27d976878.png" 
-              alt="RC Construções" 
-              className={`w-auto transition-all duration-300 ${
-                isScrolled ? 'h-12' : 'h-20'
-              }`}
-            />
+            <Link to="/">
+              <img 
+                src="/lovable-uploads/2637c813-1f59-4fc8-82f5-a5c27d976878.png" 
+                alt="RC Construções" 
+                className={`w-auto transition-all duration-300 ${
+                  isScrolled ? 'h-12' : 'h-20'
+                }`}
+              />
+            </Link>
           </motion.div>
 
           {/* Desktop Menu */}
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex space-x-8 items-center">
             {[
-              { label: 'Início', id: 'home' },
+              { label: 'Início', id: 'home', path: '/' },
               { label: 'Sobre Nós', id: 'about' },
               { label: 'Serviços', id: 'services' },
               { label: 'Galeria', id: 'gallery' },
@@ -58,7 +92,7 @@ const Header = () => {
             ].map((item, index) => (
               <motion.button 
                 key={item.id}
-                onClick={() => scrollToSection(item.id)} 
+                onClick={() => item.path ? navigate(item.path) : scrollToSection(item.id)} 
                 className="text-foreground hover:text-primary font-semibold transition-colors relative"
                 whileHover={{ scale: 1.05 }}
                 initial={{ opacity: 0, y: -20 }}
@@ -74,6 +108,36 @@ const Header = () => {
                 />
               </motion.button>
             ))}
+            
+            {user ? (
+              <>
+                <Link 
+                  to="/admin" 
+                  className={`transition-colors ${
+                    location.pathname === '/admin' 
+                      ? 'text-orange-600 font-semibold' 
+                      : 'text-gray-700 hover:text-orange-600'
+                  }`}
+                >
+                  Admin
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center space-x-2 text-gray-700 hover:text-orange-600 transition-colors"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Sair</span>
+                </button>
+              </>
+            ) : (
+              <Link 
+                to="/auth" 
+                className="flex items-center space-x-2 bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors"
+              >
+                <LogIn className="h-4 w-4" />
+                <span>Entrar</span>
+              </Link>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -104,7 +168,7 @@ const Header = () => {
           <div className="pt-4 pb-2 border-t border-border mt-4">
             <div className="flex flex-col space-y-2">
               {[
-                { label: 'Início', id: 'home' },
+                { label: 'Início', id: 'home', path: '/' },
                 { label: 'Sobre Nós', id: 'about' },
                 { label: 'Serviços', id: 'services' },
                 { label: 'Galeria', id: 'gallery' },
@@ -112,7 +176,7 @@ const Header = () => {
               ].map((item, index) => (
                 <motion.button 
                   key={item.id}
-                  onClick={() => scrollToSection(item.id)} 
+                  onClick={() => item.path ? navigate(item.path) : scrollToSection(item.id)} 
                   className="text-left text-foreground hover:text-primary font-semibold py-3 px-4 rounded-lg hover:bg-accent transition-colors"
                   initial={{ x: -20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
@@ -121,6 +185,34 @@ const Header = () => {
                   {item.label}
                 </motion.button>
               ))}
+              
+              {user ? (
+                <>
+                  <Link 
+                    to="/admin" 
+                    className="text-gray-700 hover:text-orange-600 transition-colors py-3 px-4 rounded-lg hover:bg-accent"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Admin
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center space-x-2 text-gray-700 hover:text-orange-600 transition-colors py-3 px-4 rounded-lg hover:bg-accent text-left"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Sair</span>
+                  </button>
+                </>
+              ) : (
+                <Link 
+                  to="/auth" 
+                  className="flex items-center space-x-2 text-gray-700 hover:text-orange-600 transition-colors py-3 px-4 rounded-lg hover:bg-accent"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <LogIn className="h-4 w-4" />
+                  <span>Entrar</span>
+                </Link>
+              )}
             </div>
           </div>
         </motion.nav>

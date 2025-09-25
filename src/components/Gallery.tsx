@@ -58,30 +58,28 @@ const Gallery = () => {
     fetchProjects();
   }, []);
 
-  const fetchProjects = async (retryCount = 0) => {
+  const fetchProjects = async () => {
+    console.log('🔄 Tentativa 1: Buscando projetos do Supabase...');
+    setLoading(true);
+    
     try {
-      console.log(`🔄 Tentativa ${retryCount + 1}: Buscando projetos do Supabase...`);
-      
-      // Test Supabase connection first
-      const { data: connectionTest, error: connectionError } = await supabase
-        .from('projects')
-        .select('count')
-        .single();
-        
-      console.log('🔗 Teste de conexão Supabase:', { connectionTest, connectionError });
-      
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('projects')
         .select('id, title, category, cover_image, city, start_date, description')
-        .order('created_at', { ascending: false })
-        .limit(6);
+        .eq('status', 'active')
+        .order('created_at', { ascending: false });
 
-      console.log('📊 Resposta completa do Supabase:', { 
-        data, 
-        error, 
+      console.log('🔗 Teste de conexão Supabase:', {
+        connectionTest: { count: data?.length || 0 },
+        connectionError: error
+      });
+
+      console.log('📊 Resposta completa do Supabase:', {
+        data,
+        error,
         dataLength: data?.length,
-        firstProject: data?.[0],
-        allProjects: data
+        firstProject: data?.[0] || null,
+        allProjects: data || []
       });
 
       if (error) {
@@ -89,35 +87,21 @@ const Gallery = () => {
         throw error;
       }
 
-      if (!data || data.length === 0) {
-        console.warn('⚠️ Nenhum projeto encontrado na base de dados - usando projetos de exemplo');
-        // Try to fetch without limit to see if there are any projects at all
-        const { data: allData } = await supabase
-          .from('projects')
-          .select('id, title');
-        console.log('🔍 Verificação completa da tabela:', { totalProjects: allData?.length });
-        
-        // Use fallback projects to ensure the site always has content
-        console.log('📦 Usando projetos de fallback para garantir conteúdo no site');
-        setProjects(FALLBACK_PROJECTS);
+      if (data && data.length > 0) {
+        console.log(`✅ Sucesso: ${data.length} projetos carregados do Supabase`);
+        setProjects(data);
+        setLoading(false);
         return;
       }
+
+      console.log('⚠️ Nenhum projeto encontrado no Supabase, usando dados de fallback');
+      setProjects(FALLBACK_PROJECTS);
+      setLoading(false);
       
-      console.log(`✅ Sucesso: ${data?.length || 0} projetos carregados do Supabase`);
-      setProjects(data || []);
     } catch (error) {
-      console.error('💥 Erro ao buscar projetos:', error);
-      
-      // Retry mechanism
-      if (retryCount < 2) {
-        console.log(`🔄 Tentando novamente em 2 segundos... (tentativa ${retryCount + 1}/3)`);
-        setTimeout(() => fetchProjects(retryCount + 1), 2000);
-        return;
-      } else {
-        console.error('❌ Falha após 3 tentativas - usando projetos de exemplo');
-        setProjects(FALLBACK_PROJECTS);
-      }
-    } finally {
+      console.error('❌ Erro ao buscar projetos:', error);
+      console.log('🔄 Usando projetos de fallback devido ao erro');
+      setProjects(FALLBACK_PROJECTS);
       setLoading(false);
     }
   };
