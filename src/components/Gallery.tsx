@@ -112,7 +112,7 @@ const Gallery = () => {
     : projects.filter(p => p.category === selectedCategory);
 
   const handleProjectClick = (projectId: string) => {
-    navigate(`/projects?project=${projectId}`);
+    navigate(`/projetos/${projectId}`);
   };
 
   if (loading) {

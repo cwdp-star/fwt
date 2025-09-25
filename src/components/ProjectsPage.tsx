@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Search, Filter, MapPin, Calendar, Clock, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -43,7 +43,11 @@ interface Project {
 
 const ProjectsPage = () => {
   const { id: projectId } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  
+  // Handle both URL params and query params for backward compatibility
+  const currentProjectId = projectId || searchParams.get('project');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
@@ -61,8 +65,8 @@ const ProjectsPage = () => {
 
   // Handle URL params for direct project access
   useEffect(() => {
-    if (projectId && projects.length > 0) {
-      const project = projects.find(p => p.id === projectId);
+    if (currentProjectId && projects.length > 0) {
+      const project = projects.find(p => p.id === currentProjectId);
       if (project) {
         setSelectedProject(project);
       } else {
@@ -70,7 +74,7 @@ const ProjectsPage = () => {
         navigate('/projetos', { replace: true });
       }
     }
-  }, [projectId, projects, navigate]);
+  }, [currentProjectId, projects, navigate]);
 
   useEffect(() => {
     filterProjects();
@@ -239,10 +243,10 @@ const ProjectsPage = () => {
         canonical="https://rcconstrucoes.pt/projetos"
       />
       
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 pt-20">
         {/* Header */}
-        <div className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-40">
-          <div className="container mx-auto px-4 py-6">
+        <div className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-20 z-40">
+          <div className="container mx-auto px-4 py-4">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h1 className="text-3xl font-bold text-foreground mb-2">
@@ -265,7 +269,7 @@ const ProjectsPage = () => {
           </div>
         </div>
 
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-6">
           {/* Search and Filters */}
           <div className="mb-8 space-y-4">
             <div className="flex flex-col md:flex-row gap-4">
