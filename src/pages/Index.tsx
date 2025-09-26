@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Services from "@/components/Services";
 import Gallery from "@/components/Gallery";
+import ProjectGallery from "@/components/ProjectGallery";
 import ContactForm from "@/components/ContactForm";
 import { MetaTags, getOrganizationStructuredData } from "@/components/seo/MetaTags";
 
@@ -34,6 +35,7 @@ const Index = () => {
         <About />
         <Services />
         <Gallery />
+        <ProjectGallery />
         <ContactForm />
       </div>
     </div>

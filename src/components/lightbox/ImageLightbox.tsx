@@ -19,6 +19,7 @@ interface ImageLightboxProps {
   onClose: () => void;
   onNext: () => void;
   onPrevious: () => void;
+  title?: string;
 }
 
 export const ImageLightbox: React.FC<ImageLightboxProps> = ({
@@ -28,6 +29,7 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({
   onClose,
   onNext,
   onPrevious,
+  title,
 }) => {
   const [zoom, setZoom] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -265,9 +267,14 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({
               </Button>
             </div>
             
-            {currentImage.caption && (
-              <div className="text-sm text-foreground/80 max-w-md text-center">
-                {currentImage.caption}
+            {(title || currentImage.caption) && (
+              <div className="text-sm text-foreground/80 max-w-md text-center space-y-1">
+                {title && (
+                  <div className="font-semibold">{title}</div>
+                )}
+                {currentImage.caption && (
+                  <div className="opacity-80">{currentImage.caption}</div>
+                )}
               </div>
             )}
           </div>
