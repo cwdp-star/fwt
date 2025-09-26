@@ -65,6 +65,8 @@ const MediaManager = () => {
   useEffect(() => {
     fetchMediaFiles();
   }, [fetchMediaFiles]);
+
+  const handleViewImage = (file: any, index: number) => {
     const imageData = filteredFiles.map((f) => ({
       id: f.id,
       url: f.url,
