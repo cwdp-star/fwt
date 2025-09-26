@@ -10,7 +10,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useMediaManager } from '@/hooks/useMediaManager';
+import { useAdvancedSearch } from '@/hooks/useAdvancedSearch';
 import MediaUploader from './MediaUploader';
+import AdvancedFilters from './AdvancedFilters';
 import { ImageLightbox } from '@/components/lightbox/ImageLightbox';
 
 const MediaManager = () => {
@@ -32,15 +34,15 @@ const MediaManager = () => {
   const [lightboxImages, setLightboxImages] = useState<{id: string, url: string, caption?: string, project_id: string}[]>([]);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
-  useEffect(() => {
-    fetchMediaFiles();
-  }, [fetchMediaFiles]);
-
-  const filteredFiles = mediaFiles.filter(file =>
-    file.original_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    file.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    file.description?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Advanced search functionality
+  const {
+    filters,
+    filteredAndSortedItems: filteredFiles,
+    updateFilters,
+    resetFilters,
+    getSearchStats,
+    getAvailableCategories
+  } = useAdvancedSearch(mediaFiles);
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
@@ -60,7 +62,9 @@ const MediaManager = () => {
     });
   };
 
-  const handleViewImage = (file: any, index: number) => {
+  useEffect(() => {
+    fetchMediaFiles();
+  }, [fetchMediaFiles]);
     const imageData = filteredFiles.map((f) => ({
       id: f.id,
       url: f.url,
@@ -120,17 +124,17 @@ const MediaManager = () => {
         </TabsContent>
 
         <TabsContent value="gallery" className="space-y-6">
-          {/* Search and View Controls */}
-          <div className="flex items-center justify-between gap-4">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Buscar imagens..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
+          {/* Advanced Filters */}
+          <AdvancedFilters
+            filters={filters}
+            onFiltersChange={updateFilters}
+            onReset={resetFilters}
+            categories={getAvailableCategories()}
+            stats={getSearchStats()}
+          />
+
+          {/* View Mode Toggle */}
+          <div className="flex justify-end">
             <div className="flex items-center gap-2">
               <Button
                 variant={viewMode === 'grid' ? 'default' : 'outline'}
@@ -157,7 +161,7 @@ const MediaManager = () => {
           ) : filteredFiles.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground">
-                {searchTerm ? 'Nenhum arquivo encontrado' : 'Nenhum arquivo enviado ainda'}
+                {getSearchStats().hasActiveFilters ? 'Nenhum arquivo encontrado com os filtros aplicados' : 'Nenhum arquivo enviado ainda'}
               </p>
             </div>
           ) : (
@@ -339,14 +343,14 @@ const MediaManager = () => {
       )}
 
       {/* Image Lightbox */}
-        <ImageLightbox
-          isOpen={lightboxOpen}
-          onClose={() => setLightboxOpen(false)}
-          images={lightboxImages}
-          currentIndex={lightboxIndex}
-          onNext={handleNextImage}
-          onPrevious={handlePreviousImage}
-        />
+      <ImageLightbox
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        images={lightboxImages}
+        currentIndex={lightboxIndex}
+        onNext={handleNextImage}
+        onPrevious={handlePreviousImage}
+      />
     </div>
   );
 };

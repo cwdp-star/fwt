@@ -16,16 +16,16 @@ import { Progress } from '@/components/ui/progress';
 import { supabase } from '@/integrations/supabase/client';
 
 interface DashboardStatistics {
-  totalProjects: number;
-  activeProjects: number;
-  completedProjects: number;
-  totalImages: number;
+  totalMediaFiles: number;
+  totalQuoteRequests: number;
+  newQuoteRequests: number;
+  recentQuoteRequests: number;
   recentActivity: Activity[];
 }
 
 interface Activity {
   id: string;
-  type: 'project_created' | 'project_updated' | 'image_upload';
+  type: 'quote_request' | 'media_upload' | 'quote_update';
   description: string;
   timestamp: Date;
   metadata?: any;
@@ -33,10 +33,10 @@ interface Activity {
 
 const DashboardStats = () => {
   const [stats, setStats] = useState<DashboardStatistics>({
-    totalProjects: 0,
-    activeProjects: 0,
-    completedProjects: 0,
-    totalImages: 0,
+    totalMediaFiles: 0,
+    totalQuoteRequests: 0,
+    newQuoteRequests: 0,
+    recentQuoteRequests: 0,
     recentActivity: []
   });
   const [loading, setLoading] = useState(true);
@@ -49,48 +49,58 @@ const DashboardStats = () => {
     try {
       setLoading(true);
       
-      // Fetch projects statistics
-      const { data: projects, error: projectsError } = await supabase
-        .from('projects')
-        .select('id, end_date, created_at, updated_at, title');
+      // Fetch media files statistics
+      const { data: mediaFiles, error: mediaError } = await supabase
+        .from('media_files')
+        .select('id, created_at, title, original_name');
 
-      if (projectsError) throw projectsError;
+      if (mediaError) throw mediaError;
 
-      const totalProjects = projects?.length || 0;
-      const currentDate = new Date();
-      const activeProjects = projects?.filter(p => 
-        !p.end_date || new Date(p.end_date) > currentDate
+      // Fetch quote requests statistics
+      const { data: quoteRequests, error: quotesError } = await supabase
+        .from('quote_requests')
+        .select('id, created_at, name, service, status, updated_at');
+
+      if (quotesError) throw quotesError;
+
+      const totalMediaFiles = mediaFiles?.length || 0;
+      const totalQuoteRequests = quoteRequests?.length || 0;
+      
+      // Count new quote requests (last 7 days)
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      const newQuoteRequests = quoteRequests?.filter(q => 
+        new Date(q.created_at) > weekAgo
       ).length || 0;
-      const completedProjects = totalProjects - activeProjects;
-
-      // Fetch images statistics
-      const { data: images, error: imagesError } = await supabase
-        .from('project_images')
-        .select('id');
-
-      if (imagesError) throw imagesError;
+      
+      // Count recent quote requests (last 30 days)
+      const monthAgo = new Date();
+      monthAgo.setDate(monthAgo.getDate() - 30);
+      const recentQuoteRequests = quoteRequests?.filter(q => 
+        new Date(q.created_at) > monthAgo
+      ).length || 0;
 
       // Generate recent activity
       const recentActivity: Activity[] = [
-        ...(projects?.slice(0, 5).map(p => ({
-          id: p.id,
-          type: 'project_created' as const,
-          description: `Projeto "${p.title}" foi criado`,
-          timestamp: new Date(p.created_at),
+        ...(quoteRequests?.slice(0, 5).map(q => ({
+          id: q.id,
+          type: 'quote_request' as const,
+          description: `Nova cotação de ${q.name} para ${q.service}`,
+          timestamp: new Date(q.created_at),
         })) || []),
-        ...(images?.slice(0, 3).map((img, index) => ({
-          id: img.id,
-          type: 'image_upload' as const,
-          description: `Nova imagem foi adicionada à galeria`,
-          timestamp: new Date(), // Since we don't have created_at for images in this context
+        ...(mediaFiles?.slice(0, 3).map((media) => ({
+          id: media.id,
+          type: 'media_upload' as const,
+          description: `Nova mídia adicionada: ${media.title || media.original_name}`,
+          timestamp: new Date(media.created_at),
         })) || [])
       ].sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime()).slice(0, 8);
 
       setStats({
-        totalProjects,
-        activeProjects,
-        completedProjects,
-        totalImages: images?.length || 0,
+        totalMediaFiles,
+        totalQuoteRequests,
+        newQuoteRequests,
+        recentQuoteRequests,
         recentActivity
       });
     } catch (error) {
@@ -102,10 +112,11 @@ const DashboardStats = () => {
 
   const getActivityIcon = (type: Activity['type']) => {
     switch (type) {
-      case 'project_created':
-      case 'project_updated':
-        return <Building className="h-4 w-4" />;
-      case 'image_upload':
+      case 'quote_request':
+        return <MessageSquare className="h-4 w-4" />;
+      case 'quote_update':
+        return <TrendingUp className="h-4 w-4" />;
+      case 'media_upload':
         return <Images className="h-4 w-4" />;
       default:
         return <Eye className="h-4 w-4" />;
@@ -145,8 +156,8 @@ const DashboardStats = () => {
     );
   }
 
-  const projectCompletionRate = stats.totalProjects > 0 
-    ? Math.round((stats.completedProjects / stats.totalProjects) * 100)
+  const quoteRequestsGrowth = stats.totalQuoteRequests > 0 
+    ? Math.round((stats.newQuoteRequests / stats.totalQuoteRequests) * 100)
     : 0;
 
   return (
@@ -162,14 +173,14 @@ const DashboardStats = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Total de Projetos</p>
-                  <p className="text-2xl font-bold">{stats.totalProjects}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Total de Cotações</p>
+                  <p className="text-2xl font-bold">{stats.totalQuoteRequests}</p>
                 </div>
-                <Building className="h-8 w-8 text-primary" />
+                <MessageSquare className="h-8 w-8 text-primary" />
               </div>
               <div className="mt-4 flex items-center text-sm">
                 <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
-                <span className="text-green-500">Ativos: {stats.activeProjects}</span>
+                <span className="text-green-500">Novas (7 dias): {stats.newQuoteRequests}</span>
               </div>
             </CardContent>
           </Card>
@@ -184,15 +195,15 @@ const DashboardStats = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Taxa de Conclusão</p>
-                  <p className="text-2xl font-bold">{projectCompletionRate}%</p>
+                  <p className="text-sm font-medium text-muted-foreground">Crescimento Mensal</p>
+                  <p className="text-2xl font-bold">{quoteRequestsGrowth}%</p>
                 </div>
                 <Calendar className="h-8 w-8 text-green-500" />
               </div>
               <div className="mt-4">
-                <Progress value={projectCompletionRate} className="h-2" />
+                <Progress value={Math.min(quoteRequestsGrowth, 100)} className="h-2" />
                 <p className="text-xs text-muted-foreground mt-1">
-                  {stats.completedProjects} de {stats.totalProjects} concluídos
+                  {stats.recentQuoteRequests} cotações nos últimos 30 dias
                 </p>
               </div>
             </CardContent>
@@ -208,8 +219,8 @@ const DashboardStats = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Imagens na Galeria</p>
-                  <p className="text-2xl font-bold">{stats.totalImages}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Arquivos de Mídia</p>
+                  <p className="text-2xl font-bold">{stats.totalMediaFiles}</p>
                 </div>
                 <Images className="h-8 w-8 text-blue-500" />
               </div>
@@ -230,14 +241,14 @@ const DashboardStats = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Projetos Ativos</p>
-                  <p className="text-2xl font-bold">{stats.activeProjects}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Cotações Recentes</p>
+                  <p className="text-2xl font-bold">{stats.newQuoteRequests}</p>
                 </div>
-                <Calendar className="h-8 w-8 text-orange-500" />
+                <Users className="h-8 w-8 text-orange-500" />
               </div>
               <div className="mt-4">
                 <Badge variant="secondary" className="text-xs">
-                  Em andamento
+                  Últimos 7 dias
                 </Badge>
               </div>
             </CardContent>
