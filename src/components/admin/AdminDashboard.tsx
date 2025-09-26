@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import DashboardStats from './DashboardStats';
-import ProjectsList from './ProjectsList';
 import QuoteRequestsManager from './QuoteRequestsManager';
-import { ImageUploadManager } from './ImageUploadManager';
 import ProjectAnalytics from './ProjectAnalytics';
 
 const AdminDashboard = () => {
@@ -17,14 +15,13 @@ const AdminDashboard = () => {
             Painel de Administração
           </h1>
           <p className="text-muted-foreground">
-            Gerir projetos, orçamentos e conteúdo do website
+            Gerir orçamentos e conteúdo do website
           </p>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-            <TabsTrigger value="projects">Projetos</TabsTrigger>
             <TabsTrigger value="quotes">Orçamentos</TabsTrigger>
             <TabsTrigger value="media">Mídia</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -32,12 +29,6 @@ const AdminDashboard = () => {
 
           <TabsContent value="overview" className="space-y-6">
             <DashboardStats />
-          </TabsContent>
-
-          <TabsContent value="projects" className="space-y-6">
-            <div className="bg-white rounded-xl shadow-sm border p-6">
-              <ProjectsList />
-            </div>
           </TabsContent>
 
           <TabsContent value="quotes" className="space-y-6">

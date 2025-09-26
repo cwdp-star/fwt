@@ -8,14 +8,10 @@ import { HelmetProvider } from 'react-helmet-async';
 // Pages
 import Index from '@/pages/Index';
 import AuthPage from '@/pages/AuthPage';
-import ProjectManagementPage from '@/pages/ProjectManagementPage';
-import ProjectImageManagerPage from '@/pages/ProjectImageManagerPage';
-import ImageGalleryPage from '@/pages/ImageGalleryPage';
 import DatabaseHealthPage from '@/pages/DatabaseHealthPage';
 import SecurityAuditPage from '@/pages/SecurityAuditPage';
 import TestRoute from '@/pages/TestRoute';
 import NotFound from '@/pages/NotFound';
-import ProjectsPage from '@/components/ProjectsPage';
 
 // Components
 import Header from '@/components/Header';
@@ -72,28 +68,9 @@ function App() {
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<AuthPage />} />
                 <Route path="/admin-login" element={<AuthPage />} />
-                <Route path="/projetos" element={<ProjectsPage />} />
-                <Route path="/projetos/:id" element={<ProjectsPage />} />
-                <Route path="/projects" element={<ProjectsPage />} />
-                <Route path="/gallery" element={<ImageGalleryPage />} />
                 <Route path="/admin" element={
                   <ProtectedRoute>
                     <AdminDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/admin/projetos/:id/imagens" element={
-                  <ProtectedRoute>
-                    <ProjectImageManagerPage />
-                  </ProtectedRoute>
-                } />
-                <Route path="/admin/projetos/:id/gestao" element={
-                  <ProtectedRoute>
-                    <ProjectManagementPage />
-                  </ProtectedRoute>
-                } />
-                <Route path="/admin/images/:projectId" element={
-                  <ProtectedRoute>
-                    <ProjectImageManagerPage />
                   </ProtectedRoute>
                 } />
                 <Route path="/admin/security" element={
@@ -106,7 +83,6 @@ function App() {
                     <DatabaseHealthPage />
                   </ProtectedRoute>
                 } />
-                <Route path="/image-gallery" element={<ImageGalleryPage />} />
                 <Route path="/health" element={
                   <ProtectedRoute>
                     <DatabaseHealthPage />
