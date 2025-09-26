@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useProjects } from '@/hooks/useProjects';
 import { ImageLightbox } from '@/components/lightbox/ImageLightbox';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
-import { Images, Calendar, MapPin, User } from 'lucide-react';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { ProjectCard } from '@/components/gallery/ProjectCard';
+import { Images } from 'lucide-react';
 
 interface ProjectImageForLightbox {
   id: string;
@@ -49,14 +47,6 @@ const ProjectGallery = () => {
     setLightboxIndex((prev) => (prev - 1 + lightboxImages.length) % lightboxImages.length);
   };
 
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return 'Data não informada';
-    try {
-      return format(new Date(dateString), 'MMMM \'de\' yyyy', { locale: ptBR });
-    } catch {
-      return 'Data não informada';
-    }
-  };
 
   if (loading) {
     return (
@@ -113,76 +103,11 @@ const ProjectGallery = () => {
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project) => (
-              <Card 
-                key={project.id} 
-                className="group cursor-pointer overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+              <ProjectCard
+                key={project.id}
+                project={project}
                 onClick={() => handleProjectClick(project.id, project.title)}
-              >
-                <CardContent className="p-0">
-                  {/* Project Cover Image */}
-                  <div className="aspect-[4/3] relative overflow-hidden">
-                    <img
-                      src={project.images[0]?.url || project.cover_image || '/placeholder.svg'}
-                      alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    
-                    {/* Image Counter Badge */}
-                    {project.images.length > 1 && (
-                      <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm font-medium">
-                        <Images className="inline-block w-4 h-4 mr-1" />
-                        {project.images.length}
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Project Info */}
-                  <div className="p-6 space-y-4">
-                    <div>
-                      <h3 className="font-bold text-lg text-foreground mb-2 line-clamp-2">
-                        {project.title}
-                      </h3>
-                      
-                      <div className="space-y-2 text-sm text-muted-foreground">
-                        {/* Location */}
-                        {project.city && (
-                          <div className="flex items-center gap-2">
-                            <MapPin className="w-4 h-4 text-primary" />
-                            <span>{project.city}</span>
-                          </div>
-                        )}
-                        
-                        {/* Completion Date */}
-                        {project.end_date && (
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-primary" />
-                            <span>Concluído em {formatDate(project.end_date)}</span>
-                          </div>
-                        )}
-                        
-                        {/* Client Name (if available in description) */}
-                        {project.client_name && (
-                          <div className="flex items-center gap-2">
-                            <User className="w-4 h-4 text-primary" />
-                            <span>{project.client_name}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Category Badge */}
-                    {project.category && (
-                      <div className="flex justify-end">
-                        <Badge variant="secondary" className="text-xs">
-                          {project.category}
-                        </Badge>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+              />
             ))}
           </div>
         </div>

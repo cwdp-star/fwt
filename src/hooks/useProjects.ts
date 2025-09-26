@@ -66,12 +66,19 @@ export const useProjects = () => {
           image => image.project_id === project.id
         );
         
+        // Extrair nome do cliente de forma mais robusta da descrição
+        let clientName: string | undefined;
+        if (project.description) {
+          const clientMatch = project.description.match(/cliente:\s*([^\n\r,]+)/i);
+          if (clientMatch) {
+            clientName = clientMatch[1].trim();
+          }
+        }
+        
         return {
           ...project,
           images: projectImages,
-          client_name: project.description?.includes('Cliente:') 
-            ? project.description.split('Cliente:')[1]?.trim().split('\n')[0] 
-            : undefined
+          client_name: clientName
         };
       });
 
