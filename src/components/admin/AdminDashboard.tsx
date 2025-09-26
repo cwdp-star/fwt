@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import DashboardStats from './DashboardStats';
 import QuoteRequestsManager from './QuoteRequestsManager';
 import ProjectAnalytics from './ProjectAnalytics';
+import MediaManager from './MediaManager';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -38,9 +39,8 @@ const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="media" className="space-y-6">
-            <div className="bg-white rounded-xl shadow-sm border p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Gestão de Mídia</h3>
-              <p className="text-gray-600">Gerir imagens e recursos do website.</p>
+            <div className="bg-card rounded-xl shadow-sm border p-6">
+              <MediaManager />
             </div>
           </TabsContent>
 

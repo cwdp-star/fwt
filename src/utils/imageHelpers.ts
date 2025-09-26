@@ -7,9 +7,9 @@ export const uploadImageToSupabase = async (file: File, folder: string = 'galler
       throw new Error('Apenas imagens são permitidas');
     }
 
-    // Validate file size (10MB max)
-    if (file.size > 10 * 1024 * 1024) {
-      throw new Error('Imagem muito grande. Máximo 10MB');
+    // Validate file size (2MB max)
+    if (file.size > 2 * 1024 * 1024) {
+      throw new Error('Imagem muito grande. Máximo 2MB');
     }
 
     const fileExt = file.name.split('.').pop();

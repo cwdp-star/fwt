@@ -1,5 +1,7 @@
-import { Images } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { Images } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import ProjectGallery from './ProjectGallery';
 
 const Gallery = () => {
   const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
@@ -76,6 +78,9 @@ const Gallery = () => {
           </div>
         </div>
       </div>
+
+      {/* Project Gallery Section */}
+      <ProjectGallery />
     </section>
   );
 };

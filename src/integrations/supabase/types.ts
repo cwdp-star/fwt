@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      media_files: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          file_size: number
+          filename: string
+          id: string
+          mime_type: string
+          original_name: string
+          tags: string[] | null
+          title: string | null
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          file_size: number
+          filename: string
+          id?: string
+          mime_type: string
+          original_name: string
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          file_size?: number
+          filename?: string
+          id?: string
+          mime_type?: string
+          original_name?: string
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
       project_images: {
         Row: {
           caption: string | null
