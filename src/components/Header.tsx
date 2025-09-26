@@ -1,16 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Phone, Mail, MapPin, LogIn, LogOut, User as UserIcon } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { User } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
+import { useAuth } from '@/components/SecurityProvider';
 
-interface HeaderProps {
-  user?: User | null;
-}
-
-const Header = ({ user }: HeaderProps) => {
+const Header = () => {
+  const { user, signOut } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
@@ -27,20 +22,9 @@ const Header = ({ user }: HeaderProps) => {
 
   const handleLogout = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      toast({
-        title: "Logout realizado",
-        description: "Você foi desconectado com sucesso.",
-      });
-      navigate('/');
+      await signOut();
     } catch (error) {
       console.error('Error signing out:', error);
-      toast({
-        title: "Erro no logout",
-        description: "Ocorreu um erro ao desconectar. Tente novamente.",
-        variant: "destructive",
-      });
     }
   };
 
