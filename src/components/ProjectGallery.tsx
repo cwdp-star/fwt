@@ -13,8 +13,10 @@ interface ProjectImageForLightbox {
   project_id: string;
 }
 
+import { ErrorBoundary } from '@/components/ui/error-boundary';
+
 const ProjectGallery = () => {
-  const { projects, loading } = useProjects();
+  const { projects, loading, error, isRetrying, refreshProjects } = useProjects();
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImages, setLightboxImages] = useState<ProjectImageForLightbox[]>([]);
   const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -48,6 +50,33 @@ const ProjectGallery = () => {
   };
 
 
+  // Estado de erro com retry
+  if (error) {
+    return (
+      <ErrorBoundary>
+        <section className="py-20 bg-gradient-to-br from-background via-background to-secondary/5">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="text-center">
+              <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-8">
+                <h3 className="text-lg font-semibold text-destructive mb-2">
+                  Erro ao carregar projetos
+                </h3>
+                <p className="text-muted-foreground mb-4">{error}</p>
+                <button
+                  onClick={refreshProjects}
+                  disabled={isRetrying}
+                  className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 disabled:opacity-50"
+                >
+                  {isRetrying ? 'Tentando novamente...' : 'Tentar Novamente'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </ErrorBoundary>
+    );
+  }
+
   if (loading) {
     return (
       <section className="py-20 bg-gradient-to-br from-background via-background to-secondary/5">
@@ -71,7 +100,8 @@ const ProjectGallery = () => {
   }
 
   return (
-    <section id="galeria" className="py-20 bg-gradient-to-br from-background via-background to-secondary/5">
+    <ErrorBoundary>
+      <section id="galeria" className="py-20 bg-gradient-to-br from-background via-background to-secondary/5">
       <div className="container mx-auto px-4 max-w-7xl">
         {/* Header */}
         <div 
@@ -137,6 +167,7 @@ const ProjectGallery = () => {
         />
       </div>
     </section>
+    </ErrorBoundary>
   );
 };
 
