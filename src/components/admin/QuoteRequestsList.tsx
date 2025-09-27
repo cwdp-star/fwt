@@ -31,17 +31,55 @@ const QuoteRequestsList = () => {
   }, []);
 
   const fetchQuoteRequests = async () => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+
     try {
-      // For now, get from localStorage
-      const storedRequests = JSON.parse(localStorage.getItem('quote_requests') || '[]');
-      setRequests(storedRequests);
+      setLoading(true);
+      
+      // Buscar orçamentos do Supabase
+      const { data, error } = await supabase
+        .from('quote_requests')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      clearTimeout(timeoutId);
+
+      if (error) {
+        console.error('Erro ao buscar orçamentos:', error);
+        
+        // Fallback para localStorage se Supabase falhar
+        const storedRequests = JSON.parse(localStorage.getItem('quote_requests') || '[]');
+        setRequests(storedRequests);
+        
+        if (storedRequests.length === 0) {
+          toast({
+            title: "Aviso",
+            description: "Conectando à base de dados. A carregar dados locais...",
+            variant: "default",
+          });
+        }
+      } else {
+        // Mapear dados do Supabase para interface esperada
+        const mappedRequests = (data || []).map(request => ({
+          ...request,
+          location: request.city || '',
+          project_type: request.project_type || request.service || '',
+          gdpr_consent: true // Assumir consentimento para dados já na DB
+        }));
+        
+        setRequests(mappedRequests);
+      }
     } catch (error) {
-      console.error('Error fetching quote requests:', error);
-      toast({
-        title: "Erro",
-        description: "Não foi possível carregar as solicitações de orçamento",
-        variant: "destructive",
-      });
+      console.error('Erro ao carregar orçamentos:', error);
+      
+      // Fallback final para localStorage
+      try {
+        const storedRequests = JSON.parse(localStorage.getItem('quote_requests') || '[]');
+        setRequests(storedRequests);
+      } catch {
+        setRequests([]);
+      }
     } finally {
       setLoading(false);
     }

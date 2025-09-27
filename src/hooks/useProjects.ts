@@ -35,41 +35,47 @@ export const useProjects = () => {
   const [error, setError] = useState<string | null>(null);
 
   const fetchProjects = useCallback(async () => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
     try {
       setLoading(true);
       setError(null);
 
-      // Buscar todos os projetos
+      // Otimizar consulta usando JOIN para buscar projetos e imagens em uma única query
       const { data: projectsData, error: projectsError } = await supabase
         .from('projects')
-        .select('*')
+        .select(`
+          *,
+          images:project_images(
+            id,
+            url,
+            caption,
+            date,
+            project_id,
+            created_at
+          )
+        `)
         .eq('status', 'active')
         .order('created_at', { ascending: false });
+
+      clearTimeout(timeoutId);
 
       if (projectsError) {
         throw projectsError;
       }
 
-      // Buscar todas as imagens dos projetos
-      const { data: imagesData, error: imagesError } = await supabase
-        .from('project_images')
-        .select('*')
-        .order('created_at', { ascending: true });
-
-      if (imagesError) {
-        throw imagesError;
-      }
-
-      // Agrupar imagens por projeto
+      // Processar dados dos projetos com imagens
       const projectsWithImages: ProjectWithImages[] = (projectsData || []).map(project => {
-        const projectImages = (imagesData || []).filter(
-          image => image.project_id === project.id
+        // Imagens já vêm incluídas na query
+        const projectImages = (project.images || []).sort((a, b) => 
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
         );
         
-        // Extrair nome do cliente de forma mais robusta da descrição
+        // Extrair nome do cliente da descrição
         let clientName: string | undefined;
         if (project.description) {
-          const clientMatch = project.description.match(/cliente:\s*([^\n\r,]+)/i);
+          const clientMatch = project.description.match(/cliente:\s*([^\n\r,.;]+)/i);
           if (clientMatch) {
             clientName = clientMatch[1].trim();
           }
@@ -84,7 +90,7 @@ export const useProjects = () => {
 
       // Filtrar apenas projetos que têm pelo menos uma imagem
       const projectsWithActualImages = projectsWithImages.filter(
-        project => project.images.length > 0
+        project => project.images && project.images.length > 0
       );
 
       setProjects(projectsWithActualImages);

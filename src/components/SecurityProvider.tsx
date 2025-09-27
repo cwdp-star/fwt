@@ -30,54 +30,69 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  // Add timeout to prevent infinite loading
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      console.log('⏰ Timeout de autenticação atingido, forçando loading = false');
-      setLoading(false);
-    }, 10000); // 10 second timeout
+    let mounted = true;
 
-    return () => clearTimeout(timeout);
-  }, []);
+    const initializeAuth = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (!mounted) return;
 
-  useEffect(() => {
-    console.log('🔄 Iniciando verificação de autenticação...');
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('📋 Sessão inicial:', session ? 'Encontrada' : 'Não encontrada');
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        checkAdminStatus(session.user.id);
-      } else {
-        console.log('✅ Nenhum utilizador encontrado, definindo loading como false');
-        setLoading(false);
+        if (error) {
+          console.error('❌ Erro ao obter sessão:', error);
+          setLoading(false);
+          return;
+        }
+
+        setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          await checkAdminStatus(session.user.id);
+        } else {
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('❌ Erro na inicialização da auth:', error);
+        if (mounted) setLoading(false);
       }
-    }).catch((error) => {
-      console.error('❌ Erro ao obter sessão inicial:', error);
-      setLoading(false);
-    });
+    };
+
+    // Initialize auth state
+    initializeAuth();
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('🔄 Mudança de estado de auth:', event);
+        if (!mounted) return;
+
         setUser(session?.user ?? null);
         
         if (session?.user) {
           await checkAdminStatus(session.user.id);
         } else {
           setIsAdmin(false);
-          console.log('✅ Utilizador desligado, definindo loading como false');
           setLoading(false);
         }
       }
     );
 
-    return () => subscription.unsubscribe();
+    // Cleanup timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      if (mounted) {
+        console.log('⏰ Timeout de autenticação atingido');
+        setLoading(false);
+      }
+    }, 8000);
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+      clearTimeout(timeout);
+    };
   }, []);
 
   const checkAdminStatus = async (userId: string) => {
-    console.log('🔍 Verificando status de admin para:', userId);
     try {
       const { data, error } = await supabase
         .from('user_roles')
@@ -86,19 +101,17 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
         .eq('role', 'admin')
         .maybeSingle();
 
-      if (error) {
+      if (error && error.code !== 'PGRST116') {
         console.error('❌ Erro ao verificar status de admin:', error);
         setIsAdmin(false);
       } else {
         const isAdminUser = data?.role === 'admin';
-        console.log('✅ Status de admin:', isAdminUser);
         setIsAdmin(isAdminUser);
       }
     } catch (error) {
       console.error('❌ Erro geral:', error);
       setIsAdmin(false);
     } finally {
-      console.log('✅ Verificação de admin concluída, definindo loading como false');
       setLoading(false);
     }
   };
