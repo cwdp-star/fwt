@@ -8,6 +8,7 @@ export interface Project {
   title: string;
   description?: string;
   city?: string;
+  start_date?: string;  // Adicionado campo start_date
   end_date?: string;
   delivery_date?: string;
   category?: string;
@@ -44,21 +45,28 @@ export const useProjects = () => {
     exponentialBackoff: true
   });
 
+  console.log('🎯 useProjects inicializado');
+
   const fetchProjects = useCallback(async (skipCache = false) => {
+    console.log('🚀 fetchProjects chamada - skipCache:', skipCache, 'cachedProjects:', cachedProjects?.length);
+    
     // Verificar cache primeiro (se não forçar atualização)
     if (!skipCache && cachedProjects && cachedProjects.length > 0) {
+      console.log('📱 Usando cache - projects:', cachedProjects.length);
       setProjects(cachedProjects);
       setLoading(false);
       return;
     }
 
     const fetchOperation = async () => {
+      console.log('🌐 Iniciando busca no Supabase...');
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
       try {
         setLoading(true);
         setError(null);
+        console.log('⏳ Loading true, error null');
 
         // Otimizar consulta usando JOIN para buscar projetos e imagens em uma única query
         const { data: projectsData, error: projectsError } = await supabase
@@ -79,6 +87,10 @@ export const useProjects = () => {
           .abortSignal(controller.signal);
 
         clearTimeout(timeoutId);
+        console.log('📦 Dados recebidos do Supabase:', { 
+          projectsData: projectsData?.length, 
+          error: projectsError?.message 
+        });
 
         if (projectsError) {
           throw projectsError;
@@ -123,7 +135,7 @@ export const useProjects = () => {
           project => project.images && project.images.length > 0
         );
 
-        console.log('Debug - Projects fetched:', {
+        console.log('✅ Projetos processados:', {
           totalProjects: projectsData?.length || 0,
           projectsWithImages: projectsWithActualImages.length,
           projects: projectsWithActualImages.map(p => ({ id: p.id, title: p.title, imageCount: p.images.length }))
@@ -132,31 +144,36 @@ export const useProjects = () => {
         // Salvar no cache
         setCachedProjects(projectsWithActualImages);
         setProjects(projectsWithActualImages);
+        console.log('💾 Cache atualizado e state definido');
         
         return projectsWithActualImages;
       } catch (err) {
-        console.error('Erro ao buscar projetos:', err);
+        console.error('❌ Erro ao buscar projetos:', err);
         const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
         setError(errorMessage);
         throw err;
       } finally {
         setLoading(false);
+        console.log('🏁 Loading definido como false');
       }
     };
 
     // Usar retry com a operação
     try {
+      console.log('🔄 Iniciando retry...');
       await retry(fetchOperation);
     } catch (finalError) {
-      console.error('Erro final após todas as tentativas:', finalError);
+      console.error('💥 Erro final após todas as tentativas:', finalError);
     }
   }, [cachedProjects, setCachedProjects, retry]);
 
   useEffect(() => {
+    console.log('🔥 useEffect disparado - fetchProjects');
     fetchProjects();
   }, [fetchProjects]);
 
   const refreshProjects = useCallback(() => {
+    console.log('🔄 refreshProjects chamada');
     fetchProjects(true); // Forçar atualização ignorando cache
   }, [fetchProjects]);
 

@@ -53,15 +53,15 @@ const ProjectManager = () => {
 
   const handleEdit = (project: Project) => {
     setEditingProject(project);
-      setFormData({
-        title: project.title,
-        description: project.description || '',
-        city: project.city || '',
-        category: project.category || '',
-        start_date: '', // Project interface doesn't have start_date
-        end_date: project.end_date || '',
-        delivery_date: project.delivery_date || ''
-      });
+        setFormData({
+          title: project.title,
+          description: project.description || '',
+          city: project.city || '',
+          category: project.category || '',
+          start_date: project.start_date || '',
+          end_date: project.end_date || '',
+          delivery_date: project.delivery_date || ''
+        });
     setIsDialogOpen(true);
   };
 

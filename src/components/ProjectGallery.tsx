@@ -16,8 +16,16 @@ interface ProjectImageForLightbox {
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 
 const ProjectGallery = () => {
+  console.log('🎨 ProjectGallery renderizando...');
   const { projects, loading, error, isRetrying, refreshProjects } = useProjects();
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  
+  console.log('📊 ProjectGallery state:', { 
+    projectsLength: projects?.length, 
+    loading, 
+    error, 
+    isRetrying 
+  });
   const [lightboxImages, setLightboxImages] = useState<ProjectImageForLightbox[]>([]);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [selectedProject, setSelectedProject] = useState<string>('');
