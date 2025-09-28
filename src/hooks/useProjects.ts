@@ -123,6 +123,12 @@ export const useProjects = () => {
           project => project.images && project.images.length > 0
         );
 
+        console.log('Debug - Projects fetched:', {
+          totalProjects: projectsData?.length || 0,
+          projectsWithImages: projectsWithActualImages.length,
+          projects: projectsWithActualImages.map(p => ({ id: p.id, title: p.title, imageCount: p.images.length }))
+        });
+
         // Salvar no cache
         setCachedProjects(projectsWithActualImages);
         setProjects(projectsWithActualImages);

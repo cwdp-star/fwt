@@ -4,6 +4,7 @@ import DashboardStats from './DashboardStats';
 import QuoteRequestsManager from './QuoteRequestsManager';
 import ProjectAnalytics from './ProjectAnalytics';
 import MediaManager from './MediaManager';
+import ProjectManager from './ProjectManager';
 import QuickActions from './QuickActions';
 import NotificationCenter from './NotificationCenter';
 
@@ -28,9 +29,10 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Visão Geral</TabsTrigger>
             <TabsTrigger value="quotes">Orçamentos</TabsTrigger>
+            <TabsTrigger value="projects">Projetos</TabsTrigger>
             <TabsTrigger value="media">Mídia</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
           </TabsList>
@@ -43,6 +45,12 @@ const AdminDashboard = () => {
           <TabsContent value="quotes" className="space-y-6">
             <div className="bg-white rounded-xl shadow-sm border p-6">
               <QuoteRequestsManager />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="projects" className="space-y-6">
+            <div className="bg-card rounded-xl shadow-sm border p-6">
+              <ProjectManager />
             </div>
           </TabsContent>
 
