@@ -66,7 +66,7 @@ export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-primary" />
                 <span>
-                  {project.end_date ? `Concluído em ${formatDate(project.end_date)}` : formatDate(project.end_date)}
+                  {project.end_date ? `Concluído em ${formatDate(project.end_date)}` : 'Em andamento'}
                 </span>
               </div>
               

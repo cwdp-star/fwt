@@ -36,146 +36,107 @@ export const useProjects = () => {
   const [projects, setProjects] = useState<ProjectWithImages[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
-  // Cache dos projetos por 15 minutos
-  const [cachedProjects, setCachedProjects] = useCache<ProjectWithImages[]>('projects-cache', 15);
+  const [cachedData, setCachedData] = useCache<ProjectWithImages[]>('projects');
   const { retry, isRetrying } = useRetry({
     maxAttempts: 3,
-    delay: 2000,
+    delay: 1000,
     exponentialBackoff: true
   });
 
-  console.log('🎯 useProjects inicializado');
+  const fetchProjects = useCallback(async (skipCache: boolean = false) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Verificar cache primeiro
+      if (!skipCache && cachedData) {
+        setProjects(cachedData);
+        setLoading(false);
+        return cachedData;
+      }
 
-  const fetchProjects = useCallback(async (skipCache = false) => {
-    console.log('🚀 fetchProjects chamada - skipCache:', skipCache, 'cachedProjects:', cachedProjects?.length);
-    
-    // Verificar cache primeiro (se não forçar atualização)
-    if (!skipCache && cachedProjects && cachedProjects.length > 0) {
-      console.log('📱 Usando cache - projects:', cachedProjects.length);
-      setProjects(cachedProjects);
-      setLoading(false);
-      return;
-    }
+      // Buscar projetos ativos
+      const { data: projectsData, error: projectsError } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('status', 'active')
+        .order('created_at', { ascending: false });
 
-    const fetchOperation = async () => {
-      console.log('🌐 Iniciando busca no Supabase...');
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
+      if (projectsError) {
+        throw new Error(`Erro ao carregar projetos: ${projectsError.message}`);
+      }
 
-      try {
-        setLoading(true);
-        setError(null);
-        console.log('⏳ Loading true, error null');
+      if (!projectsData || projectsData.length === 0) {
+        setProjects([]);
+        setLoading(false);
+        return [];
+      }
 
-        // Otimizar consulta usando JOIN para buscar projetos e imagens em uma única query
-        const { data: projectsData, error: projectsError } = await supabase
-          .from('projects')
-          .select(`
-            *,
-            images:project_images(
-              id,
-              url,
-              caption,
-              date,
-              project_id,
-              created_at
-            )
-          `)
-          .eq('status', 'active')
-          .order('created_at', { ascending: false })
-          .abortSignal(controller.signal);
+      // Buscar imagens para cada projeto
+      const { data: imagesData, error: imagesError } = await supabase
+        .from('project_images')
+        .select('id, project_id, url, caption, created_at')
+        .in('project_id', projectsData.map(p => p.id));
 
-        clearTimeout(timeoutId);
-        console.log('📦 Dados recebidos do Supabase:', { 
-          projectsData: projectsData?.length, 
-          error: projectsError?.message 
-        });
+      if (imagesError) {
+        console.warn('Erro ao carregar imagens:', imagesError);
+      }
 
-        if (projectsError) {
-          throw projectsError;
+      // Processar os dados
+      const processedProjects: ProjectWithImages[] = projectsData.map((project) => {
+        const projectImages: ProjectImage[] = (imagesData?.filter(img => img.project_id === project.id) || []).map(img => ({
+          id: img.id,
+          url: img.url,
+          caption: img.caption,
+          project_id: img.project_id,
+          created_at: img.created_at
+        }));
+        
+        // Extrair nome do cliente da descrição se disponível
+        let client_name = '';
+        if (project.description) {
+          const clientMatch = project.description.match(/Cliente:\s*([^\n\r\.]+)/i);
+          if (clientMatch) {
+            client_name = clientMatch[1].trim();
+          }
         }
 
-        // Processar dados dos projetos com imagens
-        const projectsWithImages: ProjectWithImages[] = (projectsData || []).map(project => {
-          // Imagens já vêm incluídas na query
-          const projectImages = (project.images || []).sort((a, b) => 
-            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-          );
-          
-          // Extrair nome do cliente da descrição
-          let clientName: string | undefined;
-          if (project.description) {
-            // Expressão regular mais robusta para capturar nomes de clientes
-            const clientMatches = [
-              /cliente:\s*([^\n\r,.;]+)/i,
-              /client[e]?:\s*([^\n\r,.;]+)/i,
-              /para:\s*([^\n\r,.;]+)/i,
-              /destinatário:\s*([^\n\r,.;]+)/i
-            ];
-            
-            for (const regex of clientMatches) {
-              const match = project.description.match(regex);
-              if (match) {
-                clientName = match[1].trim();
-                break;
-              }
-            }
-          }
-          
-          return {
-            ...project,
-            images: projectImages,
-            client_name: clientName
-          };
-        });
+        return {
+          ...project,
+          images: projectImages,
+          client_name: client_name || undefined
+        };
+      });
 
-        // Filtrar apenas projetos que têm pelo menos uma imagem
-        const projectsWithActualImages = projectsWithImages.filter(
-          project => project.images && project.images.length > 0
-        );
-
-        console.log('✅ Projetos processados:', {
-          totalProjects: projectsData?.length || 0,
-          projectsWithImages: projectsWithActualImages.length,
-          projects: projectsWithActualImages.map(p => ({ id: p.id, title: p.title, imageCount: p.images.length }))
-        });
-
-        // Salvar no cache
-        setCachedProjects(projectsWithActualImages);
-        setProjects(projectsWithActualImages);
-        console.log('💾 Cache atualizado e state definido');
-        
-        return projectsWithActualImages;
-      } catch (err) {
-        console.error('❌ Erro ao buscar projetos:', err);
-        const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
-        setError(errorMessage);
-        throw err;
-      } finally {
-        setLoading(false);
-        console.log('🏁 Loading definido como false');
-      }
-    };
-
-    // Usar retry com a operação
-    try {
-      console.log('🔄 Iniciando retry...');
-      await retry(fetchOperation);
-    } catch (finalError) {
-      console.error('💥 Erro final após todas as tentativas:', finalError);
+      // Filtrar apenas projetos que têm pelo menos uma imagem
+      const projectsWithImages = processedProjects.filter(project => 
+        project.images && project.images.length > 0
+      );
+      
+      setProjects(projectsWithImages);
+      setCachedData(projectsWithImages);
+      
+      return projectsWithImages;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido ao carregar projetos';
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
     }
-  }, [cachedProjects, setCachedProjects, retry]);
+  }, [cachedData, setCachedData]);
 
+  // Effect para carregar projetos na inicialização
   useEffect(() => {
-    console.log('🔥 useEffect disparado - fetchProjects');
-    fetchProjects();
-  }, [fetchProjects]);
+    retry(() => fetchProjects())
+      .catch(error => {
+        setError(error.message);
+      });
+  }, [fetchProjects, retry]);
 
   const refreshProjects = useCallback(() => {
-    console.log('🔄 refreshProjects chamada');
-    fetchProjects(true); // Forçar atualização ignorando cache
-  }, [fetchProjects]);
+    return retry(() => fetchProjects(true));
+  }, [fetchProjects, retry]);
 
   return {
     projects,

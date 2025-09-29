@@ -1,7 +1,5 @@
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { Images } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import ProjectGallery from './ProjectGallery';
 
 const Gallery = () => {
   const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
@@ -61,27 +59,24 @@ const Gallery = () => {
             </div>
           </div>
 
-          {/* Call to Action */}
-          <div className="text-center space-y-4">
-            <h3 className="text-2xl font-bold text-foreground mb-4">
-              Pronto para o Seu Próximo Projeto?
-            </h3>
-            <p className="text-muted-foreground mb-6 text-lg">
-              Entre em contacto connosco para um orçamento personalizado e gratuito.
-            </p>
-            <button 
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-primary-foreground px-10 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl"
-            >
-              Solicitar Orçamento Gratuito
-            </button>
-          </div>
-        </div>
+      {/* Call to Action */}
+      <div className="text-center space-y-4">
+        <h3 className="text-2xl font-bold text-foreground mb-4">
+          Pronto para o Seu Próximo Projeto?
+        </h3>
+        <p className="text-muted-foreground mb-6 text-lg">
+          Entre em contacto connosco para um orçamento personalizado e gratuito.
+        </p>
+        <button 
+          onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+          className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-primary-foreground px-10 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl"
+        >
+          Solicitar Orçamento Gratuito
+        </button>
       </div>
-
-      {/* Project Gallery Section */}
-      <ProjectGallery />
-    </section>
+    </div>
+  </div>
+</section>
   );
 };
 
