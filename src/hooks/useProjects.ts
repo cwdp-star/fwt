@@ -8,7 +8,7 @@ export interface Project {
   title: string;
   description?: string;
   city?: string;
-  start_date?: string;  // Adicionado campo start_date
+  start_date?: string;
   end_date?: string;
   delivery_date?: string;
   category?: string;
@@ -29,14 +29,14 @@ export interface ProjectImage {
 
 export interface ProjectWithImages extends Project {
   images: ProjectImage[];
-  client_name?: string; // Este campo pode ser adicionado no futuro
+  client_name?: string;
 }
 
 export const useProjects = () => {
   const [projects, setProjects] = useState<ProjectWithImages[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [cachedData, setCachedData] = useCache<ProjectWithImages[]>('projects');
+  const [cachedData, setCachedData, clearCache] = useCache<ProjectWithImages[]>('projects', 30);
   const { retry, isRetrying } = useRetry({
     maxAttempts: 3,
     delay: 1000,
@@ -48,13 +48,6 @@ export const useProjects = () => {
       setLoading(true);
       setError(null);
       
-      // Verificar cache primeiro
-      if (!skipCache && cachedData) {
-        setProjects(cachedData);
-        setLoading(false);
-        return cachedData;
-      }
-
       // Buscar projetos ativos
       const { data: projectsData, error: projectsError } = await supabase
         .from('projects')
@@ -124,15 +117,28 @@ export const useProjects = () => {
     } finally {
       setLoading(false);
     }
-  }, [cachedData, setCachedData]);
+  }, [setCachedData]);
 
   // Effect para carregar projetos na inicialização
   useEffect(() => {
-    retry(() => fetchProjects())
-      .catch(error => {
-        setError(error.message);
-      });
-  }, [fetchProjects, retry]);
+    // Verificar cache primeiro
+    if (cachedData && cachedData.length > 0) {
+      setProjects(cachedData);
+      setLoading(false);
+      return;
+    }
+
+    // Se não houver cache, buscar dados
+    const loadProjects = async () => {
+      try {
+        await retry(() => fetchProjects());
+      } catch (error) {
+        console.error('Erro ao carregar projetos:', error);
+      }
+    };
+    
+    loadProjects();
+  }, []);
 
   const refreshProjects = useCallback(() => {
     return retry(() => fetchProjects(true));
