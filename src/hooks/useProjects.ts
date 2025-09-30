@@ -121,15 +121,15 @@ export const useProjects = () => {
 
   // Effect para carregar projetos na inicialização
   useEffect(() => {
-    // Verificar cache primeiro
-    if (cachedData && cachedData.length > 0) {
-      setProjects(cachedData);
-      setLoading(false);
-      return;
-    }
-
-    // Se não houver cache, buscar dados
     const loadProjects = async () => {
+      // Verificar cache primeiro
+      if (cachedData && cachedData.length > 0) {
+        setProjects(cachedData);
+        setLoading(false);
+        return;
+      }
+
+      // Se não houver cache, buscar dados
       try {
         await retry(() => fetchProjects());
       } catch (error) {
@@ -138,7 +138,7 @@ export const useProjects = () => {
     };
     
     loadProjects();
-  }, []);
+  }, [cachedData, fetchProjects, retry]);
 
   const refreshProjects = useCallback(() => {
     return retry(() => fetchProjects(true));
