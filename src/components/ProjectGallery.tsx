@@ -6,6 +6,7 @@ import { Images } from 'lucide-react';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 
 const ProjectGallery = () => {
+  // CRITICAL: Hooks MUST be called before any conditional returns
   const { projects, loading, error, isRetrying, refreshProjects } = useProjects();
   const { elementRef: titleRef, isVisible: titleInView } = useScrollAnimation();
   const { elementRef: galleryRef, isVisible: galleryInView } = useScrollAnimation();
