@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface Project {
@@ -35,70 +35,89 @@ export const useProjects = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchProjects = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const { data: projectsData, error: projectsError } = await supabase
-        .from('projects')
-        .select('*')
-        .eq('status', 'active')
-        .order('created_at', { ascending: false });
-
-      if (projectsError) throw projectsError;
-      if (!projectsData) {
-        setProjects([]);
-        setLoading(false);
-        return;
-      }
-
-      const { data: imagesData, error: imagesError } = await supabase
-        .from('project_images')
-        .select('*')
-        .in('project_id', projectsData.map(p => p.id));
-
-      if (imagesError) console.warn('Erro ao carregar imagens:', imagesError);
-
-      const processedProjects: ProjectWithImages[] = projectsData.map((project) => {
-        const projectImages: ProjectImage[] = (imagesData?.filter(img => img.project_id === project.id) || []).map(img => ({
-          id: img.id,
-          url: img.url,
-          caption: img.caption,
-          project_id: img.project_id,
-          created_at: img.created_at
-        }));
-
-        return {
-          ...project,
-          images: projectImages,
-        };
-      });
-
-      const projectsWithImages = processedProjects.filter(p => p.images.length > 0);
-      setProjects(projectsWithImages);
-    } catch (err) {
-      console.error('Erro ao buscar projetos:', err);
-      setError(err instanceof Error ? err.message : 'Erro ao carregar projetos');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   useEffect(() => {
-    fetchProjects();
-  }, [fetchProjects]);
+    const fetchProjects = async () => {
+      try {
+        console.log('🚀 Iniciando busca de projetos...');
+        setLoading(true);
+        setError(null);
 
-  const refreshProjects = useCallback(() => {
-    return fetchProjects();
-  }, [fetchProjects]);
+        // Buscar projetos
+        const { data: projectsData, error: projectsError } = await supabase
+          .from('projects')
+          .select('*')
+          .eq('status', 'active')
+          .order('created_at', { ascending: false });
+
+        console.log('📦 Projetos recebidos:', projectsData?.length);
+
+        if (projectsError) {
+          console.error('❌ Erro ao buscar projetos:', projectsError);
+          throw projectsError;
+        }
+
+        if (!projectsData || projectsData.length === 0) {
+          console.log('⚠️ Nenhum projeto encontrado');
+          setProjects([]);
+          setLoading(false);
+          return;
+        }
+
+        // Buscar imagens
+        const { data: imagesData, error: imagesError } = await supabase
+          .from('project_images')
+          .select('*')
+          .in('project_id', projectsData.map(p => p.id));
+
+        console.log('🖼️ Imagens recebidas:', imagesData?.length);
+
+        if (imagesError) {
+          console.warn('⚠️ Erro ao buscar imagens:', imagesError);
+        }
+
+        // Processar projetos
+        const processedProjects: ProjectWithImages[] = projectsData
+          .map((project) => {
+            const projectImages: ProjectImage[] = (imagesData?.filter(img => img.project_id === project.id) || []).map(img => ({
+              id: img.id,
+              url: img.url,
+              caption: img.caption,
+              project_id: img.project_id,
+              created_at: img.created_at
+            }));
+
+            return {
+              ...project,
+              images: projectImages,
+            };
+          })
+          .filter(p => p.images.length > 0); // Apenas projetos com imagens
+
+        console.log('✅ Projetos processados:', processedProjects.length);
+        setProjects(processedProjects);
+      } catch (err) {
+        console.error('❌ Erro fatal:', err);
+        setError(err instanceof Error ? err.message : 'Erro ao carregar projetos');
+      } finally {
+        setLoading(false);
+        console.log('🏁 Busca finalizada');
+      }
+    };
+
+    fetchProjects();
+  }, []); // Array vazio - executa apenas uma vez
+
+  const refreshProjects = () => {
+    setLoading(true);
+    setError(null);
+  };
 
   return {
     projects,
     loading,
     error,
     refreshProjects,
-    fetchProjects,
+    fetchProjects: refreshProjects,
     isRetrying: false
   };
 };
