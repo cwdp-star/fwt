@@ -60,22 +60,12 @@ export const useProjects = () => {
 
       console.log('🌐 Buscando projetos do Supabase...');
       
-      // Timeout de 10 segundos para queries
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Timeout ao buscar projetos')), 10000)
-      );
-
-      // Buscar projetos ativos
-      const projectsPromise = supabase
+      // Buscar projetos ativos - sem timeout artificial
+      const { data: projectsData, error: projectsError } = await supabase
         .from('projects')
         .select('*')
         .eq('status', 'active')
         .order('created_at', { ascending: false });
-
-      const { data: projectsData, error: projectsError } = await Promise.race([
-        projectsPromise,
-        timeoutPromise
-      ]) as any;
 
       console.log('📊 Projetos recebidos:', projectsData?.length);
 
@@ -90,17 +80,12 @@ export const useProjects = () => {
         return [];
       }
 
-      // Buscar imagens para cada projeto
+      // Buscar imagens para cada projeto - sem timeout artificial
       console.log('🖼️ Buscando imagens dos projetos...');
-      const imagesPromise = supabase
+      const { data: imagesData, error: imagesError } = await supabase
         .from('project_images')
         .select('id, project_id, url, caption, created_at')
         .in('project_id', projectsData.map(p => p.id));
-
-      const { data: imagesData, error: imagesError } = await Promise.race([
-        imagesPromise,
-        timeoutPromise
-      ]) as any;
 
       console.log('🖼️ Imagens recebidas:', imagesData?.length);
 
