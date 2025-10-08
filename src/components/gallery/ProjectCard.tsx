@@ -12,6 +12,13 @@ interface ProjectCardProps {
 }
 
 export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
+  console.log('🎴 ProjectCard render:', { 
+    id: project.id, 
+    title: project.title, 
+    coverImage: project.images[0]?.url,
+    imagesLength: project.images.length 
+  });
+
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'Em andamento';
     try {
@@ -25,9 +32,9 @@ export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
   return (
     <Link to={`/projects/${project.id}`}>
       <Card 
-        className="group cursor-pointer overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+        className="group cursor-pointer overflow-hidden border shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-card"
       >
-      <CardContent className="p-0">
+      <CardContent className="p-0 bg-card">
         {/* Project Cover Image */}
         <div className="aspect-[4/3] relative overflow-hidden">
           <img

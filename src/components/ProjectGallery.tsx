@@ -11,6 +11,13 @@ const ProjectGallery = () => {
   const { elementRef: titleRef, isVisible: titleInView } = useScrollAnimation();
   const { elementRef: galleryRef, isVisible: galleryInView } = useScrollAnimation();
 
+  console.log('🎨 ProjectGallery render:', { 
+    projectsCount: projects.length, 
+    loading, 
+    error,
+    projects: projects.map(p => ({ id: p.id, title: p.title, imagesCount: p.images.length }))
+  });
+
   // Estado de erro com retry
   if (error) {
     return (
