@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 
 // Pages
 import Index from '@/pages/Index';
+import ProjectDetails from '@/pages/ProjectDetails';
 import AuthPage from '@/pages/AuthPage';
 import DatabaseHealthPage from '@/pages/DatabaseHealthPage';
 import SecurityAuditPage from '@/pages/SecurityAuditPage';
@@ -29,6 +30,7 @@ function App() {
             <main className="flex-1">
               <Routes>
                 <Route path="/" element={<Index />} />
+                <Route path="/projects/:id" element={<ProjectDetails />} />
                 <Route path="/auth" element={<AuthPage />} />
                 <Route path="/admin-login" element={<AuthPage />} />
                 <Route path="/admin" element={

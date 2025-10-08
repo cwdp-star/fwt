@@ -3,11 +3,12 @@ import { Badge } from '@/components/ui/badge';
 import { Images, Calendar, MapPin, User } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { Link } from 'react-router-dom';
 import type { ProjectWithImages } from '@/hooks/useProjects';
 
 interface ProjectCardProps {
   project: ProjectWithImages;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
@@ -22,10 +23,10 @@ export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
   };
 
   return (
-    <Card 
-      className="group cursor-pointer overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
-      onClick={onClick}
-    >
+    <Link to={`/projects/${project.id}`}>
+      <Card 
+        className="group cursor-pointer overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+      >
       <CardContent className="p-0">
         {/* Project Cover Image */}
         <div className="aspect-[4/3] relative overflow-hidden">
@@ -91,5 +92,6 @@ export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
         </div>
       </CardContent>
     </Card>
+    </Link>
   );
 };
