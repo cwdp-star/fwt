@@ -36,43 +36,76 @@ export const useProjects = () => {
   const [projects, setProjects] = useState<ProjectWithImages[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [cachedData, setCachedData, clearCache] = useCache<ProjectWithImages[]>('projects', 30);
+  const [cachedData, setCachedData] = useCache<ProjectWithImages[]>('projects', 30);
   const { retry, isRetrying } = useRetry({
     maxAttempts: 3,
     delay: 1000,
     exponentialBackoff: true
   });
 
-  const fetchProjects = useCallback(async (skipCache: boolean = false) => {
+  const fetchProjects = useCallback(async (forceRefresh: boolean = false) => {
+    console.log('🚀 fetchProjects iniciando...', { forceRefresh, hasCachedData: !!cachedData });
+    
     try {
       setLoading(true);
       setError(null);
       
+      // Verificar cache primeiro (apenas se não for refresh forçado)
+      if (!forceRefresh && cachedData && cachedData.length > 0) {
+        console.log('📦 Usando dados do cache:', cachedData.length, 'projetos');
+        setProjects(cachedData);
+        setLoading(false);
+        return cachedData;
+      }
+
+      console.log('🌐 Buscando projetos do Supabase...');
+      
+      // Timeout de 10 segundos para queries
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Timeout ao buscar projetos')), 10000)
+      );
+
       // Buscar projetos ativos
-      const { data: projectsData, error: projectsError } = await supabase
+      const projectsPromise = supabase
         .from('projects')
         .select('*')
         .eq('status', 'active')
         .order('created_at', { ascending: false });
+
+      const { data: projectsData, error: projectsError } = await Promise.race([
+        projectsPromise,
+        timeoutPromise
+      ]) as any;
+
+      console.log('📊 Projetos recebidos:', projectsData?.length);
 
       if (projectsError) {
         throw new Error(`Erro ao carregar projetos: ${projectsError.message}`);
       }
 
       if (!projectsData || projectsData.length === 0) {
+        console.log('⚠️ Nenhum projeto encontrado');
         setProjects([]);
         setLoading(false);
         return [];
       }
 
       // Buscar imagens para cada projeto
-      const { data: imagesData, error: imagesError } = await supabase
+      console.log('🖼️ Buscando imagens dos projetos...');
+      const imagesPromise = supabase
         .from('project_images')
         .select('id, project_id, url, caption, created_at')
         .in('project_id', projectsData.map(p => p.id));
 
+      const { data: imagesData, error: imagesError } = await Promise.race([
+        imagesPromise,
+        timeoutPromise
+      ]) as any;
+
+      console.log('🖼️ Imagens recebidas:', imagesData?.length);
+
       if (imagesError) {
-        console.warn('Erro ao carregar imagens:', imagesError);
+        console.warn('⚠️ Erro ao carregar imagens:', imagesError);
       }
 
       // Processar os dados
@@ -106,43 +139,51 @@ export const useProjects = () => {
         project.images && project.images.length > 0
       );
       
+      console.log('✅ Projetos finais com imagens:', projectsWithImages.length);
+      
       setProjects(projectsWithImages);
       setCachedData(projectsWithImages);
       
       return projectsWithImages;
     } catch (err) {
+      console.error('❌ Erro ao buscar projetos:', err);
       const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido ao carregar projetos';
       setError(errorMessage);
       throw err;
     } finally {
       setLoading(false);
+      console.log('🏁 fetchProjects finalizado');
     }
-  }, [setCachedData]);
+  }, [cachedData, setCachedData]);
 
-  // Effect para carregar projetos na inicialização
+  // Effect para carregar projetos apenas UMA VEZ na montagem
   useEffect(() => {
-    const loadProjects = async () => {
-      // Verificar cache primeiro
-      if (cachedData && cachedData.length > 0) {
-        setProjects(cachedData);
-        setLoading(false);
-        return;
-      }
-
-      // Se não houver cache, buscar dados
+    console.log('🎬 useProjects montado - iniciando carregamento...');
+    
+    const loadInitialData = async () => {
       try {
-        await retry(() => fetchProjects());
+        await retry(() => fetchProjects(false));
       } catch (error) {
-        console.error('Erro ao carregar projetos:', error);
+        console.error('❌ Erro final ao carregar projetos:', error);
       }
     };
     
-    loadProjects();
-  }, [cachedData, fetchProjects, retry]);
+    loadInitialData();
+    
+    // Array vazio = executa apenas uma vez na montagem
+  }, []);
 
   const refreshProjects = useCallback(() => {
+    console.log('🔄 refreshProjects - forçando atualização...');
     return retry(() => fetchProjects(true));
   }, [fetchProjects, retry]);
+
+  console.log('📈 useProjects state:', { 
+    projectsCount: projects.length, 
+    loading, 
+    error, 
+    isRetrying 
+  });
 
   return {
     projects,
