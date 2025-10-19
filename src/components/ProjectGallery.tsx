@@ -2,12 +2,12 @@ import { Badge } from '@/components/ui/badge';
 import { useProjects } from '@/hooks/useProjects';
 import { ProjectCard } from '@/components/gallery/ProjectCard';
 import { Images } from 'lucide-react';
-import { useLazyAnimation, useStaggeredLazyAnimation } from '@/hooks/useLazyAnimation';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 const ProjectGallery = () => {
   const { projects, loading, error } = useProjects();
-  const header = useLazyAnimation({ delay: 0 });
-  const { containerRef, isItemVisible } = useStaggeredLazyAnimation(6, { delay: 100 });
+  const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { elementRef: gridRef, isVisible: gridVisible } = useScrollAnimation();
 
   console.log('🎨 GALLERY RENDER:', { projectsCount: projects.length, loading, error });
 
@@ -52,31 +52,29 @@ const ProjectGallery = () => {
     <section id="projetos" className="py-20 bg-gradient-to-br from-background via-background to-secondary/5 lazy-container">
       <div className="container mx-auto px-4 max-w-7xl">
         {/* Header */}
-        <div ref={header.elementRef} className="text-center mb-16">
-          <div className={`flex items-center justify-center mb-4 transition-all duration-700 ${header.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+        <div ref={headerRef} className="text-center mb-16">
+          <div className={`flex items-center justify-center mb-4 transition-all duration-700 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
             <Images className="h-8 w-8 text-primary mr-3" />
             <Badge variant="secondary" className="px-4 py-2 text-lg font-medium">
               Nossos Projetos
             </Badge>
           </div>
-          <h2 className={`text-4xl md:text-5xl font-bold text-foreground mb-6 transition-all duration-700 delay-200 ${header.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <h2 className={`text-4xl md:text-5xl font-bold text-foreground mb-6 transition-all duration-700 delay-200 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             Portfólio de Obras
           </h2>
-          <p className={`text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed transition-all duration-700 delay-400 ${header.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <p className={`text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed transition-all duration-700 delay-400 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             Conheça nossos projetos realizados com excelência e dedicação. Clique em um projeto para ver mais detalhes e fotos.
           </p>
         </div>
 
         {/* Projects Grid - 3x2 (3 colunas, limitado a 6 projetos) */}
-        <div ref={containerRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.slice(0, 6).map((project, index) => (
             <div
               key={project.id}
-              className={isItemVisible(index) ? 'animate-scale-fade' : 'opacity-0 translate-y-8'}
+              className={`transition-all duration-700 ${gridVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`}
               style={{ 
-                transitionDelay: `${index * 100}ms`,
-                transitionDuration: '0.8s',
-                transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                transitionDelay: `${index * 100}ms`
               }}
             >
               <ProjectCard project={project} />
@@ -86,7 +84,7 @@ const ProjectGallery = () => {
 
         {/* Stats */}
         <div className="mt-16 text-center">
-          <div className={`inline-flex items-center gap-2 bg-card border rounded-full px-6 py-3 shadow-sm transition-all duration-700 delay-600 ${header.isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
+          <div className={`inline-flex items-center gap-2 bg-card border rounded-full px-6 py-3 shadow-sm transition-all duration-700 delay-600 ${gridVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
             <Images className="h-5 w-5 text-primary" />
             <span className="text-muted-foreground">
               <strong className="text-foreground">{projects.length}</strong> obra{projects.length !== 1 ? 's' : ''} em destaque
