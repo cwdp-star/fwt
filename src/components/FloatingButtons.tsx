@@ -22,9 +22,9 @@ const FloatingButtons = () => {
   };
 
   const openWhatsApp = () => {
-    // Sanitize and validate - no user input here, just static message
-    const phoneNumber = '351123456789'; // Altere para o número real
-    const message = encodeURIComponent('Olá! Gostaria de solicitar um orçamento.');
+    // ALTERE ESTE NÚMERO PARA O NÚMERO REAL DA EMPRESA
+    const phoneNumber = '351965123456'; // Formato: 351 + número sem espaços
+    const message = encodeURIComponent('Olá! Gostaria de solicitar um orçamento para construção civil.');
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
     
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
