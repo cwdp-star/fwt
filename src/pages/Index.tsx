@@ -1,10 +1,11 @@
-
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Services from "@/components/Services";
 import Gallery from "@/components/Gallery";
 import ProjectGallery from "@/components/ProjectGallery";
 import ContactForm from "@/components/ContactForm";
+import FloatingButtons from "@/components/FloatingButtons";
+import CookieConsent from "@/components/CookieConsent";
 import { MetaTags, getOrganizationStructuredData } from "@/components/seo/MetaTags";
 
 const Index = () => {
@@ -38,6 +39,12 @@ const Index = () => {
         <ProjectGallery />
         <ContactForm />
       </div>
+      
+      {/* Floating Buttons */}
+      <FloatingButtons />
+      
+      {/* GDPR Cookie Consent */}
+      <CookieConsent />
     </div>
   );
 };

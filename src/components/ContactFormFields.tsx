@@ -1,10 +1,10 @@
-
 import { ChangeEvent } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
+import { Shield } from 'lucide-react';
 
 interface FormData {
   name: string;
@@ -202,34 +202,52 @@ const ContactFormFields = ({ formData, onChange, onConsentChange, onPrivacyClick
       </div>
 
       {/* GDPR Consent */}
-      <div className="space-y-4 p-4 bg-gray-50 rounded-lg border">
+      <div className="space-y-4 p-6 bg-gradient-to-br from-primary/5 to-accent/5 rounded-xl border-2 border-primary/20">
+        <div className="flex items-center gap-2 mb-3">
+          <Shield className="h-5 w-5 text-primary" />
+          <h3 className="text-sm font-bold text-gray-900">Proteção de Dados (RGPD)</h3>
+        </div>
+        
         <div className="flex items-start space-x-3">
           <Checkbox
             id="gdprConsent"
             checked={formData.gdprConsent}
             onCheckedChange={onConsentChange}
             className="mt-1"
+            required
           />
           <div className="flex-1">
             <label 
               htmlFor="gdprConsent" 
-              className="text-sm text-gray-800 cursor-pointer leading-relaxed"
+              className="text-sm text-gray-800 cursor-pointer leading-relaxed font-medium"
             >
-              Consinto o tratamento dos meus dados pessoais pela RC Construções para resposta ao meu pedido de orçamento, 
-              nos termos da{' '}
+              Declaro que li e aceito a{' '}
               <button
                 type="button"
                 onClick={onPrivacyClick}
-                className="text-orange-600 underline hover:text-orange-700"
+                className="text-primary underline hover:text-accent font-bold"
               >
                 Política de Privacidade
               </button>
-              . *
+              {' '}e consinto expressamente o tratamento dos meus dados pessoais pela RC Construções 
+              para as seguintes finalidades: (i) resposta ao meu pedido de orçamento, (ii) contacto 
+              comercial relacionado com o serviço solicitado. *
             </label>
           </div>
         </div>
-        <p className="text-xs text-gray-600">
-          * Obrigatório para processamento do pedido. Pode retirar o consentimento a qualquer momento.
+        
+        <div className="bg-white/50 p-3 rounded-lg">
+          <p className="text-xs text-gray-700 leading-relaxed">
+            <strong>Os seus direitos:</strong> Pode a qualquer momento exercer os seus direitos de acesso, 
+            retificação, portabilidade, limitação, oposição e eliminação dos seus dados pessoais, 
+            bem como retirar o consentimento, contactando-nos através do email ou telefone disponibilizados 
+            no website. Os seus dados são armazenados de forma segura e não serão partilhados com terceiros 
+            sem o seu consentimento explícito.
+          </p>
+        </div>
+        
+        <p className="text-xs text-gray-600 font-semibold">
+          * Campo obrigatório nos termos do RGPD (Regulamento UE 2016/679)
         </p>
       </div>
     </>

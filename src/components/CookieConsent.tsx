@@ -34,12 +34,14 @@ const CookieConsent = () => {
               <Cookie className="h-6 w-6 text-primary" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-lg mb-2">Utilização de Cookies</h3>
+              <h3 className="font-semibold text-lg mb-2">Utilização de Cookies e Proteção de Dados (RGPD)</h3>
               <p className="text-gray-700 mb-4">
-                Este website utiliza apenas cookies técnicos essenciais para o funcionamento adequado do site, 
-                incluindo preferências de cookies, sessão de utilizador e dados de formulário. Não utilizamos 
-                cookies de marketing, rastreamento ou análise sem o seu consentimento explícito. Pode consultar 
-                a nossa Política de Privacidade para mais informações sobre o tratamento de dados.
+                Este website utiliza apenas cookies técnicos essenciais para o funcionamento adequado do site. 
+                Os seus dados pessoais fornecidos através de formulários são processados de acordo com o 
+                Regulamento Geral sobre a Proteção de Dados (RGPD) da UE. Não partilhamos os seus dados com terceiros 
+                sem o seu consentimento explícito. Os dados são armazenados de forma segura e apenas para os fins 
+                solicitados. Pode exercer os seus direitos de acesso, retificação ou eliminação a qualquer momento 
+                contactando-nos diretamente. Consulte a nossa Política de Privacidade para informação detalhada.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button 
