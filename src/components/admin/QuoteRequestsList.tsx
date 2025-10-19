@@ -4,21 +4,19 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Mail, Phone, MapPin, Calendar, DollarSign, Clock, FileText } from 'lucide-react';
+import { Mail, Phone, Clock, FileText } from 'lucide-react';
 
 interface QuoteRequest {
   id: string;
   name: string;
   email: string;
-  phone: string;
-  project_type: string;
-  location: string;
-  budget: string;
-  timeline: string;
-  description: string;
-  documents_link?: string;
-  gdpr_consent: boolean;
+  phone: string | null;
+  service: string | null;
+  message: string | null;
+  status: string | null;
+  notes: string | null;
   created_at: string;
+  updated_at: string;
 }
 
 const QuoteRequestsList = () => {
@@ -47,39 +45,18 @@ const QuoteRequestsList = () => {
 
       if (error) {
         console.error('Erro ao buscar orçamentos:', error);
-        
-        // Fallback para localStorage se Supabase falhar
-        const storedRequests = JSON.parse(localStorage.getItem('quote_requests') || '[]');
-        setRequests(storedRequests);
-        
-        if (storedRequests.length === 0) {
-          toast({
-            title: "Aviso",
-            description: "Conectando à base de dados. A carregar dados locais...",
-            variant: "default",
-          });
-        }
+        toast({
+          title: "Erro",
+          description: "Erro ao carregar solicitações de orçamento.",
+          variant: "destructive",
+        });
+        setRequests([]);
       } else {
-        // Mapear dados do Supabase para interface esperada
-        const mappedRequests = (data || []).map(request => ({
-          ...request,
-          location: request.city || '',
-          project_type: request.project_type || request.service || '',
-          gdpr_consent: true // Assumir consentimento para dados já na DB
-        }));
-        
-        setRequests(mappedRequests);
+        setRequests(data || []);
       }
     } catch (error) {
       console.error('Erro ao carregar orçamentos:', error);
-      
-      // Fallback final para localStorage
-      try {
-        const storedRequests = JSON.parse(localStorage.getItem('quote_requests') || '[]');
-        setRequests(storedRequests);
-      } catch {
-        setRequests([]);
-      }
+      setRequests([]);
     } finally {
       setLoading(false);
     }
@@ -144,9 +121,11 @@ const QuoteRequestsList = () => {
                       Recebido em {formatDate(request.created_at)}
                     </p>
                   </div>
-                  <Badge variant="outline" className="capitalize">
-                    {request.project_type}
-                  </Badge>
+                  {request.service && (
+                    <Badge variant="outline" className="capitalize">
+                      {request.service}
+                    </Badge>
+                  )}
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -158,56 +137,44 @@ const QuoteRequestsList = () => {
                         {request.email}
                       </a>
                     </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Phone className="h-4 w-4 text-primary" />
-                      <a href={`tel:${request.phone}`} className="text-primary hover:underline">
-                        {request.phone}
-                      </a>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <MapPin className="h-4 w-4 text-muted-foreground" />
-                      <span>{request.location}</span>
-                    </div>
+                    {request.phone && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Phone className="h-4 w-4 text-primary" />
+                        <a href={`tel:${request.phone}`} className="text-primary hover:underline">
+                          {request.phone}
+                        </a>
+                      </div>
+                    )}
                   </div>
                   <div className="space-y-3">
-                    <div className="flex items-center gap-2 text-sm">
-                      <DollarSign className="h-4 w-4 text-muted-foreground" />
-                      <span>Orçamento: {request.budget}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Clock className="h-4 w-4 text-muted-foreground" />
-                      <span>Prazo: {request.timeline}</span>
-                    </div>
-                    {request.documents_link && (
+                    {request.status && (
                       <div className="flex items-center gap-2 text-sm">
-                        <ExternalLink className="h-4 w-4 text-primary" />
-                        <a 
-                          href={request.documents_link} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-primary hover:underline"
-                        >
-                          Documentos anexados
-                        </a>
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <span>Estado: {request.status}</span>
                       </div>
                     )}
                   </div>
                 </div>
 
-                <div className="border-t pt-4">
-                  <h4 className="font-semibold mb-2">Descrição do Projeto:</h4>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {request.description}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between pt-4 border-t">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-muted-foreground">RGPD:</span>
-                    <Badge variant={request.gdpr_consent ? "default" : "destructive"} className="text-xs">
-                      {request.gdpr_consent ? "Consentimento Dado" : "Sem Consentimento"}
-                    </Badge>
+                {request.message && (
+                  <div className="border-t pt-4">
+                    <h4 className="font-semibold mb-2">Mensagem:</h4>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {request.message}
+                    </p>
                   </div>
+                )}
+
+                {request.notes && (
+                  <div className="border-t pt-4">
+                    <h4 className="font-semibold mb-2">Notas:</h4>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {request.notes}
+                    </p>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-end pt-4 border-t">
                   <div className="flex gap-2">
                     <Button size="sm" variant="outline" asChild>
                       <a href={`mailto:${request.email}`}>
@@ -215,12 +182,14 @@ const QuoteRequestsList = () => {
                         Responder
                       </a>
                     </Button>
-                    <Button size="sm" variant="outline" asChild>
-                      <a href={`tel:${request.phone}`}>
-                        <Phone className="h-4 w-4 mr-1" />
-                        Ligar
-                      </a>
-                    </Button>
+                    {request.phone && (
+                      <Button size="sm" variant="outline" asChild>
+                        <a href={`tel:${request.phone}`}>
+                          <Phone className="h-4 w-4 mr-1" />
+                          Ligar
+                        </a>
+                      </Button>
+                    )}
                   </div>
                 </div>
               </CardContent>
