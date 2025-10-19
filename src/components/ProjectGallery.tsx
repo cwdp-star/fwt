@@ -64,9 +64,9 @@ const ProjectGallery = () => {
           </p>
         </div>
 
-        {/* Projects Grid - 4x2 (4 colunas, limitado a 8 projetos) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {projects.slice(0, 8).map((project) => (
+        {/* Projects Grid - 3x2 (3 colunas, limitado a 6 projetos) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projects.slice(0, 6).map((project) => (
             <ProjectCard
               key={project.id}
               project={project}
