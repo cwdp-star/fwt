@@ -1,9 +1,9 @@
 import { Building, Home, Wrench } from 'lucide-react';
-import { useScrollAnimation, useStaggeredAnimation } from '@/hooks/useScrollAnimation';
+import { useLazyAnimation, useStaggeredLazyAnimation } from '@/hooks/useLazyAnimation';
 
 const Services = () => {
-  const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
-  const { containerRef: servicesRef, visibleItems } = useStaggeredAnimation(4, 150);
+  const header = useLazyAnimation({ delay: 0 });
+  const { containerRef, isItemVisible } = useStaggeredLazyAnimation(4, { delay: 150 });
   
   const services = [
     {
@@ -33,31 +33,36 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="py-20 bg-white">
+    <section id="services" className="py-20 bg-white lazy-container">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
-          <div ref={headerRef} className="text-center mb-16">
-            <h2 className={`text-4xl md:text-5xl font-bold text-foreground mb-6 transition-all duration-700 ${
-              headerVisible ? 'animate-fade-in-down' : 'opacity-0'
-            }`}>
+          <div 
+            ref={header.elementRef}
+            className="text-center mb-16"
+          >
+            <h2 className={`text-4xl md:text-5xl font-bold text-foreground mb-6 ${header.isVisible ? 'animate-fade-down' : 'animate-out'}`}
+              style={header.style}>
               Os Nossos <span className="text-primary">Serviços</span>
             </h2>
-            <p className={`text-xl text-gray-700 max-w-3xl mx-auto font-medium transition-all duration-700 ${
-              headerVisible ? 'animate-fade-in-up-delay-200' : 'opacity-0'
-            }`}>
+            <p className={`text-xl text-gray-700 max-w-3xl mx-auto font-medium ${header.isVisible ? 'animate-fade-up delay-200' : 'animate-out'}`}
+              style={{ ...header.style, transitionDelay: '200ms' }}>
               Especialistas em construção civil com estruturas robustas e duradouras, garantindo segurança, qualidade e excelência técnica em cada projeto realizado.
             </p>
           </div>
 
-          <div ref={servicesRef} className="grid lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+          <div ref={containerRef} className="grid lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
             {services.map((service, index) => (
-              <div key={index} className={`bg-gradient-to-br from-white to-gray-50/50 p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-primary/10 ${
-                visibleItems.has(index) ? 'animate-scale-in' : 'opacity-0 scale-75'
-              }`} style={{ animationDelay: `${index * 0.15}s` }}>
+              <div 
+                key={index} 
+                className={`bg-gradient-to-br from-white to-gray-50/50 p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-primary/10 ${
+                  isItemVisible(index) ? 'animate-scale-fade' : 'animate-out'
+                }`}
+                style={{ animationDelay: `${index * 150}ms` }}
+              >
                 <div className="text-center mb-6">
                   <div className="flex justify-center mb-6">
                     <div className="w-20 h-20 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl flex items-center justify-center">
-                      <service.icon className="h-12 w-12 text-primary animate-float" />
+                      <service.icon className="h-12 w-12 text-primary" />
                     </div>
                   </div>
                   <h3 className="text-xl font-bold text-foreground mb-4">
