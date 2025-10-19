@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Shield, FileText, Cookie } from 'lucide-react';
 import PrivacyPolicyModal from './legal/PrivacyPolicyModal';
 import TermsModal from './legal/TermsModal';
@@ -8,6 +8,12 @@ const Footer = () => {
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const [showCookies, setShowCookies] = useState(false);
+
+  useEffect(() => {
+    const handleOpenPrivacy = () => setShowPrivacy(true);
+    window.addEventListener('open-privacy-modal', handleOpenPrivacy);
+    return () => window.removeEventListener('open-privacy-modal', handleOpenPrivacy);
+  }, []);
 
   return (
     <>
