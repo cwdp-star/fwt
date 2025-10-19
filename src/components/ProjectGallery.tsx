@@ -53,19 +53,16 @@ const ProjectGallery = () => {
       <div className="container mx-auto px-4 max-w-7xl">
         {/* Header */}
         <div ref={header.elementRef} className="text-center mb-16">
-          <div className={`flex items-center justify-center mb-4 ${header.isVisible ? 'animate-fade-down' : 'animate-out'}`}
-            style={header.style}>
+          <div className={`flex items-center justify-center mb-4 transition-all duration-700 ${header.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
             <Images className="h-8 w-8 text-primary mr-3" />
             <Badge variant="secondary" className="px-4 py-2 text-lg font-medium">
               Nossos Projetos
             </Badge>
           </div>
-          <h2 className={`text-4xl md:text-5xl font-bold text-foreground mb-6 ${header.isVisible ? 'animate-fade-up delay-200' : 'animate-out'}`}
-            style={{ ...header.style, transitionDelay: '200ms' }}>
+          <h2 className={`text-4xl md:text-5xl font-bold text-foreground mb-6 transition-all duration-700 delay-200 ${header.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             Portfólio de Obras
           </h2>
-          <p className={`text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed ${header.isVisible ? 'animate-fade-up delay-400' : 'animate-out'}`}
-            style={{ ...header.style, transitionDelay: '400ms' }}>
+          <p className={`text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed transition-all duration-700 delay-400 ${header.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             Conheça nossos projetos realizados com excelência e dedicação. Clique em um projeto para ver mais detalhes e fotos.
           </p>
         </div>
@@ -75,8 +72,12 @@ const ProjectGallery = () => {
           {projects.slice(0, 6).map((project, index) => (
             <div
               key={project.id}
-              className={isItemVisible(index) ? 'animate-scale-fade' : 'animate-out'}
-              style={{ animationDelay: `${index * 100}ms` }}
+              className={isItemVisible(index) ? 'animate-scale-fade' : 'opacity-0 translate-y-8'}
+              style={{ 
+                transitionDelay: `${index * 100}ms`,
+                transitionDuration: '0.8s',
+                transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
             >
               <ProjectCard project={project} />
             </div>
@@ -85,8 +86,7 @@ const ProjectGallery = () => {
 
         {/* Stats */}
         <div className="mt-16 text-center">
-          <div className={`inline-flex items-center gap-2 bg-card border rounded-full px-6 py-3 shadow-sm ${header.isVisible ? 'animate-scale-fade delay-600' : 'animate-out'}`}
-            style={{ ...header.style, transitionDelay: '600ms' }}>
+          <div className={`inline-flex items-center gap-2 bg-card border rounded-full px-6 py-3 shadow-sm transition-all duration-700 delay-600 ${header.isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
             <Images className="h-5 w-5 text-primary" />
             <span className="text-muted-foreground">
               <strong className="text-foreground">{projects.length}</strong> obra{projects.length !== 1 ? 's' : ''} em destaque
