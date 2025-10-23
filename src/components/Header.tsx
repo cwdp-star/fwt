@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Phone, Mail, MapPin, LogIn, LogOut, User as UserIcon } from 'lucide-react';
+import { Menu, X, Phone, Mail, MapPin, LogOut, User as UserIcon } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/components/SecurityProvider';
@@ -93,7 +93,7 @@ const Header = () => {
               </motion.button>
             ))}
             
-            {user ? (
+            {user && (
               <>
                 <Link 
                   to="/admin" 
@@ -113,14 +113,6 @@ const Header = () => {
                   <span>Sair</span>
                 </button>
               </>
-            ) : (
-              <Link 
-                to="/auth" 
-                className="flex items-center space-x-2 bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors"
-              >
-                <LogIn className="h-4 w-4" />
-                <span>Entrar</span>
-              </Link>
             )}
           </nav>
 
@@ -170,7 +162,7 @@ const Header = () => {
                 </motion.button>
               ))}
               
-              {user ? (
+              {user && (
                 <>
                   <Link 
                     to="/admin" 
@@ -187,15 +179,6 @@ const Header = () => {
                     <span>Sair</span>
                   </button>
                 </>
-              ) : (
-                <Link 
-                  to="/auth" 
-                  className="flex items-center space-x-2 text-gray-700 hover:text-orange-600 transition-colors py-3 px-4 rounded-lg hover:bg-accent"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <LogIn className="h-4 w-4" />
-                  <span>Entrar</span>
-                </Link>
               )}
             </div>
           </div>
