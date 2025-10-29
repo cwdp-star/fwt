@@ -33,8 +33,13 @@ const Header = () => {
       navigate('/', { state: { scrollTo: sectionId } });
       return;
     }
-    const element = document.getElementById(sectionId);
-    element?.scrollIntoView({ behavior: 'smooth' });
+    
+    if (sectionId === 'home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      const element = document.getElementById(sectionId);
+      element?.scrollIntoView({ behavior: 'smooth' });
+    }
     setIsMenuOpen(false);
   };
 
@@ -76,7 +81,7 @@ const Header = () => {
             ].map((item, index) => (
               <motion.button 
                 key={item.id}
-                onClick={() => item.path ? navigate(item.path) : scrollToSection(item.id)} 
+                onClick={() => scrollToSection(item.id)} 
                 className="text-foreground hover:text-primary font-semibold transition-colors relative font-inter"
                 whileHover={{ scale: 1.05 }}
                 initial={{ opacity: 0, y: -20 }}
@@ -152,7 +157,7 @@ const Header = () => {
               ].map((item, index) => (
                 <motion.button 
                   key={item.id}
-                  onClick={() => item.path ? navigate(item.path) : scrollToSection(item.id)} 
+                  onClick={() => scrollToSection(item.id)} 
                   className="text-left text-foreground hover:text-primary font-semibold py-3 px-4 rounded-lg hover:bg-accent/10 transition-colors font-inter"
                   initial={{ x: -20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
