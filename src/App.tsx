@@ -6,7 +6,6 @@ import { HelmetProvider } from 'react-helmet-async';
 import Index from '@/pages/Index';
 import ProjectDetails from '@/pages/ProjectDetails';
 import AuthPage from '@/pages/AuthPage';
-import AdminSetup from '@/pages/AdminSetup';
 import DatabaseHealthPage from '@/pages/DatabaseHealthPage';
 import SecurityAuditPage from '@/pages/SecurityAuditPage';
 import TestRoute from '@/pages/TestRoute';
@@ -34,7 +33,6 @@ function App() {
                 <Route path="/projects/:id" element={<ProjectDetails />} />
                 <Route path="/auth" element={<AuthPage />} />
                 <Route path="/admin-login" element={<AuthPage />} />
-                <Route path="/admin-setup" element={<AdminSetup />} />
                 <Route path="/admin" element={
                   <ProtectedRoute requireAdmin>
                     <AdminDashboard />
