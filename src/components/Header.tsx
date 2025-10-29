@@ -3,6 +3,7 @@ import { Menu, X, Phone, Mail, MapPin, LogOut, User as UserIcon } from 'lucide-r
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/components/SecurityProvider';
+import ftwLogo from '@/assets/ftw-logo.png';
 
 const Header = () => {
   const { user, signOut } = useAuth();
@@ -61,7 +62,7 @@ const Header = () => {
           >
             <Link to="/">
               <img 
-                src="/src/assets/ftw-logo.png" 
+                src={ftwLogo} 
                 alt="FTW Construções" 
                 className={`w-auto transition-all duration-300 ${
                   isScrolled ? 'h-12' : 'h-20'

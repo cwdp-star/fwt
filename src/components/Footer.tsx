@@ -3,6 +3,7 @@ import { Shield, FileText, Cookie } from 'lucide-react';
 import PrivacyPolicyModal from './legal/PrivacyPolicyModal';
 import TermsModal from './legal/TermsModal';
 import CookiePolicyModal from './legal/CookiePolicyModal';
+import ftwLogo from '@/assets/ftw-logo.png';
 
 const Footer = () => {
   const [showPrivacy, setShowPrivacy] = useState(false);
@@ -24,7 +25,7 @@ const Footer = () => {
             <div className="md:col-span-2">
               <div className="flex items-center space-x-4 mb-6">
                 <div className="w-20 h-16 bg-white rounded-xl shadow-md flex items-center justify-center p-3">
-                  <img src="/src/assets/ftw-logo.png" alt="FTW Construções Logo" className="w-full h-full object-contain" />
+                  <img src={ftwLogo} alt="FTW Construções Logo" className="w-full h-full object-contain" />
                 </div>
               </div>
               <p className="text-gray-300 mb-6 leading-relaxed text-lg font-inter">

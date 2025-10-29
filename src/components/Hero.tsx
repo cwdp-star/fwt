@@ -1,4 +1,5 @@
 import { useLazyAnimation } from '@/hooks/useLazyAnimation';
+import ftwLogo from '@/assets/ftw-logo.png';
 
 const Hero = () => {
   const logo = useLazyAnimation({ delay: 0 });
@@ -28,7 +29,7 @@ const Hero = () => {
           style={logo.style}
         >
           <img 
-            src="/src/assets/ftw-logo.png" 
+            src={ftwLogo} 
             alt="FTW Construções Logo" 
             className="h-40 sm:h-48 md:h-56 lg:h-64 w-auto"
             loading="eager"
