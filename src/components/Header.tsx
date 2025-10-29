@@ -43,7 +43,7 @@ const Header = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 w-full bg-background/95 backdrop-blur-md shadow-lg z-50 border-b border-border transition-all duration-300"
+      className="fixed top-0 w-full bg-background/95 backdrop-blur-md shadow-[0_2px_20px_rgba(212,175,55,0.1)] z-50 border-b border-primary/10 transition-all duration-300"
     >
       <div className={`container mx-auto px-4 transition-all duration-300 ${
         isScrolled ? 'py-3' : 'py-6'
@@ -56,8 +56,8 @@ const Header = () => {
           >
             <Link to="/">
               <img 
-                src="/lovable-uploads/2637c813-1f59-4fc8-82f5-a5c27d976878.png" 
-                alt="RC Construções" 
+                src="/src/assets/ftw-logo.png" 
+                alt="FTW Construções" 
                 className={`w-auto transition-all duration-300 ${
                   isScrolled ? 'h-12' : 'h-20'
                 }`}
@@ -77,7 +77,7 @@ const Header = () => {
               <motion.button 
                 key={item.id}
                 onClick={() => item.path ? navigate(item.path) : scrollToSection(item.id)} 
-                className="text-foreground hover:text-primary font-semibold transition-colors relative"
+                className="text-foreground hover:text-primary font-semibold transition-colors relative font-inter"
                 whileHover={{ scale: 1.05 }}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -153,7 +153,7 @@ const Header = () => {
                 <motion.button 
                   key={item.id}
                   onClick={() => item.path ? navigate(item.path) : scrollToSection(item.id)} 
-                  className="text-left text-foreground hover:text-primary font-semibold py-3 px-4 rounded-lg hover:bg-accent transition-colors"
+                  className="text-left text-foreground hover:text-primary font-semibold py-3 px-4 rounded-lg hover:bg-accent/10 transition-colors font-inter"
                   initial={{ x: -20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}

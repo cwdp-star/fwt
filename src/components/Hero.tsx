@@ -20,36 +20,36 @@ const Hero = () => {
       <div className="relative z-10 text-center px-4 max-w-6xl mx-auto">
         <div 
           ref={logo.elementRef}
-          className={`flex justify-center mb-8 ${logo.isVisible ? 'animate-fade-down' : 'animate-out'}`}
+          className={`flex justify-center mb-12 ${logo.isVisible ? 'animate-fade-down' : 'animate-out'}`}
           style={logo.style}
         >
           <img 
-            src="/lovable-uploads/2637c813-1f59-4fc8-82f5-a5c27d976878.png" 
-            alt="RC Construções Logo" 
-            className="h-40 w-auto"
+            src="/src/assets/ftw-logo.png" 
+            alt="FTW Construções Logo" 
+            className="h-48 md:h-56 w-auto"
             loading="eager"
           />
         </div>
         
         <h1 
           ref={title.elementRef}
-          className={`text-5xl md:text-7xl font-bold text-secondary mb-6 leading-tight ${title.isVisible ? 'animate-fade-up' : 'animate-out'}`}
+          className={`text-5xl md:text-7xl font-playfair font-bold text-secondary mb-6 leading-tight ${title.isVisible ? 'animate-fade-up' : 'animate-out'}`}
           style={title.style}
         >
           Construção Civil
           <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent block">
-            & Remodelação
+            Premium & Remodelação
           </span>
         </h1>
         
         <p 
           ref={subtitle.elementRef}
-          className={`text-xl md:text-2xl text-gray-700 mb-8 max-w-4xl mx-auto leading-relaxed ${subtitle.isVisible ? 'animate-fade-up' : 'animate-out'}`}
+          className={`text-xl md:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed font-inter ${subtitle.isVisible ? 'animate-fade-up' : 'animate-out'}`}
           style={subtitle.style}
         >
-          Da conceção à entrega das chaves. A RC Construções oferece soluções completas 
-          em construção civil e remodelações com qualidade superior, 
-          profissionalismo comprovado e cumprimento rigoroso de prazos.
+          Da conceção à entrega das chaves. A FTW Construções oferece soluções premium 
+          em construção civil e remodelações com excelência técnica, 
+          acabamentos de luxo e compromisso absoluto com a qualidade.
         </p>
 
         <div 
@@ -59,13 +59,13 @@ const Hero = () => {
         >
           <button 
             onClick={scrollToContact}
-            className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white px-10 py-4 rounded-lg font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl"
+            className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white px-12 py-5 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-[0_10px_40px_rgba(212,175,55,0.3)] hover:shadow-[0_15px_50px_rgba(212,175,55,0.4)] font-inter"
           >
             Solicitar Orçamento
           </button>
           <button 
             onClick={() => document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' })}
-            className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-white px-10 py-4 rounded-lg font-bold text-lg transition-all duration-300"
+            className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-12 py-5 rounded-xl font-bold text-lg transition-all duration-300 font-inter"
           >
             Ver Galeria
           </button>

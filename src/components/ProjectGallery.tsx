@@ -56,11 +56,11 @@ const ProjectGallery = () => {
               Nossos Projetos
             </Badge>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Portfólio de Obras
+          <h2 className="text-4xl md:text-5xl font-playfair font-bold text-foreground mb-6">
+            Portfólio de Obras Premium
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Conheça nossos projetos realizados com excelência e dedicação. Clique em um projeto para ver mais detalhes e fotos.
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-inter">
+            Conheça nossos projetos realizados com excelência e dedicação premium. Clique em um projeto para ver mais detalhes e fotos.
           </p>
         </div>
 

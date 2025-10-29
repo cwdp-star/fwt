@@ -155,23 +155,23 @@ const ContactForm = () => {
   }
 
   return (
-    <section id="contact" className="py-20 bg-gradient-to-br from-gray-100 to-white">
+    <section id="contact" className="py-20 bg-gradient-to-br from-muted to-white">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div ref={headerRef} className="text-center mb-12">
-            <h2 className={`text-4xl md:text-5xl font-bold text-secondary mb-6 transition-all duration-700 ${
+            <h2 className={`text-4xl md:text-5xl font-playfair font-bold text-secondary mb-6 transition-all duration-700 ${
               headerVisible ? 'animate-fade-in-down' : 'opacity-0'
             }`}>
-              Solicite o seu <span className="text-primary">Orçamento</span>
+              Solicite o seu <span className="text-primary">Orçamento Premium</span>
             </h2>
-            <p className={`text-xl text-gray-700 font-medium transition-all duration-700 ${
+            <p className={`text-xl text-muted-foreground font-inter transition-all duration-700 ${
               headerVisible ? 'animate-fade-in-up-delay-200' : 'opacity-0'
             }`}>
-              Preencha o formulário abaixo e receba um orçamento personalizado para o seu projeto de construção ou remodelação.
+              Preencha o formulário abaixo e receba um orçamento personalizado para o seu projeto de construção premium ou remodelação de luxo.
             </p>
           </div>
 
-          <div ref={formRef} className={`bg-white rounded-2xl shadow-2xl p-8 md:p-12 border border-gray-200 transition-all duration-700 ${
+          <div ref={formRef} className={`bg-white rounded-2xl shadow-[0_10px_50px_rgba(212,175,55,0.15)] p-8 md:p-12 border-2 border-primary/20 transition-all duration-700 ${
             formVisible ? 'animate-scale-in' : 'opacity-0 scale-95'
           }`}>
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -186,11 +186,11 @@ const ContactForm = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting || !formData.gdprConsent}
-                  className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary disabled:opacity-50 disabled:cursor-not-allowed text-white px-12 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
+                  className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary disabled:opacity-50 disabled:cursor-not-allowed text-white px-12 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-[0_10px_40px_rgba(212,175,55,0.3)] hover:shadow-[0_15px_50px_rgba(212,175,55,0.4)] font-inter"
                 >
                   {isSubmitting ? 'A Enviar...' : 'Solicitar Orçamento Gratuito'}
                 </button>
-                <p className="text-sm text-gray-600 mt-4 font-medium">
+                <p className="text-sm text-muted-foreground mt-4 font-inter">
                   * Campos obrigatórios. Responderemos em 24 horas.
                 </p>
               </div>

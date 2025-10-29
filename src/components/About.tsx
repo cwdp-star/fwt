@@ -8,21 +8,21 @@ const About = () => {
   const { containerRef, isItemVisible } = useStaggeredLazyAnimation(3, { delay: 200 });
 
   return (
-    <section id="about" className="py-20 bg-gray-50 lazy-container">
+    <section id="about" className="py-20 bg-muted lazy-container">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div ref={header.elementRef} className="text-center mb-16">
-            <h2 className={`text-4xl md:text-5xl font-bold text-secondary mb-6 ${header.isVisible ? 'animate-fade-down' : 'animate-out'}`}
+            <h2 className={`text-4xl md:text-5xl font-playfair font-bold text-secondary mb-6 ${header.isVisible ? 'animate-fade-down' : 'animate-out'}`}
               style={header.style}>
-              Sobre a <span className="text-primary">RC Construções</span>
+              Sobre a <span className="text-primary">FTW Construções</span>
             </h2>
-            <p className={`text-xl text-gray-700 max-w-3xl mx-auto font-medium mb-8 ${header.isVisible ? 'animate-fade-up delay-200' : 'animate-out'}`}
+            <p className={`text-xl text-primary max-w-3xl mx-auto font-playfair font-semibold mb-8 ${header.isVisible ? 'animate-fade-up delay-200' : 'animate-out'}`}
               style={{ ...header.style, transitionDelay: '200ms' }}>
-              Excelência em Construção Civil e Remodelação
+              Excelência em Construção Civil Premium
             </p>
-            <p className={`text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed ${header.isVisible ? 'animate-fade-up delay-400' : 'animate-out'}`}
+            <p className={`text-lg text-muted-foreground max-w-4xl mx-auto leading-relaxed font-inter ${header.isVisible ? 'animate-fade-up delay-400' : 'animate-out'}`}
               style={{ ...header.style, transitionDelay: '400ms' }}>
-              A RC Construções é sinónimo de qualidade estrutural e excelência construtiva. Especializamo-nos em projetos de construção civil, remodelações completas e projetos chave na mão, sempre com foco na durabilidade e segurança das estruturas que construímos.
+              A FTW Construções é sinónimo de excelência e sofisticação. Especializamo-nos em projetos de construção civil premium, remodelações de luxo e projetos chave na mão, sempre com foco na qualidade superior e acabamentos impecáveis.
             </p>
           </div>
 
@@ -44,14 +44,14 @@ const About = () => {
               className={textSection.isVisible ? 'animate-fade-right' : 'animate-out'}
               style={textSection.style}
             >
-              <h3 className="text-3xl font-bold text-secondary mb-6">
+              <h3 className="text-3xl font-playfair font-bold text-secondary mb-6">
                 A Nossa Missão
               </h3>
-              <p className="text-gray-700 mb-6 leading-relaxed text-lg">
-                A RC Construções dedica-se à construção de estruturas sólidas e duradouras. Especializamo-nos em construção nova, remodelações completas e projetos chave na mão, sempre com foco na qualidade estrutural e segurança.
+              <p className="text-muted-foreground mb-6 leading-relaxed text-lg font-inter">
+                A FTW Construções dedica-se à criação de espaços premium com excelência técnica e acabamentos de luxo. Especializamo-nos em construção premium, remodelações sofisticadas e projetos chave na mão de alta qualidade.
               </p>
-              <p className="text-gray-700 leading-relaxed text-lg">
-                Trabalhamos com materiais certificados e técnicas avançadas de construção. Cada projeto recebe controlo rigoroso de qualidade desde as fundações até aos acabamentos, garantindo estruturas robustas e duradouras.
+              <p className="text-muted-foreground leading-relaxed text-lg font-inter">
+                Trabalhamos com materiais premium e técnicas de construção avançadas. Cada projeto recebe atenção aos detalhes e acabamentos impecáveis, garantindo sofisticação e qualidade superior.
               </p>
             </div>
           </div>
@@ -64,16 +64,16 @@ const About = () => {
             ].map((item, index) => (
               <div 
                 key={index} 
-                className={`text-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-primary/10 ${
+                className={`text-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-[0_15px_40px_rgba(212,175,55,0.2)] transition-all duration-300 border-2 border-primary/20 hover:border-primary/40 ${
                   isItemVisible(index) ? 'animate-scale-fade' : 'animate-out'
                 }`}
                 style={{ animationDelay: `${index * 200}ms` }}
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-primary/10 to-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
                   <item.icon className="h-12 w-12 text-primary" />
                 </div>
-                <h4 className="text-xl font-bold text-secondary mb-4">{item.title}</h4>
-                <p className="text-gray-700">{item.desc}</p>
+                <h4 className="text-xl font-playfair font-bold text-secondary mb-4">{item.title}</h4>
+                <p className="text-muted-foreground font-inter">{item.desc}</p>
               </div>
             ))}
           </div>

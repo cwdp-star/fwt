@@ -40,13 +40,13 @@ const Services = () => {
             ref={header.elementRef}
             className="text-center mb-16"
           >
-            <h2 className={`text-4xl md:text-5xl font-bold text-foreground mb-6 ${header.isVisible ? 'animate-fade-down' : 'animate-out'}`}
+            <h2 className={`text-4xl md:text-5xl font-playfair font-bold text-foreground mb-6 ${header.isVisible ? 'animate-fade-down' : 'animate-out'}`}
               style={header.style}>
-              Os Nossos <span className="text-primary">Serviços</span>
+              Os Nossos <span className="text-primary">Serviços Premium</span>
             </h2>
-            <p className={`text-xl text-gray-700 max-w-3xl mx-auto font-medium ${header.isVisible ? 'animate-fade-up delay-200' : 'animate-out'}`}
+            <p className={`text-xl text-muted-foreground max-w-3xl mx-auto font-inter ${header.isVisible ? 'animate-fade-up delay-200' : 'animate-out'}`}
               style={{ ...header.style, transitionDelay: '200ms' }}>
-              Especialistas em construção civil com estruturas robustas e duradouras, garantindo segurança, qualidade e excelência técnica em cada projeto realizado.
+              Especialistas em construção civil premium com excelência técnica e acabamentos de luxo, garantindo qualidade superior e sofisticação em cada detalhe.
             </p>
           </div>
 
@@ -54,29 +54,29 @@ const Services = () => {
             {services.map((service, index) => (
               <div 
                 key={index} 
-                className={`bg-gradient-to-br from-white to-gray-50/50 p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-primary/10 ${
+                className={`bg-white p-8 rounded-2xl shadow-lg hover:shadow-[0_15px_40px_rgba(212,175,55,0.2)] transition-all duration-300 border-2 border-primary/20 hover:border-primary/40 ${
                   isItemVisible(index) ? 'animate-scale-fade' : 'animate-out'
                 }`}
                 style={{ animationDelay: `${index * 150}ms` }}
               >
                 <div className="text-center mb-6">
                   <div className="flex justify-center mb-6">
-                    <div className="w-20 h-20 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl flex items-center justify-center">
+                    <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl flex items-center justify-center shadow-sm">
                       <service.icon className="h-12 w-12 text-primary" />
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold text-foreground mb-4">
+                  <h3 className="text-xl font-playfair font-bold text-foreground mb-4">
                     {service.title}
                   </h3>
-                  <p className="text-gray-700 text-base leading-relaxed">
+                  <p className="text-muted-foreground text-base leading-relaxed font-inter">
                     {service.description}
                   </p>
                 </div>
                 <ul className="space-y-3">
                   {service.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></div>
-                      <span className="text-gray-700 font-medium text-sm">{feature}</span>
+                      <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 shadow-sm"></div>
+                      <span className="text-muted-foreground font-inter text-sm">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -87,7 +87,7 @@ const Services = () => {
           <div className="text-center mt-16">
             <button 
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white px-12 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl animate-fade-in-up"
+              className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white px-12 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-[0_10px_40px_rgba(212,175,55,0.3)] hover:shadow-[0_15px_50px_rgba(212,175,55,0.4)] animate-fade-in-up font-inter"
             >
               Solicitar Orçamento Gratuito
             </button>
