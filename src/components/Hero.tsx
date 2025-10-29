@@ -1,5 +1,6 @@
 import { useLazyAnimation } from '@/hooks/useLazyAnimation';
 import ftwLogo from '@/assets/ftw-logo.png';
+import heroBackground from '@/assets/hero-background.jpg';
 
 const Hero = () => {
   const logo = useLazyAnimation({ delay: 0 });
@@ -15,8 +16,15 @@ const Hero = () => {
   return (
     <section 
       id="home" 
-      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-white via-white to-muted/30 pt-24 pb-12 md:pt-32 md:pb-20 lazy-container"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 pb-12 md:pt-32 md:pb-20 lazy-container"
     >
+      {/* Background Image with Overlay */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${heroBackground})` }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/50 to-black/60"></div>
+      </div>
       {/* Decorative elements */}
       <div className="absolute top-20 left-10 w-32 h-32 bg-primary/5 rounded-full blur-3xl"></div>
       <div className="absolute bottom-20 right-10 w-40 h-40 bg-accent/5 rounded-full blur-3xl"></div>
@@ -38,7 +46,7 @@ const Hero = () => {
         
         <h1 
           ref={title.elementRef}
-          className={`text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-playfair font-bold text-secondary mb-6 leading-tight px-4 ${title.isVisible ? 'animate-fade-up' : 'animate-out'}`}
+          className={`text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-playfair font-bold text-white mb-6 leading-tight px-4 ${title.isVisible ? 'animate-fade-up' : 'animate-out'}`}
           style={title.style}
         >
           Construção Civil
@@ -49,7 +57,7 @@ const Hero = () => {
         
         <p 
           ref={subtitle.elementRef}
-          className={`text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed font-inter px-4 ${subtitle.isVisible ? 'animate-fade-up' : 'animate-out'}`}
+          className={`text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-12 max-w-4xl mx-auto leading-relaxed font-inter px-4 ${subtitle.isVisible ? 'animate-fade-up' : 'animate-out'}`}
           style={subtitle.style}
         >
           Transformamos visões em realidade através de construção civil premium e remodelações de luxo. 
