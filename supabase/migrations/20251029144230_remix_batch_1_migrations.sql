@@ -1,3 +1,5 @@
+
+-- Migration: 20251019075544
 -- Create projects table
 CREATE TABLE IF NOT EXISTS public.projects (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
