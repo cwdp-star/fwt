@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/utils/logger';
 
 const AdminSetup = () => {
   const [email, setEmail] = useState('');
@@ -70,7 +71,7 @@ const AdminSetup = () => {
         });
 
       if (roleError) {
-        console.error('Erro ao adicionar role:', roleError);
+        logger.error('Erro ao adicionar role:', roleError);
         // Continuar mesmo se houver erro na role, pois pode ser questão de permissões
       }
 
@@ -87,7 +88,7 @@ const AdminSetup = () => {
       }, 2000);
 
     } catch (error: any) {
-      console.error('Erro ao criar admin:', error);
+      logger.error('Erro ao criar admin:', error);
       toast({
         title: 'Erro',
         description: error.message || 'Erro ao criar conta de administrador',

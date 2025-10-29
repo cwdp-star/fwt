@@ -4,11 +4,8 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/integrations/supabase/client';
 import ContactFormFields from './ContactFormFields';
 import PrivacyPolicy from './PrivacyPolicy';
-import { sanitizeFormData, isValidEmail, isValidPhone, createRateLimiter } from '@/utils/sanitizer';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
-
-// Rate limiter: max 3 submissions per 10 minutes
-const rateLimiter = createRateLimiter(3, 10 * 60 * 1000);
+import { logger } from '@/utils/logger';
 
 const ContactForm = () => {
   const { toast } = useToast();
@@ -33,74 +30,42 @@ const ContactForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Rate limiting check
-    const clientId = formData.email || 'anonymous';
-    if (!rateLimiter(clientId)) {
-      toast({
-        title: "Muitas Tentativas",
-        description: "Aguarde alguns minutos antes de enviar outro pedido.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    // GDPR consent check
-    if (!formData.gdprConsent) {
-      toast({
-        title: "Consentimento Obrigatório",
-        description: "Deve aceitar a política de privacidade para enviar o pedido de orçamento.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    // Enhanced validation
-    if (!isValidEmail(formData.email)) {
-      toast({
-        title: "Email Inválido",
-        description: "Por favor, insira um endereço de email válido.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (formData.phone && !isValidPhone(formData.phone)) {
-      toast({
-        title: "Telefone Inválido",
-        description: "Por favor, insira um número de telefone português válido.",
-        variant: "destructive"
-      });
-      return;
-    }
-
     setIsSubmitting(true);
     
     try {
-      // Sanitize form data before processing
-      const sanitizedData = sanitizeFormData(formData);
-      
-      // Save to Supabase database
-      const { error: dbError } = await supabase
-        .from('quote_requests')
-        .insert({
-          name: sanitizedData.name,
-          email: sanitizedData.email,
-          phone: sanitizedData.phone,
-          service: sanitizedData.projectType,
-          project_type: sanitizedData.projectType,
-          budget: sanitizedData.budget,
-          timeline: sanitizedData.timeline,
-          city: sanitizedData.location,
-          description: sanitizedData.description,
-          status: 'new'
-        });
+      // Call server-side edge function for validation and submission
+      const { data, error } = await supabase.functions.invoke('submit-quote', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          project_type: formData.projectType,
+          location: formData.location,
+          budget: formData.budget,
+          timeline: formData.timeline,
+          message: formData.description,
+          gdpr_consent: formData.gdprConsent
+        }
+      });
 
-      if (dbError) {
-        console.error('Database error:', dbError);
-        throw dbError;
+      if (error) {
+        logger.error('Quote submission error:', error);
+        toast({
+          title: 'Erro',
+          description: 'Ocorreu um erro ao enviar o pedido. Por favor, tente novamente.',
+          variant: 'destructive',
+        });
+        return;
       }
 
+      if (data?.error) {
+        toast({
+          title: 'Erro',
+          description: data.error,
+          variant: 'destructive',
+        });
+        return;
+      }
 
       toast({
         title: "Orçamento Enviado com Sucesso!",
@@ -121,10 +86,10 @@ const ContactForm = () => {
         gdprConsent: false
       });
     } catch (error) {
-      console.error('Error sending quote request:', error);
+      logger.error('Submission error:', error);
       toast({
         title: "Erro ao Enviar",
-        description: "Ocorreu um erro ao enviar o seu pedido. Tente novamente ou contacte-nos diretamente.",
+        description: "Ocorreu um erro inesperado. Por favor, tente novamente.",
         variant: "destructive"
       });
     } finally {

@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { User, Session } from '@supabase/supabase-js';
 import { Eye, EyeOff, ArrowLeft, Shield } from 'lucide-react';
+import { logger } from '@/utils/logger';
 
 const AdminLogin = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -96,7 +97,7 @@ const AdminLogin = () => {
       setError(null);
       navigate('/');
     } catch (error) {
-      console.error('Sign out error:', error);
+      logger.error('Sign out error:', error);
     }
   };
 

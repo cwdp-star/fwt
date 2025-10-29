@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { User, Session } from '@supabase/supabase-js';
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { logger } from '@/utils/logger';
 
 const Auth = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -54,7 +55,7 @@ const Auth = () => {
         .maybeSingle();
 
       if (error) {
-        console.error('Error checking admin role:', error);
+        logger.error('Error checking admin role:', error);
         setError('Erro ao verificar permissões');
         return;
       }
@@ -66,7 +67,7 @@ const Auth = () => {
         await supabase.auth.signOut();
       }
     } catch (error) {
-      console.error('Error:', error);
+      logger.error('Error:', error);
       setError('Erro inesperado');
     }
   };
@@ -95,7 +96,7 @@ const Auth = () => {
         // The onAuthStateChange will handle the admin check and redirect
       }
     } catch (error) {
-      console.error('Sign in error:', error);
+      logger.error('Sign in error:', error);
       setError('Erro ao fazer login');
     } finally {
       setLoading(false);
@@ -108,7 +109,7 @@ const Auth = () => {
       setError(null);
       navigate('/');
     } catch (error) {
-      console.error('Sign out error:', error);
+      logger.error('Sign out error:', error);
     }
   };
 

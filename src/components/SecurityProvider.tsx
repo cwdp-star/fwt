@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/utils/logger';
 
 interface SecurityContextType {
   user: User | null;
@@ -40,7 +41,7 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
         if (!mounted) return;
 
         if (error) {
-          console.error('❌ Erro ao obter sessão:', error);
+          logger.error('Erro ao obter sessão:', error);
           setLoading(false);
           return;
         }
@@ -53,7 +54,7 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
           setLoading(false);
         }
       } catch (error) {
-        console.error('❌ Erro na inicialização da auth:', error);
+        logger.error('Erro na inicialização da auth:', error);
         if (mounted) setLoading(false);
       }
     };
@@ -80,7 +81,7 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
     // Cleanup timeout to prevent infinite loading
     const timeout = setTimeout(() => {
       if (mounted) {
-        console.log('⏰ Timeout de autenticação atingido');
+        logger.info('Timeout de autenticação atingido');
         setLoading(false);
       }
     }, 8000);
@@ -102,14 +103,14 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
         .maybeSingle();
 
       if (error && error.code !== 'PGRST116') {
-        console.error('❌ Erro ao verificar status de admin:', error);
+        logger.error('Erro ao verificar status de admin:', error);
         setIsAdmin(false);
       } else {
         const isAdminUser = data?.role === 'admin';
         setIsAdmin(isAdminUser);
       }
     } catch (error) {
-      console.error('❌ Erro geral:', error);
+      logger.error('Erro geral:', error);
       setIsAdmin(false);
     } finally {
       setLoading(false);
@@ -124,7 +125,7 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
         description: "Sessão terminada com sucesso",
       });
     } catch (error) {
-      console.error('Sign out error:', error);
+      logger.error('Sign out error:', error);
       toast({
         title: "Erro",
         description: "Erro ao terminar sessão",
