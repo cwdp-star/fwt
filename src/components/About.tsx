@@ -1,5 +1,6 @@
-import { Hammer, CheckSquare, Shield } from 'lucide-react';
+import { Hammer, CheckSquare, Shield, Award, Sparkles } from 'lucide-react';
 import { useLazyAnimation, useStaggeredLazyAnimation } from '@/hooks/useLazyAnimation';
+import constructionMission from '@/assets/construction-mission.jpg';
 
 const About = () => {
   const header = useLazyAnimation({ delay: 0 });
@@ -16,64 +17,113 @@ const About = () => {
               style={header.style}>
               Sobre a <span className="text-primary">FTW Construções</span>
             </h2>
+            <div className="flex items-center justify-center mb-6">
+              <div className="h-0.5 w-16 bg-gradient-to-r from-transparent to-primary"></div>
+              <Sparkles className="h-6 w-6 text-primary mx-4" />
+              <div className="h-0.5 w-16 bg-gradient-to-l from-transparent to-primary"></div>
+            </div>
             <p className={`text-xl text-primary max-w-3xl mx-auto font-playfair font-semibold mb-8 ${header.isVisible ? 'animate-fade-up delay-200' : 'animate-out'}`}
               style={{ ...header.style, transitionDelay: '200ms' }}>
               Excelência em Construção Civil Premium
             </p>
             <p className={`text-lg text-muted-foreground max-w-4xl mx-auto leading-relaxed font-inter ${header.isVisible ? 'animate-fade-up delay-400' : 'animate-out'}`}
               style={{ ...header.style, transitionDelay: '400ms' }}>
-              A FTW Construções é sinónimo de excelência e sofisticação. Especializamo-nos em projetos de construção civil premium, remodelações de luxo e projetos chave na mão, sempre com foco na qualidade superior e acabamentos impecáveis.
+              A FTW Construções representa o mais alto padrão em construção civil e remodelações de luxo. 
+              Com décadas de experiência e um portfólio de projetos exclusivos, transformamos visões em realidade 
+              através de execução impecável, materiais premium e atenção meticulosa aos detalhes.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
             <div 
               ref={imageSection.elementRef}
-              className={imageSection.isVisible ? 'animate-fade-left' : 'animate-out'}
+              className={`relative ${imageSection.isVisible ? 'animate-fade-left' : 'animate-out'}`}
               style={imageSection.style}
             >
-              <img 
-                src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                alt="Construção moderna em andamento"
-                className="rounded-2xl shadow-2xl w-full h-96 object-cover"
-                loading="lazy"
-              />
+              <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-xl"></div>
+              <div className="relative">
+                <img 
+                  src={constructionMission}
+                  alt="Obra de construção premium FTW"
+                  className="rounded-2xl shadow-[0_20px_60px_rgba(212,175,55,0.3)] w-full h-[400px] md:h-[500px] object-cover border-2 border-primary/30"
+                  loading="lazy"
+                />
+                <div className="absolute -bottom-6 -right-6 bg-gradient-to-br from-primary to-accent p-6 rounded-2xl shadow-2xl border-2 border-white">
+                  <Award className="h-12 w-12 text-white" />
+                </div>
+              </div>
             </div>
             <div 
               ref={textSection.elementRef}
               className={textSection.isVisible ? 'animate-fade-right' : 'animate-out'}
               style={textSection.style}
             >
-              <h3 className="text-3xl font-playfair font-bold text-secondary mb-6">
-                A Nossa Missão
+              <h3 className="text-3xl md:text-4xl font-playfair font-bold text-secondary mb-8">
+                A Nossa <span className="text-primary">Missão</span>
               </h3>
-              <p className="text-muted-foreground mb-6 leading-relaxed text-lg font-inter">
-                A FTW Construções dedica-se à criação de espaços premium com excelência técnica e acabamentos de luxo. Especializamo-nos em construção premium, remodelações sofisticadas e projetos chave na mão de alta qualidade.
+              <p className="text-muted-foreground mb-6 leading-relaxed text-base md:text-lg font-inter">
+                Elevar o padrão da construção civil em Portugal através da excelência técnica, 
+                inovação arquitetónica e compromisso inabalável com a qualidade. Cada projeto que 
+                desenvolvemos é uma obra de arte funcional, onde a precisão encontra o design 
+                sofisticado e os sonhos dos nossos clientes ganham forma tangível.
               </p>
-              <p className="text-muted-foreground leading-relaxed text-lg font-inter">
-                Trabalhamos com materiais premium e técnicas de construção avançadas. Cada projeto recebe atenção aos detalhes e acabamentos impecáveis, garantindo sofisticação e qualidade superior.
+              <p className="text-muted-foreground leading-relaxed text-base md:text-lg font-inter mb-8">
+                Utilizamos exclusivamente materiais premium certificados, tecnologias de construção 
+                de ponta e uma equipa de profissionais altamente qualificados. Do planeamento 
+                estratégico à entrega das chaves, garantimos transparência total, cumprimento 
+                rigoroso de prazos e acabamentos que superam expectativas.
               </p>
+              <div className="flex flex-wrap gap-4">
+                <div className="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                  <span className="text-sm font-inter font-semibold text-secondary">Qualidade Premium</span>
+                </div>
+                <div className="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full">
+                  <Award className="h-5 w-5 text-primary" />
+                  <span className="text-sm font-inter font-semibold text-secondary">Certificação Total</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div ref={containerRef} className="grid md:grid-cols-3 gap-8">
+          <div ref={containerRef} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {[
-              { icon: CheckSquare, title: "Qualidade Garantida", desc: "Utilizamos materiais de primeira qualidade e técnicas modernas de construção para garantir durabilidade e acabamentos perfeitos." },
-              { icon: Hammer, title: "Experiência Comprovada", desc: "Mais de 15 anos no mercado da construção civil, com centenas de projetos realizados com sucesso e clientes satisfeitos." },
-              { icon: Shield, title: "Compromisso Total", desc: "Comprometemo-nos com prazos, orçamentos e especificações técnicas, oferecendo transparência total em todas as fases do projeto." }
+              { 
+                icon: CheckSquare, 
+                title: "Excelência Técnica", 
+                desc: "Materiais premium certificados, técnicas construtivas avançadas e controlo de qualidade rigoroso em cada etapa. Garantimos durabilidade excecional e acabamentos impecáveis que resistem ao tempo.",
+                badge: "Premium"
+              },
+              { 
+                icon: Hammer, 
+                title: "Experiência Comprovada", 
+                desc: "Décadas de expertise em projetos de construção civil e remodelações de luxo. Portfolio extenso com centenas de clientes satisfeitos e obras concluídas com distinção em todo o país.",
+                badge: "20+ Anos"
+              },
+              { 
+                icon: Shield, 
+                title: "Compromisso Absoluto", 
+                desc: "Transparência total em orçamentos, cumprimento rigoroso de prazos e comunicação constante. Oferecemos garantias extensivas e suporte pós-entrega para sua total tranquilidade.",
+                badge: "Garantido"
+              }
             ].map((item, index) => (
               <div 
                 key={index} 
-                className={`text-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-[0_15px_40px_rgba(212,175,55,0.2)] transition-all duration-300 border-2 border-primary/20 hover:border-primary/40 ${
+                className={`relative text-center p-6 md:p-8 bg-white rounded-2xl shadow-lg hover:shadow-[0_20px_50px_rgba(212,175,55,0.25)] transition-all duration-300 border-2 border-primary/20 hover:border-primary/50 hover:-translate-y-2 ${
                   isItemVisible(index) ? 'animate-scale-fade' : 'animate-out'
                 }`}
                 style={{ animationDelay: `${index * 200}ms` }}
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-                  <item.icon className="h-12 w-12 text-primary" />
+                <div className="absolute top-4 right-4">
+                  <span className="bg-gradient-to-r from-primary to-accent text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                    {item.badge}
+                  </span>
                 </div>
-                <h4 className="text-xl font-playfair font-bold text-secondary mb-4">{item.title}</h4>
-                <p className="text-muted-foreground font-inter">{item.desc}</p>
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-md transform hover:rotate-6 transition-transform">
+                  <item.icon className="h-10 w-10 md:h-12 md:w-12 text-primary" />
+                </div>
+                <h4 className="text-lg md:text-xl font-playfair font-bold text-secondary mb-4">{item.title}</h4>
+                <p className="text-sm md:text-base text-muted-foreground font-inter leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>

@@ -8,32 +8,32 @@ const Services = () => {
   const services = [
     {
       icon: Building,
-      title: "Construção Civil",
-      description: "Construção de habitações e estruturas comerciais com foco na qualidade estrutural e durabilidade excecional.",
-      features: ["Estruturas Robustas", "Materiais Certificados", "Técnicas Avançadas", "Controlo de Qualidade"]
+      title: "Construção Civil Premium",
+      description: "Construção de habitações e estruturas comerciais de luxo com excelência técnica absoluta. Cada projeto é executado com precisão arquitetónica e materiais de primeira linha.",
+      features: ["Arquitetura Sofisticada", "Materiais Premium Certificados", "Engenharia de Ponta", "Controlo Rigoroso"]
     },
     {
       icon: Home,
-      title: "Remodelações Completas",
-      description: "Renovação total de espaços existentes com qualidade construtiva superior e atenção aos detalhes.",
-      features: ["Qualidade Estrutural", "Acabamentos Premium", "Segurança Garantida", "Durabilidade"]
+      title: "Remodelações de Luxo",
+      description: "Transformação completa de espaços com design exclusivo e acabamentos impecáveis. Renovamos mantendo a essência, elevando o padrão de qualidade e conforto.",
+      features: ["Design Personalizado", "Acabamentos Impecáveis", "Execução Perfeita", "Atenção aos Detalhes"]
     },
     {
       icon: Wrench,
       title: "Projetos Chave na Mão",
-      description: "Da planta ao acabamento final, garantimos qualidade em cada etapa do processo construtivo.",
-      features: ["Gestão Completa", "Controlo de Qualidade", "Entrega no Prazo", "Estruturas Sólidas"]
+      description: "Gestão integral do seu projeto desde o conceito até a entrega final. Coordenamos todas as fases com eficiência máxima e transparência total para sua tranquilidade.",
+      features: ["Gestão Total Integrada", "Coordenação Profissional", "Prazos Garantidos", "Orçamento Transparente"]
     },
     {
       icon: Building,
-      title: "Betão Armado",
-      description: "Especialistas em estruturas de betão armado, ferro e cofragem com técnicas de construção avançadas.",
-      features: ["Ferro e Cofragem", "Estruturas Especiais", "Betão de Qualidade", "Resistência Superior"]
+      title: "Estruturas Especiais",
+      description: "Expertise em estruturas complexas de betão armado, aço e sistemas construtivos avançados. Soluções técnicas para os projetos mais desafiadores e ambiciosos.",
+      features: ["Engenharia Avançada", "Estruturas Complexas", "Cálculo Estrutural", "Certificação Técnica"]
     }
   ];
 
   return (
-    <section id="services" className="py-20 bg-white lazy-container">
+    <section id="services" className="py-16 md:py-20 bg-white lazy-container overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div 
@@ -50,33 +50,33 @@ const Services = () => {
             </p>
           </div>
 
-          <div ref={containerRef} className="grid lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+          <div ref={containerRef} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-7xl mx-auto">
             {services.map((service, index) => (
               <div 
                 key={index} 
-                className={`bg-white p-8 rounded-2xl shadow-lg hover:shadow-[0_15px_40px_rgba(212,175,55,0.2)] transition-all duration-300 border-2 border-primary/20 hover:border-primary/40 ${
+                className={`bg-white p-6 md:p-8 rounded-2xl shadow-lg hover:shadow-[0_20px_50px_rgba(212,175,55,0.25)] transition-all duration-300 border-2 border-primary/20 hover:border-primary/50 hover:-translate-y-2 ${
                   isItemVisible(index) ? 'animate-scale-fade' : 'animate-out'
                 }`}
                 style={{ animationDelay: `${index * 150}ms` }}
               >
                 <div className="text-center mb-6">
                   <div className="flex justify-center mb-6">
-                    <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl flex items-center justify-center shadow-sm">
-                      <service.icon className="h-12 w-12 text-primary" />
+                    <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-primary/20 via-primary/10 to-accent/20 rounded-2xl flex items-center justify-center shadow-md transform hover:rotate-6 transition-transform">
+                      <service.icon className="h-10 w-10 md:h-12 md:w-12 text-primary" />
                     </div>
                   </div>
-                  <h3 className="text-xl font-playfair font-bold text-foreground mb-4">
+                  <h3 className="text-lg md:text-xl font-playfair font-bold text-foreground mb-4">
                     {service.title}
                   </h3>
-                  <p className="text-muted-foreground text-base leading-relaxed font-inter">
+                  <p className="text-muted-foreground text-sm md:text-base leading-relaxed font-inter">
                     {service.description}
                   </p>
                 </div>
-                <ul className="space-y-3">
+                <ul className="space-y-2 md:space-y-3">
                   {service.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 shadow-sm"></div>
-                      <span className="text-muted-foreground font-inter text-sm">{feature}</span>
+                    <li key={featureIndex} className="flex items-start space-x-3">
+                      <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-gradient-to-r from-primary to-accent rounded-full flex-shrink-0 mt-1.5 shadow-sm"></div>
+                      <span className="text-muted-foreground font-inter text-xs md:text-sm leading-relaxed">{feature}</span>
                     </li>
                   ))}
                 </ul>
