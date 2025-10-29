@@ -27,15 +27,12 @@ const Hero = () => {
           className={`flex justify-center mb-8 md:mb-12 ${logo.isVisible ? 'animate-fade-down' : 'animate-out'}`}
           style={logo.style}
         >
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 blur-2xl rounded-full"></div>
-            <img 
-              src="/src/assets/ftw-logo.png" 
-              alt="FTW Construções Logo" 
-              className="relative h-40 sm:h-48 md:h-56 lg:h-64 w-auto drop-shadow-2xl"
-              loading="eager"
-            />
-          </div>
+          <img 
+            src="/src/assets/ftw-logo.png" 
+            alt="FTW Construções Logo" 
+            className="h-40 sm:h-48 md:h-56 lg:h-64 w-auto"
+            loading="eager"
+          />
         </div>
         
         <h1 
