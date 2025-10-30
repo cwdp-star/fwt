@@ -1,12 +1,17 @@
+import { lazy, Suspense } from 'react';
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Services from "@/components/Services";
 import Gallery from "@/components/Gallery";
-import ProjectGallery from "@/components/ProjectGallery";
 import ContactForm from "@/components/ContactForm";
 import FloatingButtons from "@/components/FloatingButtons";
+import WhatsAppChat from "@/components/WhatsAppChat";
 import CookieConsent from "@/components/CookieConsent";
 import { MetaTags, getOrganizationStructuredData } from "@/components/seo/MetaTags";
+
+// Lazy load heavy components
+const ProjectGallery = lazy(() => import("@/components/ProjectGallery"));
+const FAQ = lazy(() => import("@/components/FAQ"));
 
 const Index = () => {
   return (
@@ -36,12 +41,20 @@ const Index = () => {
         <About />
         <Services />
         <Gallery />
-        <ProjectGallery />
+        <Suspense fallback={<div className="min-h-[400px] flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div></div>}>
+          <ProjectGallery />
+        </Suspense>
+        <Suspense fallback={<div className="min-h-[300px]"></div>}>
+          <FAQ />
+        </Suspense>
         <ContactForm />
       </div>
       
       {/* Floating Buttons */}
       <FloatingButtons />
+      
+      {/* WhatsApp Chat */}
+      <WhatsAppChat />
       
       {/* GDPR Cookie Consent */}
       <CookieConsent />

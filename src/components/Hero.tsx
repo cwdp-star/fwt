@@ -72,13 +72,13 @@ const Hero = () => {
         >
           <button 
             onClick={scrollToContact}
-            className="w-full sm:w-auto bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white px-8 sm:px-12 py-4 sm:py-5 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-[0_10px_40px_rgba(212,175,55,0.3)] hover:shadow-[0_15px_50px_rgba(212,175,55,0.4)] font-inter"
+            className="w-full sm:w-auto bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white px-8 sm:px-12 py-4 sm:py-5 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-[0_10px_40px_rgba(212,175,55,0.3)] hover:shadow-[0_15px_50px_rgba(212,175,55,0.4)] font-inter min-h-[56px] md:min-h-[48px]"
           >
             Solicitar Orçamento Premium
           </button>
           <button 
             onClick={() => document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' })}
-            className="w-full sm:w-auto border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 sm:px-12 py-4 sm:py-5 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 font-inter"
+            className="w-full sm:w-auto border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 sm:px-12 py-4 sm:py-5 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 font-inter min-h-[56px] md:min-h-[48px]"
           >
             Ver Portfolio
           </button>

@@ -69,7 +69,7 @@ const Gallery = () => {
         </p>
         <button 
           onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-          className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-primary-foreground px-10 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl"
+          className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-primary-foreground px-10 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl min-h-[56px] md:min-h-[48px]"
         >
           Solicitar Orçamento Gratuito
         </button>
