@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Shield } from 'lucide-react';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 interface FormData {
   name: string;
@@ -27,6 +28,9 @@ interface ContactFormFieldsProps {
 }
 
 const ContactFormFields = ({ formData, onChange, onConsentChange, onPrivacyClick }: ContactFormFieldsProps) => {
+  const { getSettingValue } = useSiteSettings();
+  const companyName = getSettingValue('company_name') || 'FTW Construções';
+
   return (
     <>
       <div className="grid md:grid-cols-2 gap-6">
@@ -229,7 +233,7 @@ const ContactFormFields = ({ formData, onChange, onConsentChange, onPrivacyClick
               >
                 Política de Privacidade
               </button>
-              {' '}e consinto expressamente o tratamento dos meus dados pessoais pela FTW Construções 
+              {' '}e consinto expressamente o tratamento dos meus dados pessoais pela {companyName} 
               para as seguintes finalidades: (i) resposta ao meu pedido de orçamento, (ii) contacto 
               comercial relacionado com o serviço solicitado. *
             </label>

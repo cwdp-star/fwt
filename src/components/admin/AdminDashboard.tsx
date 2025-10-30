@@ -7,6 +7,7 @@ import MediaManager from './MediaManager';
 import ProjectManager from './ProjectManager';
 import QuickActions from './QuickActions';
 import NotificationCenter from './NotificationCenter';
+import SiteSettingsManager from './SiteSettingsManager';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -29,12 +30,13 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Visão Geral</TabsTrigger>
             <TabsTrigger value="quotes">Orçamentos</TabsTrigger>
             <TabsTrigger value="projects">Projetos</TabsTrigger>
             <TabsTrigger value="media">Mídia</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="settings">Configurações</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -63,6 +65,12 @@ const AdminDashboard = () => {
           <TabsContent value="analytics" className="space-y-6">
             <div className="bg-white rounded-xl shadow-sm border p-6">
               <ProjectAnalytics />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="settings" className="space-y-6">
+            <div className="bg-card rounded-xl shadow-sm border p-6">
+              <SiteSettingsManager />
             </div>
           </TabsContent>
         </Tabs>

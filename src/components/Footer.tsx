@@ -4,11 +4,21 @@ import PrivacyPolicyModal from './legal/PrivacyPolicyModal';
 import TermsModal from './legal/TermsModal';
 import CookiePolicyModal from './legal/CookiePolicyModal';
 import ftwLogo from '@/assets/ftw-logo.png';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 const Footer = () => {
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const [showCookies, setShowCookies] = useState(false);
+  const { getSettingValue } = useSiteSettings();
+
+  const companyName = getSettingValue('company_name') || 'FTW Construções';
+  const phone = getSettingValue('company_phone') || '+351 965 123 456';
+  const email = getSettingValue('company_email') || 'geral@ftwconstrucoes.pt';
+  const addressStreet = getSettingValue('company_address_street') || 'Rua Senhor Dos Aflitos 809';
+  const addressPostal = getSettingValue('company_address_postal') || '4415-887';
+  const addressCity = getSettingValue('company_address_city') || 'Sandim';
+  const addressRegion = getSettingValue('company_address_region') || 'Vila Nova de Gaia';
 
   useEffect(() => {
     const handleOpenPrivacy = () => setShowPrivacy(true);
@@ -25,7 +35,7 @@ const Footer = () => {
             <div className="md:col-span-2">
               <div className="flex items-center space-x-4 mb-6">
                 <div className="w-32 h-24 flex items-center justify-center">
-                  <img src={ftwLogo} alt="FTW Construções Logo" className="w-full h-full object-contain brightness-0 invert" />
+                  <img src={ftwLogo} alt={`${companyName} Logo`} className="w-full h-full object-contain brightness-0 invert" />
                 </div>
               </div>
               <p className="text-gray-300 mb-6 leading-relaxed text-lg font-inter">
@@ -77,15 +87,15 @@ const Footer = () => {
               <div className="space-y-4 text-gray-300 font-inter">
                 <div>
                   <p className="font-semibold text-white">Telefone:</p>
-                  <p className="text-lg">+351 965 123 456</p>
+                  <p className="text-lg">{phone}</p>
                 </div>
                 <div>
                   <p className="font-semibold text-white">Email:</p>
-                  <p>geral@ftwconstrucoes.pt</p>
+                  <p>{email}</p>
                 </div>
                 <div>
                   <p className="font-semibold text-white">Morada:</p>
-                  <p>Rua Senhor Dos Aflitos 809<br />4415-887 Sandim<br />Vila Nova de Gaia</p>
+                  <p>{addressStreet}<br />{addressPostal} {addressCity}<br />{addressRegion}</p>
                 </div>
               </div>
             </div>
@@ -95,7 +105,7 @@ const Footer = () => {
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
               <div className="text-center md:text-left">
                 <p className="text-gray-400 mb-2 font-inter">
-                  © 2025 FTW Construções. Todos os direitos reservados.
+                  © 2025 {companyName}. Todos os direitos reservados.
                 </p>
                 <p className="text-gray-400 text-xs font-inter">
                   Este site foi criado por{" "}
