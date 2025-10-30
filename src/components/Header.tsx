@@ -49,10 +49,14 @@ const Header = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 w-full bg-background/95 backdrop-blur-md shadow-[0_2px_20px_rgba(212,175,55,0.1)] z-50 border-b border-primary/10 transition-all duration-300"
+      className={`fixed top-0 w-full backdrop-blur-lg z-50 border-b transition-all duration-300 ${
+        isScrolled 
+          ? 'bg-background/98 shadow-lg border-primary/20' 
+          : 'bg-background/95 shadow-[0_4px_30px_rgba(212,175,55,0.15)] border-primary/10'
+      }`}
     >
       <div className={`container mx-auto px-4 transition-all duration-300 ${
-        isScrolled ? 'py-3' : 'py-6'
+        isScrolled ? 'py-2' : 'py-4'
       }`}>
         <div className="flex items-center justify-between">
           <motion.div 
@@ -65,14 +69,14 @@ const Header = () => {
                 src={ftwLogo} 
                 alt="FTW Construções" 
                 className={`w-auto transition-all duration-300 ${
-                  isScrolled ? 'h-12' : 'h-20'
+                  isScrolled ? 'h-16 md:h-20' : 'h-24 md:h-28'
                 }`}
               />
             </Link>
           </motion.div>
 
           {/* Desktop Menu */}
-          <nav className="hidden md:flex space-x-8 items-center">
+          <nav className="hidden md:flex space-x-2 lg:space-x-6 items-center">
             {[
               { label: 'Início', id: 'home', path: '/' },
               { label: 'Sobre Nós', id: 'about' },
@@ -83,7 +87,7 @@ const Header = () => {
               <motion.button 
                 key={item.id}
                 onClick={() => scrollToSection(item.id)} 
-                className="text-foreground hover:text-primary font-semibold transition-colors relative font-inter"
+                className="text-foreground hover:text-primary font-semibold transition-all relative font-inter px-4 py-2 rounded-lg hover:bg-primary/5"
                 whileHover={{ scale: 1.05 }}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -91,9 +95,9 @@ const Header = () => {
               >
                 <span className="relative z-10">{item.label}</span>
                 <motion.div
-                  className="absolute inset-0 bg-primary/10 rounded-lg -z-10"
-                  initial={{ scale: 0 }}
-                  whileHover={{ scale: 1 }}
+                  className="absolute inset-0 bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg -z-10"
+                  initial={{ scale: 0, opacity: 0 }}
+                  whileHover={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.2 }}
                 />
               </motion.button>
@@ -103,17 +107,17 @@ const Header = () => {
               <>
                 <Link 
                   to="/admin" 
-                  className={`transition-colors ${
+                  className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                     location.pathname === '/admin' 
-                      ? 'text-orange-600 font-semibold' 
-                      : 'text-gray-700 hover:text-orange-600'
+                      ? 'bg-primary text-white' 
+                      : 'text-foreground hover:text-primary hover:bg-primary/5'
                   }`}
                 >
                   Admin
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center space-x-2 text-gray-700 hover:text-orange-600 transition-colors"
+                  className="flex items-center space-x-2 px-4 py-2 text-foreground hover:text-primary hover:bg-primary/5 rounded-lg transition-all font-semibold"
                 >
                   <LogOut className="h-4 w-4" />
                   <span>Sair</span>
@@ -125,7 +129,7 @@ const Header = () => {
           {/* Mobile Menu Button */}
           <motion.button 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-accent"
+            className="md:hidden p-3 rounded-lg hover:bg-primary/10 transition-colors border border-transparent hover:border-primary/20"
             whileTap={{ scale: 0.95 }}
           >
             <motion.div
@@ -147,8 +151,8 @@ const Header = () => {
           }}
           transition={{ duration: 0.3 }}
         >
-          <div className="pt-4 pb-2 border-t border-border mt-4">
-            <div className="flex flex-col space-y-2">
+          <div className="pt-4 pb-4 border-t border-primary/20 mt-4 bg-gradient-to-b from-primary/5 to-transparent rounded-b-xl">
+            <div className="flex flex-col space-y-1">
               {[
                 { label: 'Início', id: 'home', path: '/' },
                 { label: 'Sobre Nós', id: 'about' },
@@ -159,7 +163,7 @@ const Header = () => {
                 <motion.button 
                   key={item.id}
                   onClick={() => scrollToSection(item.id)} 
-                  className="text-left text-foreground hover:text-primary font-semibold py-3 px-4 rounded-lg hover:bg-accent/10 transition-colors font-inter"
+                  className="text-left text-foreground hover:text-primary font-semibold py-3 px-4 rounded-lg hover:bg-primary/10 transition-all border border-transparent hover:border-primary/10"
                   initial={{ x: -20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -172,14 +176,18 @@ const Header = () => {
                 <>
                   <Link 
                     to="/admin" 
-                    className="text-gray-700 hover:text-orange-600 transition-colors py-3 px-4 rounded-lg hover:bg-accent"
+                    className={`py-3 px-4 rounded-lg font-semibold transition-all border border-transparent ${
+                      location.pathname === '/admin'
+                        ? 'bg-primary/10 text-primary border-primary/20'
+                        : 'text-foreground hover:text-primary hover:bg-primary/5 hover:border-primary/10'
+                    }`}
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Admin
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="flex items-center space-x-2 text-gray-700 hover:text-orange-600 transition-colors py-3 px-4 rounded-lg hover:bg-accent text-left"
+                    className="flex items-center space-x-2 text-foreground hover:text-primary transition-all py-3 px-4 rounded-lg hover:bg-primary/5 text-left border border-transparent hover:border-primary/10 font-semibold"
                   >
                     <LogOut className="h-4 w-4" />
                     <span>Sair</span>

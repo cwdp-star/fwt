@@ -18,6 +18,7 @@ import CookieConsent from '@/components/CookieConsent';
 import { SecurityProvider } from '@/components/SecurityProvider';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import AdminDashboard from '@/components/admin/AdminDashboard';
+import { ScrollToTop } from '@/components/ScrollToTop';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
     <HelmetProvider>
       <SecurityProvider>
         <Router>
+          <ScrollToTop />
           <div className="min-h-screen flex flex-col">
             <Header />
             <main className="flex-1">
