@@ -31,9 +31,11 @@ interface ContactFormFieldsProps {
   onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
   onConsentChange: (checked: boolean) => void;
   onPrivacyClick: () => void;
+  onSubmit: (e: React.FormEvent, files: File[]) => void;
+  isSubmitting: boolean;
 }
 
-const ContactFormFields = ({ formData, onChange, onConsentChange, onPrivacyClick }: ContactFormFieldsProps) => {
+const ContactFormFields = ({ formData, onChange, onConsentChange, onPrivacyClick, onSubmit, isSubmitting }: ContactFormFieldsProps) => {
   const { getSettingValue } = useSiteSettings();
   const companyName = getSettingValue('company_name') || 'FTW Construções';
   
@@ -76,8 +78,13 @@ const ContactFormFields = ({ formData, onChange, onConsentChange, onPrivacyClick
     });
   };
 
+  const handleFormSubmit = (e: React.FormEvent) => {
+    const files = uploadedFiles.map(uf => uf.file);
+    onSubmit(e, files);
+  };
+
   return (
-    <>
+    <form onSubmit={handleFormSubmit} className="space-y-6">
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           <label htmlFor="name" className="block text-sm font-bold text-gray-800 mb-2">
@@ -380,7 +387,20 @@ const ContactFormFields = ({ formData, onChange, onConsentChange, onPrivacyClick
           * Campo obrigatório nos termos do RGPD (Regulamento UE 2016/679)
         </p>
       </div>
-    </>
+
+      <div className="text-center pt-6">
+        <button
+          type="submit"
+          disabled={isSubmitting || !formData.gdprConsent}
+          className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary disabled:opacity-50 disabled:cursor-not-allowed text-white px-12 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-[0_10px_40px_rgba(212,175,55,0.3)] hover:shadow-[0_15px_50px_rgba(212,175,55,0.4)] font-inter"
+        >
+          {isSubmitting ? 'A Enviar...' : 'Solicitar Orçamento Gratuito'}
+        </button>
+        <p className="text-sm text-muted-foreground mt-4 font-inter">
+          * Campos obrigatórios. Responderemos em 24 horas.
+        </p>
+      </div>
+    </form>
   );
 };
 

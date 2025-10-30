@@ -32,7 +32,10 @@ const sanitizeFormData = (data: Record<string, any>): Record<string, any> => {
   Object.keys(data).forEach(key => {
     const value = data[key];
     
-    if (typeof value === 'string') {
+    // Keep arrays (like attachments) as-is
+    if (Array.isArray(value)) {
+      sanitized[key] = value;
+    } else if (typeof value === 'string') {
       sanitized[key] = sanitizeText(value);
     } else if (typeof value === 'boolean' || typeof value === 'number') {
       sanitized[key] = value;
@@ -134,13 +137,17 @@ Deno.serve(async (req) => {
         name: sanitized.name,
         email: sanitized.email,
         phone: sanitized.phone,
-        project_type: sanitized.project_type,
-        location: sanitized.location,
-        budget: sanitized.budget,
-        timeline: sanitized.timeline,
+        service: sanitized.project_type,
         message: sanitized.message,
-        gdpr_consent: sanitized.gdpr_consent,
-        status: 'pending'
+        status: 'new',
+        notes: [
+          sanitized.location ? `Localização: ${sanitized.location}` : null,
+          sanitized.budget ? `Orçamento: ${sanitized.budget}` : null,
+          sanitized.timeline ? `Prazo: ${sanitized.timeline}` : null,
+          sanitized.documents_link ? `Documentos: ${sanitized.documents_link}` : null,
+          sanitized.preferred_start_date ? `Data Início: ${sanitized.preferred_start_date}` : null,
+        ].filter(Boolean).join('\n'),
+        attachments: sanitized.attachments || []
       });
     
     if (dbError) {

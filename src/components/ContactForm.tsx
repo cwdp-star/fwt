@@ -29,11 +29,37 @@ const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent, uploadedFiles: File[]) => {
     e.preventDefault();
     setIsSubmitting(true);
     
     try {
+      // Upload files first if any
+      let attachments: Array<{filename: string, path: string, size: number}> = [];
+      
+      if (uploadedFiles.length > 0) {
+        for (const file of uploadedFiles) {
+          const fileExt = file.name.split('.').pop();
+          const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+          const filePath = `${formData.email}/${fileName}`;
+          
+          const { error: uploadError } = await supabase.storage
+            .from('quote-attachments')
+            .upload(filePath, file);
+          
+          if (uploadError) {
+            logger.error('File upload error:', uploadError);
+            throw new Error(`Erro ao enviar ficheiro ${file.name}`);
+          }
+          
+          attachments.push({
+            filename: file.name,
+            path: filePath,
+            size: file.size
+          });
+        }
+      }
+      
       // Call server-side edge function for validation and submission
       const { data, error } = await supabase.functions.invoke('submit-quote', {
         body: {
@@ -45,7 +71,10 @@ const ContactForm = () => {
           budget: formData.budget,
           timeline: formData.timeline,
           message: formData.description,
-          gdpr_consent: formData.gdprConsent
+          documents_link: formData.documentsLink,
+          preferred_start_date: formData.preferredStartDate,
+          gdpr_consent: formData.gdprConsent,
+          attachments: attachments
         }
       });
 
@@ -91,7 +120,7 @@ const ContactForm = () => {
       logger.error('Submission error:', error);
       toast({
         title: "Erro ao Enviar",
-        description: "Ocorreu um erro inesperado. Por favor, tente novamente.",
+        description: error instanceof Error ? error.message : "Ocorreu um erro inesperado. Por favor, tente novamente.",
         variant: "destructive"
       });
     } finally {
@@ -141,27 +170,14 @@ const ContactForm = () => {
           <div ref={formRef} className={`bg-white rounded-2xl shadow-[0_10px_50px_rgba(212,175,55,0.15)] p-8 md:p-12 border-2 border-primary/20 transition-all duration-700 ${
             formVisible ? 'animate-scale-in' : 'opacity-0 scale-95'
           }`}>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <ContactFormFields 
-                formData={formData} 
-                onChange={handleChange}
-                onConsentChange={handleConsentChange}
-                onPrivacyClick={handlePrivacyClick}
-              />
-
-              <div className="text-center pt-6">
-                <button
-                  type="submit"
-                  disabled={isSubmitting || !formData.gdprConsent}
-                  className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary disabled:opacity-50 disabled:cursor-not-allowed text-white px-12 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-[0_10px_40px_rgba(212,175,55,0.3)] hover:shadow-[0_15px_50px_rgba(212,175,55,0.4)] font-inter"
-                >
-                  {isSubmitting ? 'A Enviar...' : 'Solicitar Orçamento Gratuito'}
-                </button>
-                <p className="text-sm text-muted-foreground mt-4 font-inter">
-                  * Campos obrigatórios. Responderemos em 24 horas.
-                </p>
-              </div>
-            </form>
+            <ContactFormFields 
+              formData={formData} 
+              onChange={handleChange}
+              onConsentChange={handleConsentChange}
+              onPrivacyClick={handlePrivacyClick}
+              onSubmit={handleSubmit}
+              isSubmitting={isSubmitting}
+            />
           </div>
         </div>
       </div>

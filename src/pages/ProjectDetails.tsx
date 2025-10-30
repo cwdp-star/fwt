@@ -136,9 +136,34 @@ const ProjectDetails = () => {
   }
 
   const pageTitle = `${project.title} - RC Construções`;
-  const pageDescription = project.description 
-    ? project.description.substring(0, 160)
-    : `Projeto de ${project.category || 'construção'} em ${project.city || 'Portugal'}`;
+  
+  // Create unique, descriptive meta description
+  const createMetaDescription = () => {
+    const parts = [];
+    if (project.category) parts.push(`Projeto de ${project.category.toLowerCase()}`);
+    if (project.city) parts.push(`em ${project.city}`);
+    if (project.delivery_date) {
+      const year = new Date(project.delivery_date).getFullYear();
+      parts.push(`concluído em ${year}`);
+    }
+    
+    let description = parts.join(' ');
+    
+    // Add description snippet if available
+    if (project.description) {
+      const cleanDesc = project.description
+        .replace(/Cliente:.*?(\n|$)/gi, '')
+        .trim()
+        .substring(0, 100);
+      description = `${description}. ${cleanDesc}`;
+    }
+    
+    return description.length > 160 
+      ? description.substring(0, 157) + '...' 
+      : description;
+  };
+  
+  const pageDescription = createMetaDescription();
 
   return (
     <>
