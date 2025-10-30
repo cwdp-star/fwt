@@ -14,10 +14,10 @@ interface MetaTagsProps {
 }
 
 export const MetaTags: React.FC<MetaTagsProps> = ({
-  title = "RC Construções - Especialistas em Estruturas de Betão Armado",
-  description = "RC Construções é especializada em estruturas de betão armado, ferro e cofragem. Serviços de construção civil de alta qualidade em todo Portugal.",
+  title = "FTW Construções - Especialistas em Estruturas de Betão Armado",
+  description = "FTW Construções é especializada em estruturas de betão armado, ferro e cofragem. Serviços de construção civil de alta qualidade em todo Portugal.",
   keywords = [
-    "RC Construções",
+    "FTW Construções",
     "betão armado",
     "ferro e cofragem", 
     "estruturas",
@@ -35,7 +35,7 @@ export const MetaTags: React.FC<MetaTagsProps> = ({
   ogType = "website",
   structuredData,
 }) => {
-  const fullTitle = title.includes("RC Construções") ? title : `${title} | RC Construções`;
+  const fullTitle = title.includes("FTW Construções") ? title : `${title} | FTW Construções`;
   const metaDescription = description.length > 160 ? description.substring(0, 157) + "..." : description;
 
   return (
@@ -53,7 +53,7 @@ export const MetaTags: React.FC<MetaTagsProps> = ({
       <meta property="og:description" content={ogDescription || metaDescription} />
       <meta property="og:image" content={ogImage} />
       <meta property="og:type" content={ogType} />
-      <meta property="og:site_name" content="RC Construções" />
+      <meta property="og:site_name" content="FTW Construções" />
       <meta property="og:locale" content="pt_PT" />
       
       {/* Twitter Card Tags */}
@@ -64,7 +64,7 @@ export const MetaTags: React.FC<MetaTagsProps> = ({
       
       {/* Additional SEO Tags */}
       <meta name="robots" content="index, follow" />
-      <meta name="author" content="RC Construções" />
+      <meta name="author" content="FTW Construções" />
       <meta name="language" content="Portuguese" />
       <meta name="geo.region" content="PT" />
       <meta name="geo.placename" content="Portugal" />
@@ -88,7 +88,7 @@ export const MetaTags: React.FC<MetaTagsProps> = ({
 export const getOrganizationStructuredData = () => ({
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "RC Construções",
+  "name": "FTW Construções",
   "description": "Especialistas em estruturas de betão armado, ferro e cofragem. Serviços de construção civil de alta qualidade.",
   "url": "https://rcconstrucoes.pt",
   "logo": "https://rcconstrucoes.pt/logo.png",
@@ -129,7 +129,7 @@ export const getConstructionProjectStructuredData = (project: any) => ({
   },
   "provider": {
     "@type": "Organization",
-    "name": "RC Construções"
+    "name": "FTW Construções"
   },
   "startDate": project.start_date,
   "endDate": project.end_date

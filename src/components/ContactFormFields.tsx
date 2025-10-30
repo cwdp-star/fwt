@@ -229,7 +229,7 @@ const ContactFormFields = ({ formData, onChange, onConsentChange, onPrivacyClick
               >
                 Política de Privacidade
               </button>
-              {' '}e consinto expressamente o tratamento dos meus dados pessoais pela RC Construções 
+              {' '}e consinto expressamente o tratamento dos meus dados pessoais pela FTW Construções 
               para as seguintes finalidades: (i) resposta ao meu pedido de orçamento, (ii) contacto 
               comercial relacionado com o serviço solicitado. *
             </label>

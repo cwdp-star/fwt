@@ -12,10 +12,10 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <MetaTags 
-        title="RC Construções - Especialistas em Estruturas de Betão Armado"
-        description="RC Construções é especializada em estruturas de betão armado, ferro e cofragem. Serviços de construção civil de alta qualidade em todo Portugal. Solicite orçamento gratuito."
+        title="FTW Construções - Especialistas em Estruturas de Betão Armado"
+        description="FTW Construções é especializada em estruturas de betão armado, ferro e cofragem. Serviços de construção civil de alta qualidade em todo Portugal. Solicite orçamento gratuito."
         keywords={[
-          "RC Construções",
+          "FTW Construções",
           "betão armado",
           "ferro e cofragem", 
           "estruturas",
