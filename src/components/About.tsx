@@ -44,7 +44,7 @@ const About = () => {
               <div className="relative">
                 <img 
                   src={constructionMission}
-                  alt="Obra de construção premium FTW"
+                  alt="Equipa de construção profissional da FTW Construções trabalhando em obra de construção civil premium com materiais de alta qualidade e equipamentos modernos"
                   className="rounded-2xl shadow-[0_20px_60px_rgba(212,175,55,0.3)] w-full h-[400px] md:h-[500px] object-cover border-2 border-primary/30"
                   loading="lazy"
                 />

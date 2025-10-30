@@ -38,7 +38,7 @@ const Hero = () => {
         >
           <img 
             src={ftwLogo} 
-            alt="FTW Construções Logo" 
+            alt="FTW Construções - Empresa líder em construção civil premium, remodelações de luxo e projetos de alta qualidade em Portugal" 
             className="h-40 sm:h-48 md:h-56 lg:h-64 w-auto"
             loading="eager"
           />

@@ -39,7 +39,7 @@ export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
         <div className="aspect-[4/3] relative overflow-hidden">
           <img
             src={project.images[0]?.url || project.cover_image || '/placeholder.svg'}
-            alt={project.title}
+            alt={`${project.title} - Projeto de construção civil ${project.category ? 'categoria ' + project.category : ''} ${project.city ? 'em ' + project.city : ''} executado pela FTW Construções`}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             loading="lazy"
           />

@@ -22,6 +22,7 @@ const ContactForm = () => {
     timeline: '',
     description: '',
     documentsLink: '',
+    preferredStartDate: '',
     gdprConsent: false
   });
 
@@ -83,6 +84,7 @@ const ContactForm = () => {
         timeline: '',
         description: '',
         documentsLink: '',
+        preferredStartDate: '',
         gdprConsent: false
       });
     } catch (error) {

@@ -1,10 +1,10 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
-import { Shield } from 'lucide-react';
+import { Shield, Upload, X, FileText } from 'lucide-react';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 interface FormData {
@@ -17,7 +17,13 @@ interface FormData {
   timeline: string;
   description: string;
   documentsLink?: string;
+  preferredStartDate?: string;
   gdprConsent: boolean;
+}
+
+interface UploadedFile {
+  file: File;
+  preview?: string;
 }
 
 interface ContactFormFieldsProps {
@@ -30,6 +36,45 @@ interface ContactFormFieldsProps {
 const ContactFormFields = ({ formData, onChange, onConsentChange, onPrivacyClick }: ContactFormFieldsProps) => {
   const { getSettingValue } = useSiteSettings();
   const companyName = getSettingValue('company_name') || 'FTW Construções';
+  
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+
+  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    const maxFiles = 5;
+    
+    if (uploadedFiles.length + files.length > maxFiles) {
+      alert(`Pode enviar no máximo ${maxFiles} ficheiros`);
+      return;
+    }
+    
+    const validFiles = files.filter(file => {
+      if (file.size > maxSize) {
+        alert(`${file.name} é muito grande. Máximo 10MB por ficheiro.`);
+        return false;
+      }
+      return true;
+    });
+    
+    const newFiles = validFiles.map(file => ({
+      file,
+      preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined
+    }));
+    
+    setUploadedFiles(prev => [...prev, ...newFiles]);
+  };
+
+  const removeFile = (index: number) => {
+    setUploadedFiles(prev => {
+      const newFiles = [...prev];
+      if (newFiles[index].preview) {
+        URL.revokeObjectURL(newFiles[index].preview!);
+      }
+      newFiles.splice(index, 1);
+      return newFiles;
+    });
+  };
 
   return (
     <>
@@ -186,23 +231,104 @@ const ContactFormFields = ({ formData, onChange, onConsentChange, onPrivacyClick
             ></textarea>
       </div>
 
-      {/* Documents Link Field */}
+      {/* Preferred Start Date */}
+      <div className="grid md:grid-cols-2 gap-6">
+        <div>
+          <label htmlFor="preferredStartDate" className="block text-sm font-bold text-gray-800 mb-2">
+            Data Preferencial de Início <span className="text-gray-500">(Opcional)</span>
+          </label>
+          <input
+            type="date"
+            id="preferredStartDate"
+            name="preferredStartDate"
+            value={formData.preferredStartDate || ''}
+            onChange={onChange}
+            min={new Date().toISOString().split('T')[0]}
+            className="w-full min-h-[44px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all font-medium"
+          />
+        </div>
+        
+        {/* Documents Link Field */}
+        <div>
+          <label htmlFor="documentsLink" className="block text-sm font-bold text-gray-800 mb-2">
+            Link para Documentos <span className="text-gray-500">(Opcional)</span>
+          </label>
+          <input
+            id="documentsLink"
+            name="documentsLink"
+            type="url"
+            value={formData.documentsLink || ''}
+            onChange={onChange}
+            placeholder="https://drive.google.com/..."
+            className="w-full min-h-[44px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all font-medium"
+          />
+        </div>
+      </div>
+      
+      {/* File Upload Section */}
       <div>
-        <label htmlFor="documentsLink" className="block text-sm font-bold text-gray-800 mb-2">
-          Link para Documentos <span className="text-gray-500">(Opcional)</span>
+        <label className="block text-sm font-bold text-gray-800 mb-2">
+          Enviar Documentos/Fotos <span className="text-gray-500">(Opcional)</span>
         </label>
-        <input
-          id="documentsLink"
-          name="documentsLink"
-          type="url"
-          value={formData.documentsLink || ''}
-          onChange={onChange}
-          placeholder="https://drive.google.com/... ou https://dropbox.com/..."
-          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all font-medium"
-        />
-        <p className="text-xs text-gray-600 mt-1">
-          Pode partilhar um link para documentos, plantas ou imagens no Google Drive, Dropbox ou similar.
-        </p>
+        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors">
+          <input
+            type="file"
+            id="fileUpload"
+            multiple
+            accept="image/*,.pdf,.doc,.docx"
+            onChange={handleFileUpload}
+            className="hidden"
+          />
+          <label 
+            htmlFor="fileUpload" 
+            className="cursor-pointer flex flex-col items-center gap-3"
+          >
+            <Upload className="h-10 w-10 text-primary" />
+            <div>
+              <p className="text-sm font-semibold text-gray-700">
+                Clique para enviar ou arraste ficheiros
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                Imagens, PDF, Word (máx. 10MB por ficheiro, até 5 ficheiros)
+              </p>
+            </div>
+          </label>
+        </div>
+        
+        {/* Uploaded Files Preview */}
+        {uploadedFiles.length > 0 && (
+          <div className="mt-4 space-y-2">
+            {uploadedFiles.map((uploadedFile, index) => (
+              <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                {uploadedFile.preview ? (
+                  <img 
+                    src={uploadedFile.preview} 
+                    alt={`Pré-visualização ${index + 1}`}
+                    className="w-12 h-12 object-cover rounded"
+                  />
+                ) : (
+                  <FileText className="w-12 h-12 text-primary p-2" />
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-700 truncate">
+                    {uploadedFile.file.name}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {(uploadedFile.file.size / 1024 / 1024).toFixed(2)} MB
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeFile(index)}
+                  className="p-2 hover:bg-red-100 rounded-full transition-colors"
+                  aria-label="Remover ficheiro"
+                >
+                  <X className="h-4 w-4 text-red-500" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* GDPR Consent */}

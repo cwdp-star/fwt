@@ -35,7 +35,11 @@ const Footer = () => {
             <div className="md:col-span-2">
               <div className="flex items-center space-x-4 mb-6">
                 <div className="w-32 h-24 flex items-center justify-center">
-                  <img src={ftwLogo} alt={`${companyName} Logo`} className="w-full h-full object-contain brightness-0 invert" />
+                  <img 
+                    src={ftwLogo} 
+                    alt={`${companyName} - Empresa de construção civil e remodelações de luxo em Portugal`} 
+                    className="w-full h-full object-contain brightness-0 invert" 
+                  />
                 </div>
               </div>
               <p className="text-gray-300 mb-6 leading-relaxed text-lg font-inter">

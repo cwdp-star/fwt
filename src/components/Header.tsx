@@ -67,7 +67,7 @@ const Header = () => {
             <Link to="/">
               <img 
                 src={ftwLogo} 
-                alt="FTW Construções" 
+                alt="FTW Construções - Construção Civil Premium e Remodelações de Luxo" 
                 className={`w-auto transition-all duration-300 ${
                   isScrolled ? 'h-16 md:h-20' : 'h-24 md:h-28'
                 }`}
