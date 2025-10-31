@@ -13,7 +13,7 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
 
   return (
-    <div className="min-h-screen bg-background relative">
+    <div className="min-h-screen bg-background relative pt-32 md:pt-36">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="mb-8 relative">
           <h1 className="text-3xl font-bold text-foreground mb-2">
@@ -30,7 +30,7 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-6 relative z-10">
             <TabsTrigger value="overview">Visão Geral</TabsTrigger>
             <TabsTrigger value="quotes">Orçamentos</TabsTrigger>
             <TabsTrigger value="projects">Projetos</TabsTrigger>
