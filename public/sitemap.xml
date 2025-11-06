@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- NOTA: Substitua 'seu-dominio.com' pelo seu domínio real antes do lançamento -->
   <url>
-    <loc>https://rcconstrucoes.pt/</loc>
-    <lastmod>2025-10-30</lastmod>
+    <loc>https://seu-dominio.com/</loc>
+    <lastmod>2025-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://rcconstrucoes.pt/#about</loc>
-    <lastmod>2025-10-30</lastmod>
+    <loc>https://seu-dominio.com/#about</loc>
+    <lastmod>2025-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rcconstrucoes.pt/#services</loc>
-    <lastmod>2025-10-30</lastmod>
+    <loc>https://seu-dominio.com/#services</loc>
+    <lastmod>2025-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rcconstrucoes.pt/#gallery</loc>
-    <lastmod>2025-10-30</lastmod>
+    <loc>https://seu-dominio.com/#gallery</loc>
+    <lastmod>2025-11-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://rcconstrucoes.pt/#contact</loc>
-    <lastmod>2025-10-30</lastmod>
+    <loc>https://seu-dominio.com/#contact</loc>
+    <lastmod>2025-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
