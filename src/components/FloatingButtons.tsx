@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MessageCircle, ArrowUp } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 import { Button } from './ui/button';
 
 const FloatingButtons = () => {
@@ -21,15 +21,6 @@ const FloatingButtons = () => {
     });
   };
 
-  const openWhatsApp = () => {
-    // ALTERE ESTE NÚMERO PARA O NÚMERO REAL DA EMPRESA
-    const phoneNumber = '351965123456'; // Formato: 351 + número sem espaços
-    const message = encodeURIComponent('Olá! Gostaria de solicitar um orçamento para construção civil.');
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    
-    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-  };
-
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
       {/* Scroll to Top Button */}
@@ -43,16 +34,6 @@ const FloatingButtons = () => {
           <ArrowUp className="h-6 w-6" />
         </Button>
       )}
-
-      {/* WhatsApp Button */}
-      <Button
-        onClick={openWhatsApp}
-        size="lg"
-        className="w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20BA5A] text-white shadow-lg transition-all duration-300 hover:scale-110 animate-scale-fade"
-        aria-label="Contactar via WhatsApp"
-      >
-        <MessageCircle className="h-6 w-6" />
-      </Button>
     </div>
   );
 };
