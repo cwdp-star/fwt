@@ -119,7 +119,10 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
 
   const signOut = async () => {
     try {
-      await supabase.auth.signOut();
+      setUser(null);
+      setIsAdmin(false);
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
       toast({
         title: "Sessão Terminada",
         description: "Sessão terminada com sucesso",
