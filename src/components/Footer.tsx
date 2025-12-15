@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Shield, FileText, Cookie, Settings } from 'lucide-react';
+import { Shield, FileText, Cookie } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import PrivacyPolicyModal from './legal/PrivacyPolicyModal';
 import TermsModal from './legal/TermsModal';
@@ -120,15 +120,17 @@ const Footer = () => {
                 </p>
               </div>
               <div className="text-gray-400 text-sm text-center md:text-right font-inter">
-                <p>🔒 Conforme o RGPD (UE 2016/679)</p>
+                <p>
+                  <Link 
+                    to="/auth" 
+                    className="hover:text-primary transition-colors"
+                    title="Painel Admin"
+                  >
+                    🔒
+                  </Link>
+                  {' '}Conforme o RGPD (UE 2016/679)
+                </p>
                 <p className="text-xs mt-1">Os seus dados estão protegidos</p>
-                <Link 
-                  to="/auth" 
-                  className="inline-flex items-center gap-1 text-xs mt-2 text-primary/70 hover:text-primary transition-colors"
-                >
-                  <Settings className="h-3 w-3" />
-                  Painel Admin
-                </Link>
               </div>
             </div>
           </div>
