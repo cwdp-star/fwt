@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import DashboardStats from './DashboardStats';
 import QuoteRequestsManager from './QuoteRequestsManager';
-import ProjectAnalytics from './ProjectAnalytics';
 import MediaManager from './MediaManager';
 import ProjectManager from './ProjectManager';
 import QuickActions from './QuickActions';
@@ -37,12 +36,11 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-6 relative z-10">
+          <TabsList className="grid w-full grid-cols-5 relative z-10">
             <TabsTrigger value="overview">Visão Geral</TabsTrigger>
             <TabsTrigger value="quotes">Orçamentos</TabsTrigger>
             <TabsTrigger value="projects">Projetos</TabsTrigger>
             <TabsTrigger value="media">Mídia</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="settings">Configurações</TabsTrigger>
           </TabsList>
 
@@ -66,12 +64,6 @@ const AdminDashboard = () => {
           <TabsContent value="media" className="space-y-6">
             <div className="bg-card rounded-xl shadow-sm border p-6">
               <MediaManager />
-            </div>
-          </TabsContent>
-
-          <TabsContent value="analytics" className="space-y-6">
-            <div className="bg-white rounded-xl shadow-sm border p-6">
-              <ProjectAnalytics />
             </div>
           </TabsContent>
 

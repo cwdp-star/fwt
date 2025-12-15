@@ -4,8 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Save, Building2, Mail, Share2 } from 'lucide-react';
+import { Save, Building2, Mail, Phone, MapPin, Share2, Globe } from 'lucide-react';
 
 const SiteSettingsManager = () => {
   const { settings, isLoading, updateSetting, getSettingsByCategory } = useSiteSettings();
@@ -26,13 +25,14 @@ const SiteSettingsManager = () => {
     }
   };
 
-  const renderSettingCard = (setting: any) => {
+  const renderSettingField = (setting: any, icon?: React.ReactNode) => {
     const currentValue = editedValues[setting.id] ?? setting.value;
     const hasChanges = editedValues[setting.id] !== undefined;
 
     return (
-      <div key={setting.id} className="space-y-2">
-        <Label htmlFor={setting.key} className="text-sm font-semibold">
+      <div key={setting.id} className="space-y-1.5">
+        <Label htmlFor={setting.key} className="text-sm font-medium flex items-center gap-2">
+          {icon}
           {setting.label}
         </Label>
         {setting.description && (
@@ -61,12 +61,25 @@ const SiteSettingsManager = () => {
   };
 
   if (isLoading) {
-    return <div>A carregar configurações...</div>;
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   const companySettings = getSettingsByCategory('company');
   const contactSettings = getSettingsByCategory('contact');
   const socialSettings = getSettingsByCategory('social');
+
+  // Find specific settings for better organization
+  const siteTitle = companySettings.find(s => s.key === 'site_title');
+  const companyName = companySettings.find(s => s.key === 'company_name');
+  const otherCompanySettings = companySettings.filter(s => !['site_title', 'company_name'].includes(s.key));
+
+  const phone = contactSettings.find(s => s.key === 'company_phone');
+  const email = contactSettings.find(s => s.key === 'company_email');
+  const addressSettings = contactSettings.filter(s => s.key.includes('address'));
 
   return (
     <div className="space-y-6">
@@ -75,68 +88,74 @@ const SiteSettingsManager = () => {
           Configurações do Site
         </h2>
         <p className="text-muted-foreground">
-          Gerir informações da empresa, contactos e redes sociais
+          Gerir todas as informações do website
         </p>
       </div>
 
-      <Tabs defaultValue="company" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="company">
-            <Building2 className="h-4 w-4 mr-2" />
-            Empresa
-          </TabsTrigger>
-          <TabsTrigger value="contact">
-            <Mail className="h-4 w-4 mr-2" />
-            Contactos
-          </TabsTrigger>
-          <TabsTrigger value="social">
-            <Share2 className="h-4 w-4 mr-2" />
-            Redes Sociais
-          </TabsTrigger>
-        </TabsList>
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Site & Company Info */}
+        <Card>
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Globe className="h-5 w-5 text-primary" />
+              Site e Empresa
+            </CardTitle>
+            <CardDescription>
+              Título do site e informações da empresa
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {siteTitle && renderSettingField(siteTitle)}
+            {companyName && renderSettingField(companyName, <Building2 className="h-4 w-4" />)}
+            {otherCompanySettings.map(s => renderSettingField(s))}
+          </CardContent>
+        </Card>
 
-        <TabsContent value="company">
-          <Card>
-            <CardHeader>
-              <CardTitle>Informações da Empresa</CardTitle>
-              <CardDescription>
-                Configure o nome e detalhes da empresa
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {companySettings.map(renderSettingCard)}
-            </CardContent>
-          </Card>
-        </TabsContent>
+        {/* Contact Info */}
+        <Card>
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Mail className="h-5 w-5 text-primary" />
+              Contactos
+            </CardTitle>
+            <CardDescription>
+              Telefone, email e morada
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {phone && renderSettingField(phone, <Phone className="h-4 w-4" />)}
+            {email && renderSettingField(email, <Mail className="h-4 w-4" />)}
+            
+            <div className="pt-2 border-t">
+              <Label className="text-sm font-medium flex items-center gap-2 mb-3">
+                <MapPin className="h-4 w-4" />
+                Morada
+              </Label>
+              <div className="space-y-3 pl-6">
+                {addressSettings.map(s => renderSettingField(s))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-        <TabsContent value="contact">
-          <Card>
-            <CardHeader>
-              <CardTitle>Informações de Contacto</CardTitle>
-              <CardDescription>
-                Telefone, email e morada da empresa
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {contactSettings.map(renderSettingCard)}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="social">
-          <Card>
-            <CardHeader>
-              <CardTitle>Redes Sociais</CardTitle>
-              <CardDescription>
-                URLs das redes sociais da empresa (opcional)
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {socialSettings.map(renderSettingCard)}
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+        {/* Social Media */}
+        <Card className="md:col-span-2">
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Share2 className="h-5 w-5 text-primary" />
+              Redes Sociais
+            </CardTitle>
+            <CardDescription>
+              URLs das redes sociais (opcional)
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-3">
+              {socialSettings.map(s => renderSettingField(s))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
