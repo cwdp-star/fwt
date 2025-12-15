@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 interface MetaTagsProps {
   title?: string;
@@ -14,7 +15,7 @@ interface MetaTagsProps {
 }
 
 export const MetaTags: React.FC<MetaTagsProps> = ({
-  title = "FTW Construções - Especialistas em Estruturas de Betão Armado",
+  title,
   description = "FTW Construções é especializada em estruturas de betão armado, ferro e cofragem. Serviços de construção civil de alta qualidade em todo Portugal.",
   keywords = [
     "FTW Construções",
@@ -35,7 +36,12 @@ export const MetaTags: React.FC<MetaTagsProps> = ({
   ogType = "website",
   structuredData,
 }) => {
-  const fullTitle = title.includes("FTW Construções") ? title : `${title} | FTW Construções`;
+  const { getSettingValue } = useSiteSettings();
+  const siteTitle = getSettingValue('site_title') || 'FTW Construções | Construção Civil Premium';
+  const companyName = getSettingValue('company_name') || 'FTW Construções';
+  
+  const pageTitle = title || siteTitle;
+  const fullTitle = pageTitle.includes(companyName) ? pageTitle : `${pageTitle} | ${companyName}`;
   const metaDescription = description.length > 160 ? description.substring(0, 157) + "..." : description;
 
   return (
@@ -53,7 +59,7 @@ export const MetaTags: React.FC<MetaTagsProps> = ({
       <meta property="og:description" content={ogDescription || metaDescription} />
       <meta property="og:image" content={ogImage} />
       <meta property="og:type" content={ogType} />
-      <meta property="og:site_name" content="FTW Construções" />
+      <meta property="og:site_name" content={companyName} />
       <meta property="og:locale" content="pt_PT" />
       
       {/* Twitter Card Tags */}
@@ -64,7 +70,7 @@ export const MetaTags: React.FC<MetaTagsProps> = ({
       
       {/* Additional SEO Tags */}
       <meta name="robots" content="index, follow" />
-      <meta name="author" content="FTW Construções" />
+      <meta name="author" content={companyName} />
       <meta name="language" content="Portuguese" />
       <meta name="geo.region" content="PT" />
       <meta name="geo.placename" content="Portugal" />
