@@ -79,13 +79,13 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
         if (mounted) setLoading(false);
       });
 
-    // Cleanup timeout to prevent infinite loading
+    // Cleanup timeout to prevent infinite loading (reduced to 3s for better UX)
     const timeout = setTimeout(() => {
       if (mounted) {
         logger.info('Timeout de autenticação atingido');
         setLoading(false);
       }
-    }, 8000);
+    }, 3000);
 
     return () => {
       mounted = false;
