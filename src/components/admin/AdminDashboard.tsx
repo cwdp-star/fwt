@@ -10,7 +10,14 @@ import NotificationCenter from './NotificationCenter';
 import SiteSettingsManager from './SiteSettingsManager';
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  // Persist active tab in sessionStorage to prevent losing state on navigation
+  const [activeTab, setActiveTab] = useState(() => {
+    return sessionStorage.getItem('admin-active-tab') || 'overview';
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem('admin-active-tab', activeTab);
+  }, [activeTab]);
 
   return (
     <div className="min-h-screen bg-background relative pt-32 md:pt-36">

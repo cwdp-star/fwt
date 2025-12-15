@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Image, Calendar, MapPin } from 'lucide-react';
+import { useState } from 'react';
+import { Plus, Edit, Trash2, Image, Calendar, MapPin, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -7,9 +7,11 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useProjects, Project, ProjectImage } from '@/hooks/useProjects';
+import ProjectImageGallery from './ProjectImageGallery';
 
 interface ProjectFormData {
   title: string;
@@ -22,9 +24,10 @@ interface ProjectFormData {
 }
 
 const ProjectManager = () => {
-  const { projects, loading, error, refreshProjects } = useProjects();
+  const { projects, loading, error, refreshProjects } = useProjects(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [expandedProjects, setExpandedProjects] = useState<Set<string>>(new Set());
   const [formData, setFormData] = useState<ProjectFormData>({
     title: '',
     description: '',
@@ -35,6 +38,7 @@ const ProjectManager = () => {
     delivery_date: ''
   });
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
   const resetForm = () => {
@@ -48,21 +52,53 @@ const ProjectManager = () => {
       delivery_date: ''
     });
     setSelectedImages([]);
+    setImagePreviewUrls([]);
     setEditingProject(null);
   };
 
   const handleEdit = (project: Project) => {
     setEditingProject(project);
-        setFormData({
-          title: project.title,
-          description: project.description || '',
-          city: project.city || '',
-          category: project.category || '',
-          start_date: project.start_date || '',
-          end_date: project.end_date || '',
-          delivery_date: project.delivery_date || ''
-        });
+    setFormData({
+      title: project.title,
+      description: project.description || '',
+      city: project.city || '',
+      category: project.category || '',
+      start_date: project.start_date || '',
+      end_date: project.end_date || '',
+      delivery_date: project.delivery_date || ''
+    });
+    setSelectedImages([]);
+    setImagePreviewUrls([]);
     setIsDialogOpen(true);
+  };
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setSelectedImages(files);
+    
+    // Generate preview URLs
+    const urls = files.map(file => URL.createObjectURL(file));
+    setImagePreviewUrls(urls);
+  };
+
+  const removeSelectedImage = (index: number) => {
+    setSelectedImages(prev => prev.filter((_, i) => i !== index));
+    setImagePreviewUrls(prev => {
+      URL.revokeObjectURL(prev[index]);
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
+  const toggleExpanded = (projectId: string) => {
+    setExpandedProjects(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(projectId)) {
+        newSet.delete(projectId);
+      } else {
+        newSet.add(projectId);
+      }
+      return newSet;
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -73,7 +109,6 @@ const ProjectManager = () => {
       let projectId: string;
 
       if (editingProject) {
-        // Update existing project
         const { error: updateError } = await supabase
           .from('projects')
           .update({
@@ -92,7 +127,6 @@ const ProjectManager = () => {
         projectId = editingProject.id;
         toast.success('Projeto atualizado com sucesso!');
       } else {
-        // Create new project
         const { data: projectData, error: createError } = await supabase
           .from('projects')
           .insert({
@@ -113,7 +147,6 @@ const ProjectManager = () => {
         toast.success('Projeto criado com sucesso!');
       }
 
-      // Upload images if any
       if (selectedImages.length > 0) {
         await uploadProjectImages(projectId);
       }
@@ -132,28 +165,25 @@ const ProjectManager = () => {
   const uploadProjectImages = async (projectId: string) => {
     const uploadPromises = selectedImages.map(async (file) => {
       const fileExt = file.name.split('.').pop();
-      const fileName = `${projectId}_${Date.now()}.${fileExt}`;
+      const fileName = `${projectId}_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
       const filePath = `project-images/${fileName}`;
 
-      // Upload to storage
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('project-images')
         .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
-      // Get public URL
       const { data: { publicUrl } } = supabase.storage
         .from('project-images')
         .getPublicUrl(filePath);
 
-      // Save to project_images table
       const { error: insertError } = await supabase
         .from('project_images')
         .insert({
           project_id: projectId,
           url: publicUrl,
-          caption: file.name
+          caption: file.name.replace(/\.[^/.]+$/, '')
         });
 
       if (insertError) throw insertError;
@@ -169,7 +199,6 @@ const ProjectManager = () => {
     }
 
     try {
-      // Delete project images first (cascade should handle this, but let's be explicit)
       const { error: imagesError } = await supabase
         .from('project_images')
         .delete()
@@ -177,7 +206,6 @@ const ProjectManager = () => {
 
       if (imagesError) throw imagesError;
 
-      // Delete project
       const { error: projectError } = await supabase
         .from('projects')
         .delete()
@@ -225,7 +253,7 @@ const ProjectManager = () => {
               Novo Projeto
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingProject ? 'Editar Projeto' : 'Novo Projeto'}
@@ -309,22 +337,41 @@ const ProjectManager = () => {
               </div>
 
               <div>
-                <Label htmlFor="images">Imagens do Projeto</Label>
+                <Label htmlFor="images">Adicionar Imagens</Label>
                 <Input
                   id="images"
                   type="file"
                   multiple
                   accept="image/*"
-                  onChange={(e) => setSelectedImages(Array.from(e.target.files || []))}
+                  onChange={handleImageSelect}
                 />
-                {selectedImages.length > 0 && (
-                  <p className="text-sm text-muted-foreground mt-1">
-                    {selectedImages.length} imagem(ns) selecionada(s)
-                  </p>
+                
+                {/* Preview of selected images */}
+                {imagePreviewUrls.length > 0 && (
+                  <div className="mt-3 grid grid-cols-4 gap-2">
+                    {imagePreviewUrls.map((url, index) => (
+                      <div key={index} className="relative aspect-square group">
+                        <img
+                          src={url}
+                          alt={`Preview ${index + 1}`}
+                          className="w-full h-full object-cover rounded border"
+                        />
+                        <Button
+                          type="button"
+                          size="icon"
+                          variant="destructive"
+                          className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => removeSelectedImage(index)}
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
 
-              <div className="flex justify-end gap-2">
+              <div className="flex justify-end gap-2 pt-4">
                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
                   Cancelar
                 </Button>
@@ -337,7 +384,7 @@ const ProjectManager = () => {
         </Dialog>
       </div>
 
-      <div className="grid gap-6">
+      <div className="grid gap-4">
         {projects.length === 0 ? (
           <Card>
             <CardContent className="text-center py-20">
@@ -347,73 +394,92 @@ const ProjectManager = () => {
           </Card>
         ) : (
           projects.map((project) => (
-            <Card key={project.id}>
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="flex items-center gap-2">
-                      {project.title}
-                      <Badge variant="secondary">{project.images.length} fotos</Badge>
-                    </CardTitle>
-                    <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                      {project.city && (
-                        <div className="flex items-center gap-1">
-                          <MapPin className="h-3 w-3" />
-                          {project.city}
+            <Collapsible
+              key={project.id}
+              open={expandedProjects.has(project.id)}
+              onOpenChange={() => toggleExpanded(project.id)}
+            >
+              <Card>
+                <CardHeader className="pb-3">
+                  <div className="flex justify-between items-start">
+                    <CollapsibleTrigger className="flex-1 text-left">
+                      <div className="flex items-center gap-3">
+                        <div className="flex-1">
+                          <CardTitle className="flex items-center gap-2">
+                            {project.title}
+                            <Badge variant="secondary">{project.images.length} fotos</Badge>
+                            {project.category && (
+                              <Badge variant="outline">{project.category}</Badge>
+                            )}
+                          </CardTitle>
+                          <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                            {project.city && (
+                              <div className="flex items-center gap-1">
+                                <MapPin className="h-3 w-3" />
+                                {project.city}
+                              </div>
+                            )}
+                            {project.end_date && (
+                              <div className="flex items-center gap-1">
+                                <Calendar className="h-3 w-3" />
+                                {new Date(project.end_date).toLocaleDateString('pt-BR')}
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      )}
-                      {project.end_date && (
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          {new Date(project.end_date).toLocaleDateString('pt-BR')}
-                        </div>
-                      )}
+                        {expandedProjects.has(project.id) ? (
+                          <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                        ) : (
+                          <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                        )}
+                      </div>
+                    </CollapsibleTrigger>
+                    <div className="flex gap-2 ml-4">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEdit(project);
+                        }}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(project.id, project.title);
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEdit(project)}
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDelete(project.id, project.title)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-              
-              {project.description && (
-                <CardContent>
-                  <p className="text-muted-foreground">{project.description}</p>
-                  
-                  {project.images.length > 0 && (
-                    <div className="mt-4 grid grid-cols-4 gap-2">
-                      {project.images.slice(0, 4).map((image, idx) => (
-                        <div key={image.id} className="relative aspect-square">
-                          <img
-                            src={image.url}
-                            alt={image.caption || project.title}
-                            className="w-full h-full object-cover rounded"
-                          />
-                          {idx === 3 && project.images.length > 4 && (
-                            <div className="absolute inset-0 bg-black/50 rounded flex items-center justify-center text-white text-sm">
-                              +{project.images.length - 4}
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                </CardHeader>
+                
+                <CollapsibleContent>
+                  <CardContent className="pt-0">
+                    {project.description && (
+                      <p className="text-muted-foreground mb-4">{project.description}</p>
+                    )}
+                    
+                    <div className="border-t pt-4">
+                      <h4 className="font-medium mb-3 flex items-center gap-2">
+                        <Image className="h-4 w-4" />
+                        Galeria de Imagens ({project.images.length})
+                      </h4>
+                      <ProjectImageGallery
+                        images={project.images}
+                        projectTitle={project.title}
+                        onImageDeleted={refreshProjects}
+                      />
                     </div>
-                  )}
-                </CardContent>
-              )}
-            </Card>
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
           ))
         )}
       </div>
