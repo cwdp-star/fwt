@@ -34,10 +34,35 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
   useEffect(() => {
     let mounted = true;
 
-    const initializeAuth = async () => {
-      try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
+    const scheduleAdminCheck = (userId?: string) => {
+      if (!mounted) return;
+
+      if (!userId) {
+        setIsAdmin(false);
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      setTimeout(() => {
+        if (mounted) checkAdminStatus(userId);
+      }, 0);
+    };
+
+    // Listen for auth changes FIRST (avoid missing events)
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!mounted) return;
+
+      setUser(session?.user ?? null);
+      scheduleAdminCheck(session?.user?.id);
+    });
+
+    // THEN check for existing session
+    supabase.auth
+      .getSession()
+      .then(({ data: { session }, error }) => {
         if (!mounted) return;
 
         if (error) {
@@ -47,36 +72,12 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
         }
 
         setUser(session?.user ?? null);
-        
-        if (session?.user) {
-          await checkAdminStatus(session.user.id);
-        } else {
-          setLoading(false);
-        }
-      } catch (error) {
+        scheduleAdminCheck(session?.user?.id);
+      })
+      .catch((error) => {
         logger.error('Erro na inicialização da auth:', error);
         if (mounted) setLoading(false);
-      }
-    };
-
-    // Initialize auth state
-    initializeAuth();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (!mounted) return;
-
-        setUser(session?.user ?? null);
-        
-        if (session?.user) {
-          await checkAdminStatus(session.user.id);
-        } else {
-          setIsAdmin(false);
-          setLoading(false);
-        }
-      }
-    );
+      });
 
     // Cleanup timeout to prevent infinite loading
     const timeout = setTimeout(() => {
