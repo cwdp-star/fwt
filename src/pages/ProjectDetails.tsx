@@ -393,7 +393,7 @@ const ProjectDetails = () => {
             >
               {/* Galeria de Imagens */}
               {project.images.length > 0 ? (
-                <Card className="overflow-hidden border-border/50 shadow-xl">
+                <Card className="overflow-hidden border-0 shadow-xl bg-card/80 backdrop-blur-sm">
                   <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle className="flex items-center gap-2">
                       <ImageIcon className="h-5 w-5 text-primary" />
@@ -576,7 +576,7 @@ const ProjectDetails = () => {
                   </CardContent>
                 </Card>
               ) : (
-                <Card>
+                <Card className="border-0 bg-card/50">
                   <CardContent className="py-12 text-center text-muted-foreground">
                     <ImageIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
                     <p>Nenhuma imagem disponível para este projeto</p>
@@ -586,7 +586,7 @@ const ProjectDetails = () => {
 
               {/* Descrição */}
               {project.description && (
-                <Card className="border-border/50 shadow-lg">
+                <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <span className="w-1 h-6 bg-primary rounded-full" />
@@ -610,7 +610,7 @@ const ProjectDetails = () => {
               className="space-y-6"
             >
               {/* Detalhes do Projeto */}
-              <Card className="border-border/50 shadow-lg backdrop-blur-sm">
+              <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm">
                 <CardHeader>
                   <CardTitle>Detalhes do Projeto</CardTitle>
                 </CardHeader>
@@ -649,7 +649,7 @@ const ProjectDetails = () => {
               </Card>
 
               {/* Call to Action */}
-              <Card className="bg-gradient-to-br from-primary/20 via-primary/10 to-secondary/10 border-primary/30 shadow-lg shadow-primary/10 overflow-hidden relative">
+              <Card className="bg-gradient-to-br from-primary/20 via-primary/10 to-secondary/10 border-0 shadow-lg shadow-primary/10 overflow-hidden relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
                 <CardHeader className="relative">
                   <motion.div
