@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft, Calendar, MapPin, User, ImageIcon, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, User, ImageIcon, ChevronLeft, ChevronRight, ZoomIn, Play, Pause } from 'lucide-react';
 import { ProjectWithImages } from '@/hooks/useProjects';
 import { ImageLightbox } from '@/components/lightbox/ImageLightbox';
 import { MetaTags } from '@/components/seo/MetaTags';
@@ -21,6 +21,8 @@ const ProjectDetails = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [isSlideshow, setIsSlideshow] = useState(false);
+  const [slideshowSpeed, setSlideshowSpeed] = useState(4);
 
   // Parallax scroll effect
   const { scrollY } = useScroll();
@@ -134,6 +136,22 @@ const ProjectDetails = () => {
     if (!project?.images.length) return;
     setDirection(1);
     setSelectedIndex((prev) => (prev + 1) % project.images.length);
+  };
+
+  // Slideshow automático
+  useEffect(() => {
+    if (!isSlideshow || !project?.images.length) return;
+
+    const timer = setInterval(() => {
+      setDirection(1);
+      setSelectedIndex((prev) => (prev + 1) % project.images.length);
+    }, slideshowSpeed * 1000);
+
+    return () => clearInterval(timer);
+  }, [isSlideshow, slideshowSpeed, project?.images.length]);
+
+  const toggleSlideshow = () => {
+    setIsSlideshow(prev => !prev);
   };
 
   // Swipe handlers para mobile
@@ -375,12 +393,36 @@ const ProjectDetails = () => {
             >
               {/* Galeria de Imagens */}
               {project.images.length > 0 ? (
-                <Card>
-                  <CardHeader>
+                <Card className="overflow-hidden border-border/50 shadow-xl">
+                  <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle className="flex items-center gap-2">
-                      <ImageIcon className="h-5 w-5" />
+                      <ImageIcon className="h-5 w-5 text-primary" />
                       Galeria de Imagens ({project.images.length})
                     </CardTitle>
+                    {project.images.length > 1 && (
+                      <motion.button
+                        onClick={toggleSlideshow}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-colors ${
+                          isSlideshow 
+                            ? 'bg-primary text-primary-foreground' 
+                            : 'bg-muted hover:bg-muted/80'
+                        }`}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        {isSlideshow ? (
+                          <>
+                            <Pause className="h-4 w-4" />
+                            <span className="hidden sm:inline">Pausar</span>
+                          </>
+                        ) : (
+                          <>
+                            <Play className="h-4 w-4" />
+                            <span className="hidden sm:inline">Slideshow</span>
+                          </>
+                        )}
+                      </motion.button>
+                    )}
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {/* Imagem Principal com Swipe */}
@@ -544,12 +586,15 @@ const ProjectDetails = () => {
 
               {/* Descrição */}
               {project.description && (
-                <Card>
+                <Card className="border-border/50 shadow-lg">
                   <CardHeader>
-                    <CardTitle>Sobre o Projeto</CardTitle>
+                    <CardTitle className="flex items-center gap-2">
+                      <span className="w-1 h-6 bg-primary rounded-full" />
+                      Sobre o Projeto
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                    <p className="text-muted-foreground whitespace-pre-wrap leading-relaxed text-lg">
                       {project.description}
                     </p>
                   </CardContent>
@@ -565,7 +610,7 @@ const ProjectDetails = () => {
               className="space-y-6"
             >
               {/* Detalhes do Projeto */}
-              <Card>
+              <Card className="border-border/50 shadow-lg backdrop-blur-sm">
                 <CardHeader>
                   <CardTitle>Detalhes do Projeto</CardTitle>
                 </CardHeader>
@@ -604,20 +649,44 @@ const ProjectDetails = () => {
               </Card>
 
               {/* Call to Action */}
-              <Card className="bg-gradient-to-br from-primary/10 to-secondary/10 border-primary/20">
-                <CardHeader>
-                  <CardTitle>Interessado em um projeto similar?</CardTitle>
-                  <CardDescription>
-                    Entre em contato conosco para discutir seu projeto
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button 
-                    className="w-full" 
-                    onClick={() => navigate('/#contact')}
+              <Card className="bg-gradient-to-br from-primary/20 via-primary/10 to-secondary/10 border-primary/30 shadow-lg shadow-primary/10 overflow-hidden relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
+                <CardHeader className="relative">
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
                   >
-                    Solicitar Orçamento
-                  </Button>
+                    <CardTitle className="text-xl">Interessado em um projeto similar?</CardTitle>
+                    <CardDescription className="text-base mt-2">
+                      Entre em contato conosco para discutir seu projeto. Teremos o maior prazer em ajudá-lo a concretizar a sua visão.
+                    </CardDescription>
+                  </motion.div>
+                </CardHeader>
+                <CardContent className="relative">
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Button 
+                      className="w-full text-lg py-6 font-semibold shadow-lg" 
+                      size="lg"
+                      onClick={() => {
+                        navigate('/');
+                        setTimeout(() => {
+                          const contactSection = document.getElementById('contact');
+                          if (contactSection) {
+                            contactSection.scrollIntoView({ behavior: 'smooth' });
+                          }
+                        }, 100);
+                      }}
+                    >
+                      Solicitar Orçamento Gratuito
+                    </Button>
+                  </motion.div>
+                  <p className="text-center text-xs text-muted-foreground mt-3">
+                    Resposta em até 24 horas úteis
+                  </p>
                 </CardContent>
               </Card>
             </motion.div>
