@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft, Calendar, MapPin, User, ImageIcon } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, User, ImageIcon, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 import { ProjectWithImages } from '@/hooks/useProjects';
 import { ImageLightbox } from '@/components/lightbox/ImageLightbox';
 import { MetaTags } from '@/components/seo/MetaTags';
@@ -18,7 +18,7 @@ const ProjectDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
     window.scrollTo({
@@ -81,6 +81,22 @@ const ProjectDetails = () => {
     fetchProject();
   }, [id]);
 
+  // Navegação por teclado
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!project?.images.length) return;
+      
+      if (e.key === 'ArrowLeft') {
+        setSelectedIndex((prev) => (prev - 1 + project.images.length) % project.images.length);
+      } else if (e.key === 'ArrowRight') {
+        setSelectedIndex((prev) => (prev + 1) % project.images.length);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [project?.images.length]);
+
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'Data não informada';
     try {
@@ -92,9 +108,22 @@ const ProjectDetails = () => {
     }
   };
 
-  const handleImageClick = (index: number) => {
-    setLightboxIndex(index);
+  const handleThumbnailClick = (index: number) => {
+    setSelectedIndex(index);
+  };
+
+  const handleMainImageClick = () => {
     setLightboxOpen(true);
+  };
+
+  const goToPrevious = () => {
+    if (!project?.images.length) return;
+    setSelectedIndex((prev) => (prev - 1 + project.images.length) % project.images.length);
+  };
+
+  const goToNext = () => {
+    if (!project?.images.length) return;
+    setSelectedIndex((prev) => (prev + 1) % project.images.length);
   };
 
   if (loading) {
@@ -252,29 +281,92 @@ const ProjectDetails = () => {
                       Galeria de Imagens ({project.images.length})
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      {project.images.map((image, index) => (
-                        <motion.div
-                          key={image.id}
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 0.3, delay: index * 0.05 }}
-                          className="relative aspect-square rounded-lg overflow-hidden cursor-pointer group"
-                          onClick={() => handleImageClick(index)}
-                        >
-                          <img
-                            src={image.url}
-                            alt={image.caption || `${project.title} - Imagem ${index + 1}`}
-                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                            loading="lazy"
-                          />
-                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
-                            <ImageIcon className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                          </div>
-                        </motion.div>
-                      ))}
+                  <CardContent className="space-y-4">
+                    {/* Imagem Principal */}
+                    <div className="relative aspect-video rounded-lg overflow-hidden group">
+                      <motion.img
+                        key={selectedIndex}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                        src={project.images[selectedIndex]?.url}
+                        alt={project.images[selectedIndex]?.caption || `${project.title} - Imagem ${selectedIndex + 1}`}
+                        className="w-full h-full object-cover cursor-pointer"
+                        onClick={handleMainImageClick}
+                      />
+                      
+                      {/* Overlay com ícone de zoom */}
+                      <div 
+                        className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center cursor-pointer"
+                        onClick={handleMainImageClick}
+                      >
+                        <ZoomIn className="h-10 w-10 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" />
+                      </div>
+
+                      {/* Botões de navegação */}
+                      {project.images.length > 1 && (
+                        <>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); goToPrevious(); }}
+                            className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+                            aria-label="Imagem anterior"
+                          >
+                            <ChevronLeft className="h-6 w-6" />
+                          </button>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); goToNext(); }}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+                            aria-label="Próxima imagem"
+                          >
+                            <ChevronRight className="h-6 w-6" />
+                          </button>
+                        </>
+                      )}
+
+                      {/* Contador de imagens */}
+                      <div className="absolute bottom-3 right-3 bg-black/60 text-white text-sm px-3 py-1 rounded-full">
+                        {selectedIndex + 1} / {project.images.length}
+                      </div>
                     </div>
+
+                    {/* Legenda da imagem atual */}
+                    {project.images[selectedIndex]?.caption && (
+                      <p className="text-center text-muted-foreground text-sm italic">
+                        {project.images[selectedIndex].caption}
+                      </p>
+                    )}
+
+                    {/* Miniaturas */}
+                    {project.images.length > 1 && (
+                      <div className="flex gap-2 overflow-x-auto pb-2">
+                        {project.images.map((image, index) => (
+                          <motion.button
+                            key={image.id}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.2, delay: index * 0.03 }}
+                            onClick={() => handleThumbnailClick(index)}
+                            className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden transition-all duration-200 ${
+                              index === selectedIndex 
+                                ? 'ring-2 ring-primary ring-offset-2' 
+                                : 'opacity-60 hover:opacity-100'
+                            }`}
+                          >
+                            <img
+                              src={image.url}
+                              alt={image.caption || `Miniatura ${index + 1}`}
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
+                          </motion.button>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Dica de navegação */}
+                    <p className="text-center text-muted-foreground text-xs">
+                      Use as setas ← → do teclado para navegar
+                    </p>
                   </CardContent>
                 </Card>
               ) : (
@@ -373,11 +465,11 @@ const ProjectDetails = () => {
       {project.images.length > 0 && (
         <ImageLightbox
           images={project.images}
-          currentIndex={lightboxIndex}
+          currentIndex={selectedIndex}
           isOpen={lightboxOpen}
           onClose={() => setLightboxOpen(false)}
-          onNext={() => setLightboxIndex((prev) => (prev + 1) % project.images.length)}
-          onPrevious={() => setLightboxIndex((prev) => (prev - 1 + project.images.length) % project.images.length)}
+          onNext={() => setSelectedIndex((prev) => (prev + 1) % project.images.length)}
+          onPrevious={() => setSelectedIndex((prev) => (prev - 1 + project.images.length) % project.images.length)}
         />
       )}
     </>
