@@ -472,6 +472,7 @@ const ProjectManager = () => {
                       </h4>
                       <ProjectImageGallery
                         images={project.images}
+                        projectId={project.id}
                         projectTitle={project.title}
                         onImageDeleted={refreshProjects}
                       />

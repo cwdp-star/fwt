@@ -26,16 +26,33 @@ interface SecurityProviderProps {
 }
 
 export const SecurityProvider = ({ children }: SecurityProviderProps) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
+  // Initialize from sessionStorage to prevent flash on tab switch
+  const [user, setUser] = useState<User | null>(() => {
+    const cached = sessionStorage.getItem('auth-user');
+    return cached ? JSON.parse(cached) : null;
+  });
+  const [isAdmin, setIsAdmin] = useState(() => {
+    return sessionStorage.getItem('auth-isAdmin') === 'true';
+  });
+  const [loading, setLoading] = useState(() => {
+    // If we have cached user, don't show loading
+    return !sessionStorage.getItem('auth-user');
+  });
   const { toast } = useToast();
 
   useEffect(() => {
     let mounted = true;
 
-    const scheduleAdminCheck = (userId?: string) => {
+    const scheduleAdminCheck = (userId?: string, userObj?: User | null) => {
       if (!mounted) return;
+
+      // Cache user in sessionStorage
+      if (userObj) {
+        sessionStorage.setItem('auth-user', JSON.stringify(userObj));
+      } else {
+        sessionStorage.removeItem('auth-user');
+        sessionStorage.removeItem('auth-isAdmin');
+      }
 
       if (!userId) {
         setIsAdmin(false);
@@ -43,7 +60,10 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
         return;
       }
 
-      setLoading(true);
+      // Only show loading if we don't have cached admin status
+      if (!sessionStorage.getItem('auth-isAdmin')) {
+        setLoading(true);
+      }
       setTimeout(() => {
         if (mounted) checkAdminStatus(userId);
       }, 0);
@@ -56,7 +76,7 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
       if (!mounted) return;
 
       setUser(session?.user ?? null);
-      scheduleAdminCheck(session?.user?.id);
+      scheduleAdminCheck(session?.user?.id, session?.user);
     });
 
     // THEN check for existing session
@@ -72,7 +92,7 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
         }
 
         setUser(session?.user ?? null);
-        scheduleAdminCheck(session?.user?.id);
+        scheduleAdminCheck(session?.user?.id, session?.user);
       })
       .catch((error) => {
         logger.error('Erro na inicialização da auth:', error);
@@ -106,13 +126,16 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
       if (error && error.code !== 'PGRST116') {
         logger.error('Erro ao verificar status de admin:', error);
         setIsAdmin(false);
+        sessionStorage.setItem('auth-isAdmin', 'false');
       } else {
         const isAdminUser = data?.role === 'admin';
         setIsAdmin(isAdminUser);
+        sessionStorage.setItem('auth-isAdmin', String(isAdminUser));
       }
     } catch (error) {
       logger.error('Erro geral:', error);
       setIsAdmin(false);
+      sessionStorage.setItem('auth-isAdmin', 'false');
     } finally {
       setLoading(false);
     }
@@ -122,6 +145,8 @@ export const SecurityProvider = ({ children }: SecurityProviderProps) => {
     try {
       setUser(null);
       setIsAdmin(false);
+      sessionStorage.removeItem('auth-user');
+      sessionStorage.removeItem('auth-isAdmin');
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       toast({
