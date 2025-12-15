@@ -39,6 +39,7 @@ const ProjectManager = () => {
   });
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
+  const [imageCaptions, setImageCaptions] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
   const resetForm = () => {
@@ -53,6 +54,7 @@ const ProjectManager = () => {
     });
     setSelectedImages([]);
     setImagePreviewUrls([]);
+    setImageCaptions([]);
     setEditingProject(null);
   };
 
@@ -74,11 +76,20 @@ const ProjectManager = () => {
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    setSelectedImages(files);
+    setSelectedImages(prev => [...prev, ...files]);
     
     // Generate preview URLs
     const urls = files.map(file => URL.createObjectURL(file));
-    setImagePreviewUrls(urls);
+    setImagePreviewUrls(prev => [...prev, ...urls]);
+    setImageCaptions(prev => [...prev, ...files.map(() => '')]);
+  };
+
+  const updateImageCaption = (index: number, caption: string) => {
+    setImageCaptions(prev => {
+      const newCaptions = [...prev];
+      newCaptions[index] = caption;
+      return newCaptions;
+    });
   };
 
   const removeSelectedImage = (index: number) => {
@@ -87,6 +98,7 @@ const ProjectManager = () => {
       URL.revokeObjectURL(prev[index]);
       return prev.filter((_, i) => i !== index);
     });
+    setImageCaptions(prev => prev.filter((_, i) => i !== index));
   };
 
   const toggleExpanded = (projectId: string) => {
@@ -163,7 +175,7 @@ const ProjectManager = () => {
   };
 
   const uploadProjectImages = async (projectId: string) => {
-    const uploadPromises = selectedImages.map(async (file) => {
+    const uploadPromises = selectedImages.map(async (file, index) => {
       const fileExt = file.name.split('.').pop();
       const fileName = `${projectId}_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
       const filePath = `project-images/${fileName}`;
@@ -183,7 +195,7 @@ const ProjectManager = () => {
         .insert({
           project_id: projectId,
           url: publicUrl,
-          caption: file.name.replace(/\.[^/.]+$/, '')
+          caption: imageCaptions[index] || ''
         });
 
       if (insertError) throw insertError;
@@ -336,40 +348,60 @@ const ProjectManager = () => {
                 </div>
               </div>
 
-              <div>
-                <Label htmlFor="images">Adicionar Imagens</Label>
-                <Input
-                  id="images"
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={handleImageSelect}
-                />
-                
-                {/* Preview of selected images */}
-                {imagePreviewUrls.length > 0 && (
-                  <div className="mt-3 grid grid-cols-4 gap-2">
-                    {imagePreviewUrls.map((url, index) => (
-                      <div key={index} className="relative aspect-square group">
-                        <img
-                          src={url}
-                          alt={`Preview ${index + 1}`}
-                          className="w-full h-full object-cover rounded border"
-                        />
-                        <Button
-                          type="button"
-                          size="icon"
-                          variant="destructive"
-                          className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                          onClick={() => removeSelectedImage(index)}
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+              {/* Only show image upload on creation, not editing */}
+              {!editingProject && (
+                <div>
+                  <Label htmlFor="images">Imagens do Projeto</Label>
+                  <Input
+                    id="images"
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleImageSelect}
+                  />
+                  
+                  {/* Preview of selected images with caption input */}
+                  {imagePreviewUrls.length > 0 && (
+                    <div className="mt-3 space-y-3">
+                      {imagePreviewUrls.map((url, index) => (
+                        <div key={index} className="flex gap-3 items-start p-2 border rounded-lg bg-muted/30">
+                          <div className="relative w-20 h-20 shrink-0">
+                            <img
+                              src={url}
+                              alt={`Preview ${index + 1}`}
+                              className="w-full h-full object-cover rounded"
+                            />
+                            <Button
+                              type="button"
+                              size="icon"
+                              variant="destructive"
+                              className="absolute -top-2 -right-2 h-5 w-5"
+                              onClick={() => removeSelectedImage(index)}
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </div>
+                          <div className="flex-1">
+                            <Label className="text-xs text-muted-foreground">Legenda</Label>
+                            <Input
+                              placeholder="Legenda da imagem..."
+                              value={imageCaptions[index] || ''}
+                              onChange={(e) => updateImageCaption(index, e.target.value)}
+                              className="h-8"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {editingProject && (
+                <p className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg">
+                  Para gerir as imagens deste projeto, utilize a galeria na lista de projetos (clique para expandir o projeto).
+                </p>
+              )}
 
               <div className="flex justify-end gap-2 pt-4">
                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
@@ -474,7 +506,7 @@ const ProjectManager = () => {
                         images={project.images}
                         projectId={project.id}
                         projectTitle={project.title}
-                        onImageDeleted={refreshProjects}
+                        onImagesChanged={refreshProjects}
                       />
                     </div>
                   </CardContent>

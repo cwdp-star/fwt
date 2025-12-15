@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
-import { X, Trash2, ZoomIn, Upload, ImagePlus } from 'lucide-react';
+import { X, Trash2, ZoomIn, Upload, ImagePlus, GripVertical, Pencil, Check, MoveUp, MoveDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -15,14 +16,23 @@ interface ProjectImageGalleryProps {
   images: ProjectImage[];
   projectId: string;
   projectTitle: string;
-  onImageDeleted: () => void;
+  onImagesChanged: () => void;
 }
 
-const ProjectImageGallery = ({ images, projectId, projectTitle, onImageDeleted }: ProjectImageGalleryProps) => {
+const ProjectImageGallery = ({ images, projectId, projectTitle, onImagesChanged }: ProjectImageGalleryProps) => {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<ProjectImage | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [editingCaptionId, setEditingCaptionId] = useState<string | null>(null);
+  const [editingCaptionText, setEditingCaptionText] = useState('');
+  const [savingCaption, setSavingCaption] = useState(false);
+  const [localImages, setLocalImages] = useState<ProjectImage[]>(images);
+
+  // Sync local images with props
+  useState(() => {
+    setLocalImages(images);
+  });
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -85,7 +95,7 @@ const ProjectImageGallery = ({ images, projectId, projectTitle, onImageDeleted }
           .insert({
             project_id: projectId,
             url: publicUrl,
-            caption: file.name.replace(/\.[^/.]+$/, '')
+            caption: ''
           });
 
         if (insertError) throw insertError;
@@ -93,7 +103,7 @@ const ProjectImageGallery = ({ images, projectId, projectTitle, onImageDeleted }
 
       await Promise.all(uploadPromises);
       toast.success(`${files.length} imagem(ns) adicionada(s) com sucesso!`);
-      onImageDeleted();
+      onImagesChanged();
     } catch (error) {
       console.error('Erro ao fazer upload:', error);
       toast.error('Erro ao fazer upload das imagens.');
@@ -103,7 +113,7 @@ const ProjectImageGallery = ({ images, projectId, projectTitle, onImageDeleted }
   };
 
   const handleDeleteImage = async (image: ProjectImage) => {
-    if (!confirm(`Tem certeza que deseja excluir esta imagem?`)) {
+    if (!confirm('Tem certeza que deseja excluir esta imagem?')) {
       return;
     }
 
@@ -124,7 +134,7 @@ const ProjectImageGallery = ({ images, projectId, projectTitle, onImageDeleted }
       if (error) throw error;
 
       toast.success('Imagem excluída com sucesso!');
-      onImageDeleted();
+      onImagesChanged();
     } catch (error) {
       console.error('Erro ao excluir imagem:', error);
       toast.error('Erro ao excluir imagem. Tente novamente.');
@@ -132,6 +142,63 @@ const ProjectImageGallery = ({ images, projectId, projectTitle, onImageDeleted }
       setDeletingId(null);
     }
   };
+
+  const startEditCaption = (image: ProjectImage) => {
+    setEditingCaptionId(image.id);
+    setEditingCaptionText(image.caption || '');
+  };
+
+  const saveCaption = async () => {
+    if (!editingCaptionId) return;
+    
+    setSavingCaption(true);
+    try {
+      const { error } = await supabase
+        .from('project_images')
+        .update({ caption: editingCaptionText })
+        .eq('id', editingCaptionId);
+
+      if (error) throw error;
+
+      toast.success('Legenda atualizada!');
+      setEditingCaptionId(null);
+      onImagesChanged();
+    } catch (error) {
+      console.error('Erro ao salvar legenda:', error);
+      toast.error('Erro ao salvar legenda.');
+    } finally {
+      setSavingCaption(false);
+    }
+  };
+
+  const moveImage = async (index: number, direction: 'up' | 'down') => {
+    const newIndex = direction === 'up' ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex >= images.length) return;
+
+    // Swap images in local state for immediate feedback
+    const newImages = [...images];
+    [newImages[index], newImages[newIndex]] = [newImages[newIndex], newImages[index]];
+    setLocalImages(newImages);
+
+    // Update timestamps to change order in database
+    try {
+      const now = new Date();
+      const updates = newImages.map((img, idx) => 
+        supabase
+          .from('project_images')
+          .update({ updated_at: new Date(now.getTime() - idx * 1000).toISOString() })
+          .eq('id', img.id)
+      );
+
+      await Promise.all(updates);
+      onImagesChanged();
+    } catch (error) {
+      console.error('Erro ao reordenar:', error);
+      toast.error('Erro ao reordenar imagens.');
+    }
+  };
+
+  const displayImages = localImages.length > 0 ? localImages : images;
 
   return (
     <>
@@ -182,53 +249,110 @@ const ProjectImageGallery = ({ images, projectId, projectTitle, onImageDeleted }
       </div>
 
       {/* Image Grid */}
-      {images.length === 0 ? (
+      {displayImages.length === 0 ? (
         <div className="text-center py-6 text-muted-foreground">
           <p>Nenhuma imagem neste projeto</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {images.map((image) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {displayImages.map((image, index) => (
             <div
               key={image.id}
-              className="relative group aspect-square rounded-lg overflow-hidden border bg-muted"
+              className="relative group rounded-lg overflow-hidden border bg-muted"
             >
-              <img
-                src={image.url}
-                alt={image.caption || projectTitle}
-                className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                loading="lazy"
-              />
+              {/* Image */}
+              <div className="aspect-square">
+                <img
+                  src={image.url}
+                  alt={image.caption || projectTitle}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
               
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+              {/* Overlay actions */}
+              <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                 <Button
                   size="icon"
                   variant="secondary"
-                  className="h-8 w-8"
+                  className="h-7 w-7"
                   onClick={() => setPreviewImage(image)}
                 >
-                  <ZoomIn className="h-4 w-4" />
+                  <ZoomIn className="h-3 w-3" />
                 </Button>
                 <Button
                   size="icon"
                   variant="destructive"
-                  className="h-8 w-8"
+                  className="h-7 w-7"
                   onClick={() => handleDeleteImage(image)}
                   disabled={deletingId === image.id}
                 >
                   {deletingId === image.id ? (
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />
                   ) : (
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-3 w-3" />
                   )}
                 </Button>
               </div>
 
-              {image.caption && (
-                <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs p-1 truncate">
-                  {image.caption}
-                </div>
-              )}
+              {/* Reorder buttons */}
+              <div className="absolute top-2 left-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  className="h-7 w-7"
+                  onClick={() => moveImage(index, 'up')}
+                  disabled={index === 0}
+                >
+                  <MoveUp className="h-3 w-3" />
+                </Button>
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  className="h-7 w-7"
+                  onClick={() => moveImage(index, 'down')}
+                  disabled={index === displayImages.length - 1}
+                >
+                  <MoveDown className="h-3 w-3" />
+                </Button>
+              </div>
+
+              {/* Caption section */}
+              <div className="p-2 bg-background border-t">
+                {editingCaptionId === image.id ? (
+                  <div className="flex gap-2">
+                    <Input
+                      value={editingCaptionText}
+                      onChange={(e) => setEditingCaptionText(e.target.value)}
+                      placeholder="Legenda da imagem..."
+                      className="h-8 text-sm"
+                      onKeyDown={(e) => e.key === 'Enter' && saveCaption()}
+                    />
+                    <Button
+                      size="icon"
+                      className="h-8 w-8 shrink-0"
+                      onClick={saveCaption}
+                      disabled={savingCaption}
+                    >
+                      {savingCaption ? (
+                        <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                      ) : (
+                        <Check className="h-3 w-3" />
+                      )}
+                    </Button>
+                  </div>
+                ) : (
+                  <div 
+                    className="flex items-center gap-2 cursor-pointer hover:bg-muted/50 rounded p-1 -m-1"
+                    onClick={() => startEditCaption(image)}
+                  >
+                    <Pencil className="h-3 w-3 text-muted-foreground shrink-0" />
+                    <span className="text-sm text-muted-foreground truncate">
+                      {image.caption || 'Clique para adicionar legenda...'}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
