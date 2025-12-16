@@ -5,8 +5,13 @@ import MediaManager from './MediaManager';
 import ProjectManager from './ProjectManager';
 import NotificationCenter from './NotificationCenter';
 import SiteSettingsManager from './SiteSettingsManager';
+import PushNotificationSubscriber from './PushNotificationSubscriber';
+import { usePendingQuotesCount } from '@/hooks/usePendingQuotesCount';
+import { Badge } from '@/components/ui/badge';
 
 const AdminDashboard = () => {
+  const { count: pendingCount } = usePendingQuotesCount();
+  
   // Persist active tab in sessionStorage to prevent losing state on navigation
   const [activeTab, setActiveTab] = useState(() => {
     const saved = sessionStorage.getItem('admin-active-tab');
@@ -29,15 +34,26 @@ const AdminDashboard = () => {
             Gerir orçamentos e conteúdo do website
           </p>
 
-          {/* Add Notification Center to header */}
-          <div className="absolute top-0 right-0">
+          {/* Add Notification Center and Push Subscriber to header */}
+          <div className="absolute top-0 right-0 flex items-center gap-2">
+            <PushNotificationSubscriber />
             <NotificationCenter />
           </div>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-4 relative z-10">
-            <TabsTrigger value="quotes">Orçamentos</TabsTrigger>
+            <TabsTrigger value="quotes" className="relative">
+              Orçamentos
+              {pendingCount > 0 && (
+                <Badge 
+                  variant="destructive" 
+                  className="absolute -top-2 -right-2 h-5 min-w-5 flex items-center justify-center text-xs px-1.5 animate-pulse"
+                >
+                  {pendingCount > 99 ? '99+' : pendingCount}
+                </Badge>
+              )}
+            </TabsTrigger>
             <TabsTrigger value="projects">Projetos</TabsTrigger>
             <TabsTrigger value="media">Mídia</TabsTrigger>
             <TabsTrigger value="settings">Configurações</TabsTrigger>

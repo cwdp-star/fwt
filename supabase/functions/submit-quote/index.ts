@@ -158,6 +158,31 @@ Deno.serve(async (req) => {
       );
     }
     
+    // Trigger push notification to admins (fire and forget)
+    try {
+      const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
+      await fetch(`${supabaseUrl}/functions/v1/send-push-notification`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`,
+        },
+        body: JSON.stringify({
+          type: 'new-quote',
+          payload: {
+            title: 'Novo Pedido de Orçamento',
+            body: `${sanitized.name} enviou um pedido de orçamento`,
+            icon: '/favicon.png',
+            tag: 'new-quote',
+            data: { url: '/admin' },
+          },
+        }),
+      });
+    } catch (pushError) {
+      // Log but don't fail the request
+      console.error('Push notification error:', pushError);
+    }
+    
     return new Response(
       JSON.stringify({ success: true }), 
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
