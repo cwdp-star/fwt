@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import DashboardStats from './DashboardStats';
 import QuoteRequestsManager from './QuoteRequestsManager';
 import MediaManager from './MediaManager';
 import ProjectManager from './ProjectManager';
-import QuickActions from './QuickActions';
 import NotificationCenter from './NotificationCenter';
 import SiteSettingsManager from './SiteSettingsManager';
 
 const AdminDashboard = () => {
   // Persist active tab in sessionStorage to prevent losing state on navigation
   const [activeTab, setActiveTab] = useState(() => {
-    return sessionStorage.getItem('admin-active-tab') || 'overview';
+    const saved = sessionStorage.getItem('admin-active-tab');
+    // Default to quotes, or use saved if it's still a valid tab
+    return saved && ['quotes', 'projects', 'media', 'settings'].includes(saved) ? saved : 'quotes';
   });
 
   useEffect(() => {
@@ -36,18 +36,12 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 relative z-10">
-            <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4 relative z-10">
             <TabsTrigger value="quotes">Orçamentos</TabsTrigger>
             <TabsTrigger value="projects">Projetos</TabsTrigger>
             <TabsTrigger value="media">Mídia</TabsTrigger>
             <TabsTrigger value="settings">Configurações</TabsTrigger>
           </TabsList>
-
-          <TabsContent value="overview" className="space-y-6">
-            <DashboardStats />
-            <QuickActions />
-          </TabsContent>
 
           <TabsContent value="quotes" className="space-y-6">
             <div className="bg-white rounded-xl shadow-sm border p-6">
